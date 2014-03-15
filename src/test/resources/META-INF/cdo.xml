@@ -1,8 +1,8 @@
 <v1:cdo version="1.0" xmlns:v1="http://buschmais.com/cdo/schema/v1.0">
     <cdo-unit name="Titan">
         <description>This is a test unit for the Titan file datastore.</description>
-        <url>titan-cassandra://localhost:9042/titantest</url>
-        <provider>com.puresoltechnologies.xo.titan.api.TitanStoreProvider</provider>
+        <url>titan-cassandra://localhost:9160/titantest</url>
+        <provider>com.puresoltechnologies.xo.titan.api.TitanXOProvider</provider>
         <types>
             <type>com.puresoltechnologies.xo.titan.test.bootstrap.composite.A</type>
         </types>

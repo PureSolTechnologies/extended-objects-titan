@@ -33,13 +33,13 @@ public class TitanCassandraStore
 	public TitanCassandraStore(String host, int port, String path) {
 		this.host = host;
 		this.port = port;
+		while ((path != null) && (path.startsWith("/"))) {
+			path = path.substring(1);
+		}
 		if ((path == null) || (path.isEmpty())) {
 			// Titan will use its default keyspace.
 			keyspace = null;
 		} else {
-			while (path.startsWith("/")) {
-				path = path.substring(1);
-			}
 			String[] list = path.split("/");
 			if (list.length > 1) {
 				throw new CdoException(
@@ -59,7 +59,9 @@ public class TitanCassandraStore
 		Configuration configuration = new BaseConfiguration();
 		configuration.setProperty("storage.backend", "cassandra");
 		configuration.setProperty("storage.hostname", host);
-		configuration.setProperty("storage.port", port);
+		if (port > 0) {
+			configuration.setProperty("storage.port", port);
+		}
 		if (keyspace != null) {
 			configuration.setProperty("storage.keyspace", keyspace);
 		}
