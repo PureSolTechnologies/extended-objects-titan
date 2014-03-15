@@ -6,11 +6,12 @@ import com.buschmais.cdo.api.CdoException;
 import com.buschmais.cdo.api.bootstrap.CdoUnit;
 import com.buschmais.cdo.spi.bootstrap.CdoDatastoreProvider;
 import com.buschmais.cdo.spi.datastore.Datastore;
+import com.puresoltechnologies.xo.titan.impl.TitanCassandraStore;
 import com.puresoltechnologies.xo.titan.impl.TitanStoreSession;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanNodeMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
 
-public class TitanStoreProvider
+public class TitanXOProvider
 		implements
 		CdoDatastoreProvider<TitanNodeMetadata, String, TitanRelationMetadata, String> {
 

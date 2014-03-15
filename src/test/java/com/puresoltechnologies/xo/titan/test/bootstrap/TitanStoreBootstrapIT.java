@@ -7,7 +7,7 @@ import com.buschmais.cdo.api.CdoManagerFactory;
 import com.buschmais.cdo.api.bootstrap.Cdo;
 import com.puresoltechnologies.xo.titan.test.bootstrap.composite.A;
 
-public class TitanStoreBootstrapTest {
+public class TitanStoreBootstrapIT {
 
 	@Test
 	public void bootstrap() {

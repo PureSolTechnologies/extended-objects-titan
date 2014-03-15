@@ -1,4 +1,4 @@
-package com.puresoltechnologies.xo.titan.api;
+package com.puresoltechnologies.xo.titan.impl;
 
 import java.util.Collection;
 
@@ -9,8 +9,6 @@ import com.buschmais.cdo.api.CdoException;
 import com.buschmais.cdo.spi.datastore.Datastore;
 import com.buschmais.cdo.spi.datastore.DatastoreMetadataFactory;
 import com.buschmais.cdo.spi.metadata.type.TypeMetadata;
-import com.puresoltechnologies.xo.titan.impl.TitanMetadataFactory;
-import com.puresoltechnologies.xo.titan.impl.TitanStoreSession;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanNodeMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
 import com.thinkaurelius.titan.core.TitanFactory;
@@ -45,7 +43,7 @@ public class TitanCassandraStore
 			String[] list = path.split("/");
 			if (list.length > 1) {
 				throw new CdoException(
-						"The path part of the URL contains more than one element.");
+						"The path part of the URI contains more than one element.");
 			}
 			keyspace = list[0];
 		}

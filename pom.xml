@@ -96,11 +96,13 @@
 			<groupId>com.thinkaurelius.titan</groupId>
 			<artifactId>titan-core</artifactId>
 			<version>${titan.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.thinkaurelius.titan</groupId>
 			<artifactId>titan-cassandra</artifactId>
 			<version>${titan.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -121,12 +123,14 @@
 						<version>2.16</version>
 						<executions>
 							<execution>
+								<id>integration-test</id>
 								<phase>integration-test</phase>
 								<goals>
 									<goal>integration-test</goal>
 								</goals>
 							</execution>
 							<execution>
+								<id>verification</id>
 								<phase>verify</phase>
 								<goals>
 									<goal>verify</goal>
@@ -145,12 +149,14 @@
 						<version>2.0.0-1</version>
 						<executions>
 							<execution>
+								<id>cassandra-start</id>
 								<phase>pre-integration-test</phase>
 								<goals>
 									<goal>start</goal>
 								</goals>
 							</execution>
 							<execution>
+								<id>cassandra-stop</id>
 								<phase>post-integration-test</phase>
 								<goals>
 									<goal>stop</goal>
@@ -179,10 +185,24 @@
 				</executions>
 				<configuration>
 					<recursive>true</recursive>
-					<skipOptionals>false</skipOptionals>
-					<skipProvidedScope>false</skipProvidedScope>
-					<skipTestScope>false</skipTestScope>
+					<skipOptionals>true</skipOptionals>
+					<skipProvidedScope>true</skipProvidedScope>
+					<skipTestScope>true</skipTestScope>
 					<knownLicenses>
+						<knownLicense>
+							<name>Apache License, Version 2.0</name>
+							<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+							<aliases>
+								<alias>The Apache Software License, Version 2.0</alias>
+							</aliases>
+						</knownLicense>
+						<knownLicense>
+							<name>The MIT License (MIT)</name>
+							<url>http://opensource.org/licenses/MIT</url>
+							<aliases>
+								<alias>MIT License</alias>
+							</aliases>
+						</knownLicense>
 					</knownLicenses>
 				</configuration>
 			</plugin>
@@ -208,10 +228,45 @@
 					<target>1.7</target>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                        <configuration>
+                            <archive>
+                                <manifestEntries>
+                                    <Bundle-ManifestVersion>2</Bundle-ManifestVersion>
+                                    <Bundle-Name>${project.name} (Source)</Bundle-Name>
+                                    <Bundle-SymbolicName>${bundle.name}.source</Bundle-SymbolicName>
+                                    <Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
+                                    <Bundle-Version>${parsedVersion.osgiVersion}</Bundle-Version>
+                                    <Eclipse-SourceBundle>
+                                        ${bundle.name};version="${parsedVersion.osgiVersion}";roots:="."
+                                    </Eclipse-SourceBundle>
+                                </manifestEntries>
+                            </archive>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.4</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
 				<configuration>
 					<archive>
 						<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
@@ -222,6 +277,20 @@
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
 				<version>2.3.7</version>
+                <executions>
+                    <execution>
+                        <id>bundle-manifest</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>manifest</goal>
+                        </goals>
+                        <configuration>
+                            <instructions>
+                                <Bundle-Name>${project.name}</Bundle-Name>
+                            </instructions>
+                        </configuration>
+                    </execution>
+                </executions>
 				<configuration>
 					<instructions>
 						<DynamicImport-Package>*</DynamicImport-Package>
