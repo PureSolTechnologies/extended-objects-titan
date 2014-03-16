@@ -7,6 +7,7 @@ public class TitanNodeMetadata implements DatastoreEntityMetadata<String> {
 	private final String discriminator;
 
 	public TitanNodeMetadata(String discriminator) {
+		super();
 		this.discriminator = discriminator;
 	}
 

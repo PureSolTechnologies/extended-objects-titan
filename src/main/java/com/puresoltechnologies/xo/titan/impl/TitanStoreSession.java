@@ -1,8 +1,10 @@
 package com.puresoltechnologies.xo.titan.impl;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.buschmais.cdo.api.CdoException;
 import com.buschmais.cdo.api.ResultIterator;
 import com.buschmais.cdo.spi.datastore.DatastorePropertyManager;
 import com.buschmais.cdo.spi.datastore.DatastoreSession;
@@ -19,8 +21,7 @@ public class TitanStoreSession
 		implements
 		DatastoreSession<Object, Vertex, TitanNodeMetadata, String, Object, Edge, TitanRelationMetadata, String> {
 
-	private static final String ID_PROPERTY = "id";
-	private static final String TYPES_PROPERTY = "types";
+	private static final String XO_DISCRIMINATORS_PROPERTY = "xo_discriminators";
 
 	private final TitanGraph titanGraph;
 
@@ -45,13 +46,30 @@ public class TitanStoreSession
 
 	@Override
 	public Set<String> getEntityDiscriminators(Vertex vertex) {
-		// TODO
-		return null;
+		Object discriminatorsObject = vertex
+				.getProperty(XO_DISCRIMINATORS_PROPERTY);
+		if (discriminatorsObject == null) {
+			throw new CdoException(
+					"A vertex was found without discriminators. Does another framework alter the database?");
+		}
+		if (!String.class.equals(discriminatorsObject.getClass())) {
+			throw new CdoException(
+					"A vertex was found with discriminators property with type '"
+							+ discriminatorsObject.getClass().getName()
+							+ "' instead of String. Does another framework alter the database?");
+		}
+		String discriminatorsString = (String) discriminatorsObject;
+		String[] discriminatorsArray = discriminatorsString.split(",");
+		Set<String> discriminators = new HashSet<>();
+		for (String discriminator : discriminatorsArray) {
+			discriminators.add(discriminator);
+		}
+		return discriminators;
 	}
 
 	@Override
 	public String getRelationDiscriminator(Edge edge) {
-		return null;
+		return edge.getLabel();
 	}
 
 	@Override
@@ -60,15 +78,19 @@ public class TitanStoreSession
 	}
 
 	@Override
-	public Long getRelationId(Edge edge) {
-		return null;
+	public Object getRelationId(Edge edge) {
+		return edge.getId();
 	}
 
 	@Override
 	public Vertex createEntity(
 			TypeMetadataSet<EntityTypeMetadata<TitanNodeMetadata>> types,
 			Set<String> discriminators) {
-		return null;
+		Vertex vertex = titanGraph.addVertex(null);
+		for (EntityTypeMetadata<TitanNodeMetadata> type : types) {
+			// TODO
+		}
+		return vertex;
 	}
 
 	@Override
@@ -80,21 +102,24 @@ public class TitanStoreSession
 	public ResultIterator<Vertex> findEntity(
 			EntityTypeMetadata<TitanNodeMetadata> type, String discriminator,
 			Object value) {
+		// TODO
 		return null;
 	}
 
 	@Override
 	public <QL> ResultIterator<Map<String, Object>> executeQuery(QL query,
 			Map<String, Object> parameters) {
+		// TODO
 		return null;
 	}
 
 	@Override
-	public void migrateEntity(Vertex jsonNode,
+	public void migrateEntity(Vertex vertex,
 			TypeMetadataSet<EntityTypeMetadata<TitanNodeMetadata>> types,
 			Set<String> discriminators,
 			TypeMetadataSet<EntityTypeMetadata<TitanNodeMetadata>> targetTypes,
 			Set<String> targetDiscriminators) {
+		// TODO
 	}
 
 	@Override

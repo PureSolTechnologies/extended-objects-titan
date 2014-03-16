@@ -3,7 +3,7 @@ package com.puresoltechnologies.xo.titan.impl;
 import com.buschmais.cdo.spi.datastore.DatastorePropertyManager;
 import com.buschmais.cdo.spi.metadata.method.PrimitivePropertyMethodMetadata;
 import com.buschmais.cdo.spi.metadata.type.RelationTypeMetadata;
-import com.puresoltechnologies.xo.titan.impl.metadata.TitanPrimitivePropertyMetadata;
+import com.puresoltechnologies.xo.titan.impl.metadata.TitanNodeMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
@@ -11,63 +11,55 @@ import com.tinkerpop.blueprints.Vertex;
 
 public class TitanStorePropertyManager
 		implements
-		DatastorePropertyManager<Vertex, Edge, TitanPrimitivePropertyMetadata, TitanRelationMetadata> {
+		DatastorePropertyManager<Vertex, Edge, TitanNodeMetadata, TitanRelationMetadata> {
 
 	@Override
-	public void setEntityProperty(
-			Vertex vertex,
-			PrimitivePropertyMethodMetadata<TitanPrimitivePropertyMetadata> metadata,
+	public void setEntityProperty(Vertex vertex,
+			PrimitivePropertyMethodMetadata<TitanNodeMetadata> metadata,
 			Object value) {
 		vertex.setProperty(metadata.getAnnotatedMethod().getName(), value);
 	}
 
 	@Override
-	public void setRelationProperty(
-			Edge edge,
-			PrimitivePropertyMethodMetadata<TitanPrimitivePropertyMetadata> metadata,
+	public void setRelationProperty(Edge edge,
+			PrimitivePropertyMethodMetadata<TitanNodeMetadata> metadata,
 			Object value) {
 		edge.setProperty(metadata.getAnnotatedMethod().getName(), value);
 	}
 
 	@Override
-	public boolean hasEntityProperty(
-			Vertex vertex,
-			PrimitivePropertyMethodMetadata<TitanPrimitivePropertyMetadata> metadata) {
+	public boolean hasEntityProperty(Vertex vertex,
+			PrimitivePropertyMethodMetadata<TitanNodeMetadata> metadata) {
 		return vertex.getProperty(metadata.getAnnotatedMethod().getName()) != null;
 	}
 
 	@Override
-	public boolean hasRelationProperty(
-			Edge edge,
-			PrimitivePropertyMethodMetadata<TitanPrimitivePropertyMetadata> metadata) {
+	public boolean hasRelationProperty(Edge edge,
+			PrimitivePropertyMethodMetadata<TitanNodeMetadata> metadata) {
 		return edge.getProperty(metadata.getAnnotatedMethod().getName()) != null;
 	}
 
 	@Override
-	public void removeEntityProperty(
-			Vertex vertex,
-			PrimitivePropertyMethodMetadata<TitanPrimitivePropertyMetadata> metadata) {
+	public void removeEntityProperty(Vertex vertex,
+			PrimitivePropertyMethodMetadata<TitanNodeMetadata> metadata) {
 		vertex.removeProperty(metadata.getAnnotatedMethod().getName());
 	}
 
 	@Override
-	public void removeRelationProperty(
-			Edge edge,
-			PrimitivePropertyMethodMetadata<TitanPrimitivePropertyMetadata> metadata) {
+	public void removeRelationProperty(Edge edge,
+			PrimitivePropertyMethodMetadata<TitanNodeMetadata> metadata) {
 		edge.removeProperty(metadata.getAnnotatedMethod().getName());
 	}
 
 	@Override
-	public Object getEntityProperty(
-			Vertex vertex,
-			PrimitivePropertyMethodMetadata<TitanPrimitivePropertyMetadata> metadata) {
+	public Object getEntityProperty(Vertex vertex,
+			PrimitivePropertyMethodMetadata<TitanNodeMetadata> metadata) {
 		return vertex.getProperty(metadata.getAnnotatedMethod().getName());
 	}
 
 	@Override
-	public Object getRelationProperty(
-			Edge edge,
-			PrimitivePropertyMethodMetadata<TitanPrimitivePropertyMetadata> metadata) {
+	public Object getRelationProperty(Edge edge,
+			PrimitivePropertyMethodMetadata<TitanNodeMetadata> metadata) {
 		return edge.getProperty(metadata.getAnnotatedMethod().getName());
 	}
 
