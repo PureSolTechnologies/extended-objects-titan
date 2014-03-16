@@ -12,13 +12,12 @@ import com.buschmais.cdo.spi.metadata.type.EntityTypeMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanNodeMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
 import com.thinkaurelius.titan.core.TitanGraph;
-import com.thinkaurelius.titan.core.TitanRelation;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
 public class TitanStoreSession
 		implements
-		DatastoreSession<Object, Vertex, TitanNodeMetadata, String, Object, TitanRelation, TitanRelationMetadata, String> {
+		DatastoreSession<Object, Vertex, TitanNodeMetadata, String, Object, Edge, TitanRelationMetadata, String> {
 
 	private static final String ID_PROPERTY = "id";
 	private static final String TYPES_PROPERTY = "types";
@@ -31,7 +30,7 @@ public class TitanStoreSession
 
 	@Override
 	public DatastoreTransaction getDatastoreTransaction() {
-		return new TitanStoreTransaction();
+		return new TitanStoreTransaction(titanGraph);
 	}
 
 	@Override
@@ -51,17 +50,17 @@ public class TitanStoreSession
 	}
 
 	@Override
-	public String getRelationDiscriminator(TitanRelation jsonRelation) {
+	public String getRelationDiscriminator(Edge edge) {
 		return null;
 	}
 
 	@Override
 	public Object getEntityId(Vertex vertex) {
-		return vertex.getId();
+		return vertex == null ? null : vertex.getId();
 	}
 
 	@Override
-	public Long getRelationId(TitanRelation jsonRelation) {
+	public Long getRelationId(Edge edge) {
 		return null;
 	}
 
@@ -104,11 +103,12 @@ public class TitanStoreSession
 	}
 
 	@Override
-	public void flushRelation(TitanRelation jsonRelation) {
+	public void flushRelation(Edge edge) {
+		// intentionally left empty
 	}
 
 	@Override
-	public DatastorePropertyManager getDatastorePropertyManager() {
+	public DatastorePropertyManager<Vertex, Edge, ?, TitanRelationMetadata> getDatastorePropertyManager() {
 		return new TitanStorePropertyManager();
 	}
 
