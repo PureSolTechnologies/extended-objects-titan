@@ -1,5 +1,6 @@
 package com.puresoltechnologies.xo.titan.impl;
 
+import com.buschmais.cdo.api.CdoException;
 import com.buschmais.cdo.spi.datastore.DatastorePropertyManager;
 import com.buschmais.cdo.spi.metadata.method.PrimitivePropertyMethodMetadata;
 import com.buschmais.cdo.spi.metadata.type.RelationTypeMetadata;
@@ -8,6 +9,7 @@ import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.blueprints.VertexQuery;
 
 public class TitanStorePropertyManager
 		implements
@@ -67,8 +69,7 @@ public class TitanStorePropertyManager
 	public boolean hasSingleRelation(Vertex source,
 			RelationTypeMetadata<TitanRelationMetadata> metadata,
 			RelationTypeMetadata.Direction direction) {
-		// TODO
-		return false;
+		return getSingleRelation(source, metadata, direction) != null;
 	}
 
 	@Override
@@ -83,16 +84,39 @@ public class TitanStorePropertyManager
 	public Iterable<Edge> getRelations(Vertex source,
 			RelationTypeMetadata<TitanRelationMetadata> metadata,
 			RelationTypeMetadata.Direction direction) {
-		// TODO
-		return null;
+		VertexQuery query = source.query();
+		switch (direction) {
+		case TO:
+			query = query.direction(Direction.IN);
+			break;
+		case FROM:
+			query = query.direction(Direction.OUT);
+			break;
+		default:
+			throw new CdoException("Unknown direction '" + direction.name()
+					+ "'.");
+		}
+		return query.edges();
 	}
 
 	@Override
 	public Edge createRelation(Vertex source,
 			RelationTypeMetadata<TitanRelationMetadata> metadata,
 			RelationTypeMetadata.Direction direction, Vertex target) {
+		Edge edge;
+		switch (direction) {
+		case TO:
+			edge = source.addEdge("???", target);
+			break;
+		case FROM:
+			edge = target.addEdge("???", source);
+			break;
+		default:
+			throw new CdoException("Unknown direction '" + direction.name()
+					+ "'.");
+		}
 		// TODO
-		return null;
+		return edge;
 	}
 
 	@Override

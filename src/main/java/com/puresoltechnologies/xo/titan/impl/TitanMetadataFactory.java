@@ -8,7 +8,12 @@ import com.buschmais.cdo.spi.reflection.AnnotatedElement;
 import com.buschmais.cdo.spi.reflection.AnnotatedMethod;
 import com.buschmais.cdo.spi.reflection.AnnotatedType;
 import com.buschmais.cdo.spi.reflection.PropertyMethod;
+import com.puresoltechnologies.xo.titan.api.annotation.VertexType;
+import com.puresoltechnologies.xo.titan.impl.metadata.TitanCollectionPropertyMetadata;
+import com.puresoltechnologies.xo.titan.impl.metadata.TitanIndexedPropertyMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanNodeMetadata;
+import com.puresoltechnologies.xo.titan.impl.metadata.TitanPrimitivePropertyMetadata;
+import com.puresoltechnologies.xo.titan.impl.metadata.TitanReferencePropertyMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
 
 public class TitanMetadataFactory
@@ -18,8 +23,12 @@ public class TitanMetadataFactory
 	@Override
 	public TitanNodeMetadata createEntityMetadata(AnnotatedType annotatedType,
 			Map<Class<?>, TypeMetadata> metadataByType) {
-		return new TitanNodeMetadata(annotatedType.getAnnotatedElement()
-				.getName());
+		VertexType annotation = annotatedType.getAnnotation(VertexType.class);
+		String value = annotation.value();
+		if ((value == null) || (value.isEmpty())) {
+			value = annotatedType.getName();
+		}
+		return new TitanNodeMetadata(value);
 	}
 
 	@Override
@@ -29,33 +38,34 @@ public class TitanMetadataFactory
 	}
 
 	@Override
-	public <CollectionPropertyMetadata> CollectionPropertyMetadata createCollectionPropertyMetadata(
+	public TitanCollectionPropertyMetadata createCollectionPropertyMetadata(
 			PropertyMethod propertyMethod) {
-		return null;
+		return new TitanCollectionPropertyMetadata();
 	}
 
 	@Override
-	public <ReferencePropertyMetadata> ReferencePropertyMetadata createReferencePropertyMetadata(
+	public TitanReferencePropertyMetadata createReferencePropertyMetadata(
 			PropertyMethod propertyMethod) {
-		return null;
+		return new TitanReferencePropertyMetadata();
 	}
 
 	@Override
-	public <PrimitivePropertyMetadata> PrimitivePropertyMetadata createPropertyMetadata(
+	public TitanPrimitivePropertyMetadata createPropertyMetadata(
 			PropertyMethod propertyMethod) {
-		return null;
+		return new TitanPrimitivePropertyMetadata();
 	}
 
 	@Override
-	public <IndexedPropertyMetadata> IndexedPropertyMetadata createIndexedPropertyMetadata(
+	public TitanIndexedPropertyMetadata createIndexedPropertyMetadata(
 			PropertyMethod propertyMethod) {
-		return null;
+		TitanIndexedPropertyMetadata titanIndexedPropertyMetadata = new TitanIndexedPropertyMetadata();
+		return titanIndexedPropertyMetadata;
 	}
 
 	@Override
 	public TitanRelationMetadata createRelationMetadata(
 			AnnotatedElement<?> annotatedElement,
 			Map<Class<?>, TypeMetadata> metadataByType) {
-		return null;
+		return new TitanRelationMetadata();
 	}
 }

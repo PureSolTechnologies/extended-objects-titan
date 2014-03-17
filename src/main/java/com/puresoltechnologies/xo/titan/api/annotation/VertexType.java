@@ -10,5 +10,13 @@ import com.buschmais.cdo.spi.annotation.EntityDefinition;
 @EntityDefinition
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Titan {
+public @interface VertexType {
+
+	String DEFAULT_VALUE = "";
+
+	/**
+	 * @return The name of the type.
+	 */
+	String value() default "";
+
 }

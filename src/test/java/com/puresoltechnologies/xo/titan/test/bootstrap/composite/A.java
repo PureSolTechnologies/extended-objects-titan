@@ -1,8 +1,8 @@
 package com.puresoltechnologies.xo.titan.test.bootstrap.composite;
 
-import com.puresoltechnologies.xo.titan.api.annotation.Titan;
+import com.puresoltechnologies.xo.titan.api.annotation.VertexType;
 
-@Titan
+@VertexType
 public interface A {
 
 	String getName();
