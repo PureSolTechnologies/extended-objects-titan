@@ -8,6 +8,7 @@ import com.buschmais.cdo.spi.reflection.AnnotatedElement;
 import com.buschmais.cdo.spi.reflection.AnnotatedMethod;
 import com.buschmais.cdo.spi.reflection.AnnotatedType;
 import com.buschmais.cdo.spi.reflection.PropertyMethod;
+import com.puresoltechnologies.xo.titan.api.annotation.EdgeType;
 import com.puresoltechnologies.xo.titan.api.annotation.VertexType;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanCollectionPropertyMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanIndexedPropertyMetadata;
@@ -58,14 +59,19 @@ public class TitanMetadataFactory
 	@Override
 	public TitanIndexedPropertyMetadata createIndexedPropertyMetadata(
 			PropertyMethod propertyMethod) {
-		TitanIndexedPropertyMetadata titanIndexedPropertyMetadata = new TitanIndexedPropertyMetadata();
-		return titanIndexedPropertyMetadata;
+		return new TitanIndexedPropertyMetadata();
 	}
 
 	@Override
 	public TitanRelationMetadata createRelationMetadata(
 			AnnotatedElement<?> annotatedElement,
 			Map<Class<?>, TypeMetadata> metadataByType) {
-		return new TitanRelationMetadata();
+		EdgeType annotation = annotatedElement
+				.getAnnotation(EdgeType.class);
+		String value = annotation.value();
+		if ((value == null) || (value.isEmpty())) {
+			value = annotatedElement.getName();
+		}
+		return new TitanRelationMetadata(value);
 	}
 }

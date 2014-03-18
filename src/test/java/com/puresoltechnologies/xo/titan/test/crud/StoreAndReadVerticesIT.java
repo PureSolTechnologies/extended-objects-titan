@@ -1,4 +1,8 @@
-package com.puresoltechnologies.xo.titan.test.bootstrap;
+package com.puresoltechnologies.xo.titan.test.crud;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -8,11 +12,13 @@ import org.junit.Test;
 
 import com.buschmais.cdo.api.CdoManager;
 import com.buschmais.cdo.api.CdoManagerFactory;
+import com.buschmais.cdo.api.ResultIterable;
+import com.buschmais.cdo.api.ResultIterator;
 import com.buschmais.cdo.api.bootstrap.Cdo;
 import com.puresoltechnologies.xo.titan.test.AbstractXOTitanTest;
 import com.puresoltechnologies.xo.titan.test.bootstrap.composite.A;
 
-public class TitanStoreBootstrapIT extends AbstractXOTitanTest {
+public class StoreAndReadVerticesIT extends AbstractXOTitanTest {
 
 	private static CdoManagerFactory cdoManagerFactory;
 	private CdoManager cdoManager;
@@ -38,11 +44,21 @@ public class TitanStoreBootstrapIT extends AbstractXOTitanTest {
 	}
 
 	@Test
-	public void bootstrap() {
+	public void test() {
 		cdoManager.currentTransaction().begin();
-		A a = cdoManager.create(A.class);
-		a.setName("Test");
+		A createdA = cdoManager.create(A.class);
+		createdA.setName("Test");
 		cdoManager.currentTransaction().commit();
+
+		cdoManager.currentTransaction().begin();
+		ResultIterable<A> aa = cdoManager.find(A.class, "Test");
+		assertNotNull(aa);
+		ResultIterator<A> iterator = aa.iterator();
+		assertTrue(iterator.hasNext());
+		A readA = iterator.next();
+		assertNotNull(readA);
+		assertEquals("Test", readA.getName());
+		cdoManager.currentTransaction().rollback();
 	}
 
 }

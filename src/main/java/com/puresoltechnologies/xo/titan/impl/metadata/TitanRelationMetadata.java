@@ -4,9 +4,14 @@ import com.buschmais.cdo.spi.datastore.DatastoreRelationMetadata;
 
 public class TitanRelationMetadata implements DatastoreRelationMetadata<String> {
 
+	private final String label;
+
+	public TitanRelationMetadata(String label) {
+		this.label = label;
+	}
+
 	@Override
 	public String getDiscriminator() {
-		// TODO Auto-generated method stub
-		return null;
+		return label;
 	}
 }

@@ -49,6 +49,10 @@ public class TitanCassandraStore
 		}
 	}
 
+	public final TitanGraph getTitanGraph() {
+		return titanGraph;
+	}
+
 	@Override
 	public DatastoreMetadataFactory<TitanNodeMetadata, String, TitanRelationMetadata, String> getMetadataFactory() {
 		return new TitanMetadataFactory();

@@ -21,6 +21,7 @@ import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.pipes.Pipe;
+import com.tinkerpop.pipes.util.structures.Table;
 
 public class TitanStoreSession
 		implements
@@ -89,9 +90,6 @@ public class TitanStoreSession
 			vertex.setProperty(XO_DISCRIMINATORS_PROPERTY + discriminator,
 					discriminator);
 		}
-		for (EntityTypeMetadata<TitanNodeMetadata> type : types) {
-			// TODO
-		}
 		return vertex;
 	}
 
@@ -136,8 +134,10 @@ public class TitanStoreSession
 	public <QL> ResultIterator<Map<String, Object>> executeQuery(QL query,
 			Map<String, Object> parameters) {
 		String expression = getGremlinExpression(query);
-		final Pipe<?, ?> pipe = com.tinkerpop.gremlin.groovy.Gremlin
+		@SuppressWarnings("unchecked")
+		final Pipe<Vertex, ?> pipe = com.tinkerpop.gremlin.groovy.Gremlin
 				.compile(expression);
+		pipe.setStarts(titanGraph.query().vertices());
 		return new ResultIterator<Map<String, Object>>() {
 
 			@Override
@@ -161,10 +161,17 @@ public class TitanStoreSession
 						Object value = edge.getProperty(key);
 						results.put(key, value);
 					}
+				} else if (next instanceof Map) {
+					Map<String, Object> map = (Map<String, Object>) next;
+					results.putAll(map);
+				} else if (next instanceof Table) {
+					Table table = (Table) next;
+					// results.putAll(table);
 				} else {
 					throw new CdoException("Unknown result type '"
 							+ next.getClass().getName() + "'.");
 				}
+				System.out.println(next);
 				return results;
 			}
 
