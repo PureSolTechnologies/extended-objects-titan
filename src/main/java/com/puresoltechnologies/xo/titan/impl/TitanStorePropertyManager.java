@@ -103,12 +103,12 @@ public class TitanStorePropertyManager
 	public Edge createRelation(Vertex source,
 			RelationTypeMetadata<TitanRelationMetadata> metadata,
 			RelationTypeMetadata.Direction direction, Vertex target) {
-		String name = metadata.getAnnotatedType().getName();
+		String name = metadata.getDatastoreMetadata().getDiscriminator();
 		switch (direction) {
 		case TO:
-			return source.addEdge(name, target);
-		case FROM:
 			return target.addEdge(name, source);
+		case FROM:
+			return source.addEdge(name, target);
 		default:
 			throw new CdoException("Unknown direction '" + direction.name()
 					+ "'.");

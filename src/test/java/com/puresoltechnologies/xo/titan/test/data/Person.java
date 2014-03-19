@@ -1,8 +1,10 @@
 package com.puresoltechnologies.xo.titan.test.data;
 
-import com.puresoltechnologies.xo.titan.api.annotation.VertexType;
+import java.util.Set;
 
-@VertexType
+import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
+
+@VertexDefinition
 public interface Person {
 
 	void setFirstName(String firstName);
@@ -13,4 +15,15 @@ public interface Person {
 
 	String getLastName();
 
+	void setMother(Person mother);
+
+	Person getMother();
+
+	void setFather(Person father);
+
+	Person getFather();
+
+	Set<Person> getSisters();
+
+	Set<Person> getBrothers();
 }

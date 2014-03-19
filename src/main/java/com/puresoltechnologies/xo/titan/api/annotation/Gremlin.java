@@ -9,6 +9,9 @@ import com.buschmais.cdo.spi.annotation.QueryDefinition;
 
 /**
  * Marks an interface or method as a Gremlin query.
+ * 
+ * For Gremlin language, have a look to: <a
+ * href="http://gremlindocs.com">http://gremlindocs.com</a>
  */
 @QueryDefinition
 @Target({ ElementType.TYPE, ElementType.METHOD })
@@ -16,7 +19,7 @@ import com.buschmais.cdo.spi.annotation.QueryDefinition;
 public @interface Gremlin {
 
 	/**
-	 * @return The CYPHER expression.
+	 * @return The Gremlin expression.
 	 */
 	String value();
 

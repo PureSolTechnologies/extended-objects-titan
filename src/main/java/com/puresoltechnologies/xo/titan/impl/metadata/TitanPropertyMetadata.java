@@ -1,10 +1,10 @@
 package com.puresoltechnologies.xo.titan.impl.metadata;
 
-public class TitanReferencePropertyMetadata {
+public class TitanPropertyMetadata {
 
 	private final String name;
 
-	public TitanReferencePropertyMetadata(String name) {
+	public TitanPropertyMetadata(String name) {
 		this.name = name;
 	}
 

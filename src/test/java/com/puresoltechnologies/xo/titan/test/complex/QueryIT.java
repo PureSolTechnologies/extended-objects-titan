@@ -13,7 +13,6 @@ import com.buschmais.cdo.api.CdoManager;
 import com.buschmais.cdo.api.CdoManagerFactory;
 import com.buschmais.cdo.api.Query;
 import com.buschmais.cdo.api.Query.Result;
-import com.buschmais.cdo.api.Query.Result.CompositeRowObject;
 import com.buschmais.cdo.api.ResultIterable;
 import com.buschmais.cdo.api.bootstrap.Cdo;
 import com.puresoltechnologies.xo.titan.test.AbstractXOTitanTest;
@@ -67,16 +66,16 @@ public class QueryIT extends AbstractXOTitanTest {
 	@Test
 	public void test2() {
 		cdoManager.currentTransaction().begin();
-		Query<CompositeRowObject> peopleQuery = cdoManager
-				.createQuery("_().has('lastName').as('x').lastName.as('lastName').back('x').firstName.as('firstName').table(new Table()).cap");
+		Query<Person> peopleQuery = cdoManager.createQuery(
+				"_().has('lastName', 'Skywalker')", Person.class);
 		assertNotNull(peopleQuery);
-		Result<CompositeRowObject> people = peopleQuery.execute();
+		Result<Person> people = peopleQuery.execute();
 
 		int count = 0;
-		for (CompositeRowObject person : people) {
+		for (Person person : people) {
 			count++;
 		}
-		// TODO assertEquals(4, count);
+		assertEquals(4, count);
 
 		cdoManager.currentTransaction().commit();
 	}

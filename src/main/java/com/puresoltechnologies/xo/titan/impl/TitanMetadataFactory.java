@@ -2,18 +2,20 @@ package com.puresoltechnologies.xo.titan.impl;
 
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.buschmais.cdo.spi.datastore.DatastoreMetadataFactory;
 import com.buschmais.cdo.spi.metadata.type.TypeMetadata;
 import com.buschmais.cdo.spi.reflection.AnnotatedElement;
 import com.buschmais.cdo.spi.reflection.AnnotatedMethod;
 import com.buschmais.cdo.spi.reflection.AnnotatedType;
 import com.buschmais.cdo.spi.reflection.PropertyMethod;
-import com.puresoltechnologies.xo.titan.api.annotation.EdgeType;
-import com.puresoltechnologies.xo.titan.api.annotation.VertexType;
+import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition;
+import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanCollectionPropertyMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanIndexedPropertyMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanNodeMetadata;
-import com.puresoltechnologies.xo.titan.impl.metadata.TitanPrimitivePropertyMetadata;
+import com.puresoltechnologies.xo.titan.impl.metadata.TitanPropertyMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanReferencePropertyMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
 
@@ -24,7 +26,8 @@ public class TitanMetadataFactory
 	@Override
 	public TitanNodeMetadata createEntityMetadata(AnnotatedType annotatedType,
 			Map<Class<?>, TypeMetadata> metadataByType) {
-		VertexType annotation = annotatedType.getAnnotation(VertexType.class);
+		VertexDefinition annotation = annotatedType
+				.getAnnotation(VertexDefinition.class);
 		String value = annotation.value();
 		if ((value == null) || (value.isEmpty())) {
 			value = annotatedType.getName();
@@ -47,13 +50,21 @@ public class TitanMetadataFactory
 	@Override
 	public TitanReferencePropertyMetadata createReferencePropertyMetadata(
 			PropertyMethod propertyMethod) {
-		return new TitanReferencePropertyMetadata();
+		VertexDefinition property = propertyMethod
+				.getAnnotationOfProperty(VertexDefinition.class);
+		String name = property != null ? property.value() : propertyMethod
+				.getName();
+		return new TitanReferencePropertyMetadata(name);
 	}
 
 	@Override
-	public TitanPrimitivePropertyMetadata createPropertyMetadata(
+	public TitanPropertyMetadata createPropertyMetadata(
 			PropertyMethod propertyMethod) {
-		return new TitanPrimitivePropertyMetadata();
+		VertexDefinition property = propertyMethod
+				.getAnnotationOfProperty(VertexDefinition.class);
+		String name = property != null ? property.value() : propertyMethod
+				.getName();
+		return new TitanPropertyMetadata(name);
 	}
 
 	@Override
@@ -66,12 +77,24 @@ public class TitanMetadataFactory
 	public TitanRelationMetadata createRelationMetadata(
 			AnnotatedElement<?> annotatedElement,
 			Map<Class<?>, TypeMetadata> metadataByType) {
-		EdgeType annotation = annotatedElement
-				.getAnnotation(EdgeType.class);
-		String value = annotation.value();
-		if ((value == null) || (value.isEmpty())) {
-			value = annotatedElement.getName();
+		EdgeDefinition relationAnnotation;
+		if (annotatedElement instanceof PropertyMethod) {
+			relationAnnotation = ((PropertyMethod) annotatedElement)
+					.getAnnotationOfProperty(EdgeDefinition.class);
+		} else {
+			relationAnnotation = annotatedElement
+					.getAnnotation(EdgeDefinition.class);
 		}
-		return new TitanRelationMetadata(value);
+		String name = null;
+		if (relationAnnotation != null) {
+			String value = relationAnnotation.value();
+			if (!EdgeDefinition.DEFAULT_VALUE.equals(value)) {
+				name = value;
+			}
+		}
+		if (name == null) {
+			name = StringUtils.capitalize(annotatedElement.getName());
+		}
+		return new TitanRelationMetadata(name);
 	}
 }

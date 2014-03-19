@@ -21,7 +21,6 @@ import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.pipes.Pipe;
-import com.tinkerpop.pipes.util.structures.Table;
 
 public class TitanStoreSession
 		implements
@@ -151,27 +150,17 @@ public class TitanStoreSession
 				Object next = pipe.next();
 				if (next instanceof Vertex) {
 					Vertex vertex = (Vertex) next;
-					for (String key : vertex.getPropertyKeys()) {
-						Object value = vertex.getProperty(key);
-						results.put(key, value);
-					}
+					results.put("vertex", vertex);
 				} else if (next instanceof Edge) {
 					Edge edge = (Edge) next;
-					for (String key : edge.getPropertyKeys()) {
-						Object value = edge.getProperty(key);
-						results.put(key, value);
-					}
+					results.put("edge", edge);
 				} else if (next instanceof Map) {
+					@SuppressWarnings("unchecked")
 					Map<String, Object> map = (Map<String, Object>) next;
 					results.putAll(map);
-				} else if (next instanceof Table) {
-					Table table = (Table) next;
-					// results.putAll(table);
 				} else {
-					throw new CdoException("Unknown result type '"
-							+ next.getClass().getName() + "'.");
+					results.put("unknown_type", next);
 				}
-				System.out.println(next);
 				return results;
 			}
 

@@ -10,7 +10,7 @@ import com.buschmais.cdo.spi.annotation.EntityDefinition;
 @EntityDefinition
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface VertexType {
+public @interface VertexDefinition {
 
 	String DEFAULT_VALUE = "";
 

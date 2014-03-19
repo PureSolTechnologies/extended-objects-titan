@@ -27,10 +27,14 @@ public class TestData {
 		Person leaSkywalker = cdoManager.create(Person.class);
 		leaSkywalker.setFirstName("Lea");
 		leaSkywalker.setLastName("Skywalker");
+		leaSkywalker.setMother(padmeSkywalker);
+		leaSkywalker.setFather(anakinSkywalker);
 
 		Person lukeSkywalker = cdoManager.create(Person.class);
 		lukeSkywalker.setFirstName("Luke");
 		lukeSkywalker.setLastName("Skywalker");
+		lukeSkywalker.setMother(padmeSkywalker);
+		lukeSkywalker.setFather(anakinSkywalker);
 
 		cdoManager.currentTransaction().commit();
 	}
