@@ -13,9 +13,11 @@ import com.buschmais.cdo.spi.annotation.RelationDefinition.FromDefinition;
 import com.buschmais.cdo.spi.annotation.RelationDefinition.ToDefinition;
 
 /**
- * Defines a relationship.
- * <p/>
- * Can be used on the following java elements
+ * <p>
+ * Defines an edge in Titan.
+ * </p>
+ * <p>
+ * This annotation can be used on the following java elements:
  * <ul>
  * <li>getter methods references or collections of other composite objects
  * (optional).</li>

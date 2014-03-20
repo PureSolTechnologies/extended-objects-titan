@@ -1,6 +1,5 @@
 package com.puresoltechnologies.xo.titan.impl;
 
-import java.lang.reflect.AnnotatedElement;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -14,7 +13,6 @@ import com.buschmais.cdo.spi.datastore.DatastoreSession;
 import com.buschmais.cdo.spi.datastore.DatastoreTransaction;
 import com.buschmais.cdo.spi.datastore.TypeMetadataSet;
 import com.buschmais.cdo.spi.metadata.type.EntityTypeMetadata;
-import com.puresoltechnologies.xo.titan.api.annotation.Gremlin;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanNodeMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
 import com.thinkaurelius.titan.core.TitanGraph;
@@ -22,14 +20,32 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.pipes.Pipe;
 
+/**
+ * This class implements a XO {@link DatastoreSession} for Titan database.
+ * 
+ * @author Rick-Rainer Ludwig
+ */
 public class TitanStoreSession
 		implements
 		DatastoreSession<Object, Vertex, TitanNodeMetadata, String, Object, Edge, TitanRelationMetadata, String> {
 
+	/**
+	 * This constant contains the prefix for discriminator properties.
+	 */
 	private static final String XO_DISCRIMINATORS_PROPERTY = "_xo_discriminator_";
 
+	/**
+	 * This field contains the Titan graph as {@link TitanGraph} object.
+	 */
 	private final TitanGraph titanGraph;
 
+	/**
+	 * This is the initial value constructor.
+	 * 
+	 * @param titanGraph
+	 *            is the Titan graph as {@link TitanGraph} object on which this
+	 *            session shall work on.
+	 */
 	public TitanStoreSession(TitanGraph titanGraph) {
 		this.titanGraph = titanGraph;
 	}
@@ -132,7 +148,7 @@ public class TitanStoreSession
 	@Override
 	public <QL> ResultIterator<Map<String, Object>> executeQuery(QL query,
 			Map<String, Object> parameters) {
-		String expression = getGremlinExpression(query);
+		String expression = GremlinManager.getGremlinExpression(query);
 		@SuppressWarnings("unchecked")
 		final Pipe<Vertex, ?> pipe = com.tinkerpop.gremlin.groovy.Gremlin
 				.compile(expression);
@@ -174,21 +190,6 @@ public class TitanStoreSession
 				// there is no close required in pipe
 			}
 		};
-	}
-
-	protected <QL> String getGremlinExpression(QL expression) {
-		if (expression instanceof String) {
-			return (String) expression;
-		} else if (expression instanceof AnnotatedElement) {
-			AnnotatedElement typeExpression = (AnnotatedElement) expression;
-			Gremlin gremlin = typeExpression.getAnnotation(Gremlin.class);
-			if (gremlin == null) {
-				throw new CdoException(typeExpression
-						+ " must be annotated with " + Gremlin.class.getName());
-			}
-			return gremlin.value();
-		}
-		throw new CdoException("Unsupported query expression " + expression);
 	}
 
 	@Override

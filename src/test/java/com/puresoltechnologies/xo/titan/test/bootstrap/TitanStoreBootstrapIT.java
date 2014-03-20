@@ -10,7 +10,6 @@ import com.buschmais.cdo.api.CdoManager;
 import com.buschmais.cdo.api.CdoManagerFactory;
 import com.buschmais.cdo.api.bootstrap.Cdo;
 import com.puresoltechnologies.xo.titan.test.AbstractXOTitanTest;
-import com.puresoltechnologies.xo.titan.test.bootstrap.composite.A;
 
 public class TitanStoreBootstrapIT extends AbstractXOTitanTest {
 
@@ -24,7 +23,9 @@ public class TitanStoreBootstrapIT extends AbstractXOTitanTest {
 
 	@AfterClass
 	public static void teardown() {
-		cdoManagerFactory.close();
+		if (cdoManagerFactory != null) {
+			cdoManagerFactory.close();
+		}
 	}
 
 	@Before
@@ -40,7 +41,7 @@ public class TitanStoreBootstrapIT extends AbstractXOTitanTest {
 	@Test
 	public void bootstrap() {
 		cdoManager.currentTransaction().begin();
-		A a = cdoManager.create(A.class);
+		TestEntity a = cdoManager.create(TestEntity.class);
 		a.setName("Test");
 		cdoManager.currentTransaction().commit();
 	}

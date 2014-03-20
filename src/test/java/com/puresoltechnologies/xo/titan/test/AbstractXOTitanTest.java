@@ -13,11 +13,14 @@ import javax.xml.bind.Unmarshaller;
 
 import org.junit.BeforeClass;
 
+import com.buschmais.cdo.api.CdoManager;
+import com.buschmais.cdo.api.CdoManagerFactory;
 import com.buschmais.cdo.impl.schema.v1.Cdo;
 import com.buschmais.cdo.impl.schema.v1.CdoUnitType;
 import com.buschmais.cdo.spi.metadata.type.TypeMetadata;
 import com.puresoltechnologies.xo.titan.api.TitanXOProvider;
 import com.puresoltechnologies.xo.titan.impl.TitanCassandraStore;
+import com.puresoltechnologies.xo.titan.test.data.TestData;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Vertex;
 
@@ -97,15 +100,9 @@ public abstract class AbstractXOTitanTest {
 	private static void clearTitanKeyspace(URI uri) throws URISyntaxException {
 		String host = uri.getHost();
 		int port = Integer.valueOf(uri.getPort());
-		String path = uri.getPath();
-		if (path.startsWith("/")) {
-			path = path.substring(1);
-		}
-		if (path.endsWith("/")) {
-			path = path.substring(0, path.length() - 1);
-		}
+		String keyspace = TitanCassandraStore.retrieveKeyspaceFromURI(uri);
 		TitanCassandraStore titanCassandraStore = new TitanCassandraStore(host,
-				port, path);
+				port, keyspace);
 		titanCassandraStore.init(new HashSet<TypeMetadata>());
 		TitanGraph titanGraph = titanCassandraStore.getTitanGraph();
 		Iterable<Vertex> vertices = titanGraph.query().vertices();
@@ -115,4 +112,15 @@ public abstract class AbstractXOTitanTest {
 		titanGraph.commit();
 	}
 
+	/**
+	 * This method adds the Starwars characters data into the Titan database for
+	 * testing purposes.
+	 * 
+	 * @param cdoManagerFactory
+	 */
+	protected static void addStarwarsData(CdoManagerFactory cdoManagerFactory) {
+		CdoManager cdoManager = cdoManagerFactory.createCdoManager();
+		TestData.addStarwars(cdoManager);
+		cdoManager.close();
+	}
 }

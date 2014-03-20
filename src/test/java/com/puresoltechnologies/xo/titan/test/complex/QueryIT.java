@@ -12,12 +12,10 @@ import org.junit.Test;
 import com.buschmais.cdo.api.CdoManager;
 import com.buschmais.cdo.api.CdoManagerFactory;
 import com.buschmais.cdo.api.Query;
-import com.buschmais.cdo.api.Query.Result;
 import com.buschmais.cdo.api.ResultIterable;
 import com.buschmais.cdo.api.bootstrap.Cdo;
 import com.puresoltechnologies.xo.titan.test.AbstractXOTitanTest;
 import com.puresoltechnologies.xo.titan.test.data.Person;
-import com.puresoltechnologies.xo.titan.test.data.TestData;
 
 public class QueryIT extends AbstractXOTitanTest {
 
@@ -27,15 +25,14 @@ public class QueryIT extends AbstractXOTitanTest {
 	@BeforeClass
 	public static void initialize() {
 		cdoManagerFactory = Cdo.createCdoManagerFactory("Titan");
-
-		CdoManager cdoManager = cdoManagerFactory.createCdoManager();
-		TestData.addStarwars(cdoManager);
-		cdoManager.close();
+		addStarwarsData(cdoManagerFactory);
 	}
 
 	@AfterClass
 	public static void teardown() {
-		cdoManagerFactory.close();
+		if (cdoManagerFactory != null) {
+			cdoManagerFactory.close();
+		}
 	}
 
 	@Before
@@ -64,18 +61,25 @@ public class QueryIT extends AbstractXOTitanTest {
 	}
 
 	@Test
-	public void test2() {
+	public void testRelations() {
 		cdoManager.currentTransaction().begin();
-		Query<Person> peopleQuery = cdoManager.createQuery(
-				"_().has('lastName', 'Skywalker')", Person.class);
-		assertNotNull(peopleQuery);
-		Result<Person> people = peopleQuery.execute();
 
-		int count = 0;
-		for (Person person : people) {
-			count++;
-		}
-		assertEquals(4, count);
+		Query<Person> query = cdoManager.createQuery(
+				"_().has('lastName', 'Skywalker').has('firstName','Luke')",
+				Person.class);
+		Person lukeSkywalker = query.execute().getSingleResult();
+		assertEquals("Luke", lukeSkywalker.getFirstName());
+		assertEquals("Skywalker", lukeSkywalker.getLastName());
+
+		Person anakinSkywalker = lukeSkywalker.getFather();
+		assertNotNull(anakinSkywalker);
+		assertEquals("Anakin", anakinSkywalker.getFirstName());
+		assertEquals("Skywalker", anakinSkywalker.getLastName());
+
+		Person leaSkywalker = lukeSkywalker.getMother();
+		assertNotNull(leaSkywalker);
+		assertEquals("Padme", leaSkywalker.getFirstName());
+		assertEquals("Skywalker", leaSkywalker.getLastName());
 
 		cdoManager.currentTransaction().commit();
 	}

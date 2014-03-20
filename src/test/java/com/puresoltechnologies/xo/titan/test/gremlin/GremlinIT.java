@@ -1,8 +1,7 @@
-package com.puresoltechnologies.xo.titan.test.crud;
+package com.puresoltechnologies.xo.titan.test.gremlin;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -12,13 +11,13 @@ import org.junit.Test;
 
 import com.buschmais.cdo.api.CdoManager;
 import com.buschmais.cdo.api.CdoManagerFactory;
-import com.buschmais.cdo.api.ResultIterable;
-import com.buschmais.cdo.api.ResultIterator;
+import com.buschmais.cdo.api.Query;
+import com.buschmais.cdo.api.Query.Result;
 import com.buschmais.cdo.api.bootstrap.Cdo;
 import com.puresoltechnologies.xo.titan.test.AbstractXOTitanTest;
-import com.puresoltechnologies.xo.titan.test.bootstrap.TestEntity;
+import com.puresoltechnologies.xo.titan.test.data.Person;
 
-public class StoreAndReadVerticesIT extends AbstractXOTitanTest {
+public class GremlinIT extends AbstractXOTitanTest {
 
 	private static CdoManagerFactory cdoManagerFactory;
 	private CdoManager cdoManager;
@@ -26,6 +25,7 @@ public class StoreAndReadVerticesIT extends AbstractXOTitanTest {
 	@BeforeClass
 	public static void initialize() {
 		cdoManagerFactory = Cdo.createCdoManagerFactory("Titan");
+		addStarwarsData(cdoManagerFactory);
 	}
 
 	@AfterClass
@@ -46,22 +46,23 @@ public class StoreAndReadVerticesIT extends AbstractXOTitanTest {
 	}
 
 	@Test
-	public void test() {
+	public void findSkywalkerFamily() {
 		cdoManager.currentTransaction().begin();
-		TestEntity createdA = cdoManager.create(TestEntity.class);
-		createdA.setName("Test");
+
+		Query<Person> query = cdoManager.createQuery(
+				"_().has('lastName', 'Skywalker')", Person.class);
+		assertNotNull(query);
+
+		Result<Person> results = query.execute();
+		assertNotNull(results);
+
+		int count = 0;
+		for (Person person : results) {
+			count++;
+			assertEquals("Skywalker", person.getLastName());
+		}
+		assertEquals(4, count);
+
 		cdoManager.currentTransaction().commit();
-
-		cdoManager.currentTransaction().begin();
-		ResultIterable<TestEntity> aa = cdoManager.find(TestEntity.class,
-				"Test");
-		assertNotNull(aa);
-		ResultIterator<TestEntity> iterator = aa.iterator();
-		assertTrue(iterator.hasNext());
-		TestEntity readA = iterator.next();
-		assertNotNull(readA);
-		assertEquals("Test", readA.getName());
-		cdoManager.currentTransaction().rollback();
 	}
-
 }

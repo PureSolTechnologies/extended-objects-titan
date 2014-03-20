@@ -11,11 +11,25 @@ import com.puresoltechnologies.xo.titan.impl.TitanStoreSession;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanNodeMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
 
+/**
+ * This class implements the XO {@link CdoDatastoreProvider} for Titan database.
+ * 
+ * @author Rick-Rainer Ludwig
+ */
 public class TitanXOProvider
 		implements
 		CdoDatastoreProvider<TitanNodeMetadata, String, TitanRelationMetadata, String> {
 
+	/**
+	 * This constant contains {@value #TITAN_SCHEME_PREFIX} as prefix for all
+	 * URI protocols referencing a Titan store provider.
+	 */
 	private static final String TITAN_SCHEME_PREFIX = "titan-";
+
+	/**
+	 * This constant contains {@value #TITAN_CASSANDRA_SCHEME} as protocol a
+	 * Titan store provider on Cassandra.
+	 */
 	private static final String TITAN_CASSANDRA_SCHEME = TITAN_SCHEME_PREFIX
 			+ "cassandra";
 
@@ -30,10 +44,10 @@ public class TitanXOProvider
 		}
 		String host = uri.getHost();
 		int port = uri.getPort();
-		String path = uri.getPath();
+		String keyspace = TitanCassandraStore.retrieveKeyspaceFromURI(uri);
 		switch (scheme) {
 		case TITAN_CASSANDRA_SCHEME:
-			return new TitanCassandraStore(host, port, path);
+			return new TitanCassandraStore(host, port, keyspace);
 		default:
 			throw new CdoException("Scheme '" + scheme
 					+ "' is not supported by this store.");

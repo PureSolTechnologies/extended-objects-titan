@@ -2,6 +2,7 @@ package com.puresoltechnologies.xo.titan.test.data;
 
 import java.util.Set;
 
+import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Outgoing;
 import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
 
 @VertexDefinition
@@ -17,13 +18,17 @@ public interface Person {
 
 	void setMother(Person mother);
 
+	@Outgoing
 	Person getMother();
 
 	void setFather(Person father);
 
+	@Outgoing
 	Person getFather();
 
+	@Outgoing
 	Set<Person> getSisters();
 
+	@Outgoing
 	Set<Person> getBrothers();
 }

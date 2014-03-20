@@ -8,10 +8,13 @@ import java.lang.annotation.Target;
 import com.buschmais.cdo.spi.annotation.QueryDefinition;
 
 /**
+ * <p>
  * Marks an interface or method as a Gremlin query.
- * 
+ * </p>
+ * <p>
  * For Gremlin language, have a look to: <a
  * href="http://gremlindocs.com">http://gremlindocs.com</a>
+ * </p>
  */
 @QueryDefinition
 @Target({ ElementType.TYPE, ElementType.METHOD })
@@ -19,7 +22,7 @@ import com.buschmais.cdo.spi.annotation.QueryDefinition;
 public @interface Gremlin {
 
 	/**
-	 * @return The Gremlin expression.
+	 * @return Returns the Gremlin expression as {@link String}.
 	 */
 	String value();
 

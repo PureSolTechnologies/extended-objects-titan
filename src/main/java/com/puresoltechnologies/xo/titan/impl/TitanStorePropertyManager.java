@@ -1,5 +1,7 @@
 package com.puresoltechnologies.xo.titan.impl;
 
+import java.util.Iterator;
+
 import com.buschmais.cdo.api.CdoException;
 import com.buschmais.cdo.spi.datastore.DatastorePropertyManager;
 import com.buschmais.cdo.spi.metadata.method.PrimitivePropertyMethodMetadata;
@@ -11,6 +13,12 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.VertexQuery;
 
+/**
+ * This class implements the XO {@link DatastorePropertyManager} for Titan
+ * database.
+ * 
+ * @author Rick-Rainer Ludwig
+ */
 public class TitanStorePropertyManager
 		implements
 		DatastorePropertyManager<Vertex, Edge, TitanNodeMetadata, TitanRelationMetadata> {
@@ -69,15 +77,53 @@ public class TitanStorePropertyManager
 	public boolean hasSingleRelation(Vertex source,
 			RelationTypeMetadata<TitanRelationMetadata> metadata,
 			RelationTypeMetadata.Direction direction) {
-		return getSingleRelation(source, metadata, direction) != null;
+		String label = metadata.getDatastoreMetadata().getDiscriminator();
+		long count;
+		switch (direction) {
+		case FROM:
+			count = source.query().direction(Direction.OUT).labels(label)
+					.count();
+			break;
+		case TO:
+			count = source.query().direction(Direction.OUT).labels(label)
+					.count();
+			break;
+		default:
+			throw new CdoException("Unkown direction '" + direction.name()
+					+ "'.");
+		}
+		if (count > 1) {
+			throw new CdoException("Multiple results are available.");
+		}
+		return count == 1;
 	}
 
 	@Override
 	public Edge getSingleRelation(Vertex source,
 			RelationTypeMetadata<TitanRelationMetadata> metadata,
 			RelationTypeMetadata.Direction direction) {
-		// TODO
-		return null;
+		String label = metadata.getDatastoreMetadata().getDiscriminator();
+		Iterable<Edge> edges;
+		switch (direction) {
+		case FROM:
+			edges = source.getEdges(Direction.OUT, label);
+			break;
+		case TO:
+			edges = source.getEdges(Direction.IN, label);
+			break;
+		default:
+			throw new CdoException("Unkown direction '" + direction.name()
+					+ "'.");
+		}
+		Iterator<Edge> iterator = edges.iterator();
+		if (!iterator.hasNext()) {
+			throw new CdoException("No result is available.");
+		}
+		Edge result = iterator.next();
+		if (iterator.hasNext()) {
+			throw new CdoException("Multiple results are available.");
+		}
+		return result;
 	}
 
 	@Override

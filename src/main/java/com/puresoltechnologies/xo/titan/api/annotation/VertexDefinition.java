@@ -7,6 +7,9 @@ import java.lang.annotation.Target;
 
 import com.buschmais.cdo.spi.annotation.EntityDefinition;
 
+/**
+ * This annotation marks enties as Titan vertex.
+ */
 @EntityDefinition
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
@@ -15,7 +18,7 @@ public @interface VertexDefinition {
 	String DEFAULT_VALUE = "";
 
 	/**
-	 * @return The name of the type.
+	 * @return Returns the name of the type as {@link String}.
 	 */
 	String value() default "";
 
