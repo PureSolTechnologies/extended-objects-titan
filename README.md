@@ -1,6 +1,6 @@
-![PureSol Technologies](http://puresol-technologies.com/images/logos/puresol-logo-green.png?raw=true)
-xo-titan
-========
+![PureSol Technologies](http://puresol-technologies.com/images/logos/puresol-logo-green.png?raw=true)   xo-titan
+================================================================================================================
+
 
 XO-Titan is an XO provider for a Titan graph database (http://thinkaurelius.github.io/titan).
 
