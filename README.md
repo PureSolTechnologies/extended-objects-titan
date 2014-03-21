@@ -1,3 +1,4 @@
+![PureSol Technologies](http://puresol-technologies.com/images/logos/puresol-logo-green.png?raw=true)
 xo-titan
 ========
 
