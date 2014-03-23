@@ -6,10 +6,10 @@
         <types>
             <type>com.puresoltechnologies.xo.titan.test.bootstrap.TestEntity</type>
             <type>com.puresoltechnologies.xo.titan.test.data.Person</type>
-            <!-- type>com.puresoltechnologies.xo.titan.test.data.HasMother</type>
+            <type>com.puresoltechnologies.xo.titan.test.data.HasMother</type>
             <type>com.puresoltechnologies.xo.titan.test.data.HasFather</type>
             <type>com.puresoltechnologies.xo.titan.test.data.HasSister</type>
-            <type>com.puresoltechnologies.xo.titan.test.data.HasBrother</type -->
+            <type>com.puresoltechnologies.xo.titan.test.data.HasBrother</type>
         </types>
     </cdo-unit>
 </v1:cdo>

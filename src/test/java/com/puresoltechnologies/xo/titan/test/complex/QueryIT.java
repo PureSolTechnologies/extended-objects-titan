@@ -3,50 +3,42 @@ package com.puresoltechnologies.xo.titan.test.complex;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import org.junit.After;
-import org.junit.AfterClass;
+import java.io.IOException;
+import java.util.Collection;
+
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import com.buschmais.cdo.api.CdoManager;
-import com.buschmais.cdo.api.CdoManagerFactory;
 import com.buschmais.cdo.api.Query;
+import com.buschmais.cdo.api.Query.Result;
 import com.buschmais.cdo.api.ResultIterable;
-import com.buschmais.cdo.api.bootstrap.Cdo;
+import com.buschmais.cdo.api.bootstrap.CdoUnit;
 import com.puresoltechnologies.xo.titan.test.AbstractXOTitanTest;
 import com.puresoltechnologies.xo.titan.test.data.Person;
 
+@RunWith(Parameterized.class)
 public class QueryIT extends AbstractXOTitanTest {
 
-	private static CdoManagerFactory cdoManagerFactory;
-	private CdoManager cdoManager;
-
-	@BeforeClass
-	public static void initialize() {
-		cdoManagerFactory = Cdo.createCdoManagerFactory("Titan");
-		addStarwarsData(cdoManagerFactory);
+	public QueryIT(CdoUnit cdoUnit) {
+		super(cdoUnit);
 	}
 
-	@AfterClass
-	public static void teardown() {
-		if (cdoManagerFactory != null) {
-			cdoManagerFactory.close();
-		}
+	@Parameterized.Parameters
+	public static Collection<Object[]> getCdoUnits() throws IOException {
+		return cdoUnits();
 	}
 
 	@Before
-	public void setup() {
-		cdoManager = cdoManagerFactory.createCdoManager();
-	}
-
-	@After
-	public void destroy() {
-		cdoManager.close();
+	public void setupData() {
+		addStarwarsData(getCdoManager());
 	}
 
 	@Test
 	public void test() {
+		CdoManager cdoManager = getCdoManager();
 		cdoManager.currentTransaction().begin();
 		ResultIterable<Person> people = cdoManager.find(Person.class, "Test");
 		assertNotNull(people);
@@ -62,12 +54,14 @@ public class QueryIT extends AbstractXOTitanTest {
 
 	@Test
 	public void testRelations() {
+		CdoManager cdoManager = getCdoManager();
 		cdoManager.currentTransaction().begin();
 
 		Query<Person> query = cdoManager.createQuery(
 				"_().has('lastName', 'Skywalker').has('firstName','Luke')",
 				Person.class);
-		Person lukeSkywalker = query.execute().getSingleResult();
+		Result<Person> result = query.execute();
+		Person lukeSkywalker = result.getSingleResult();
 		assertEquals("Luke", lukeSkywalker.getFirstName());
 		assertEquals("Skywalker", lukeSkywalker.getLastName());
 

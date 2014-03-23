@@ -1,22 +1,26 @@
 package com.puresoltechnologies.xo.titan.test;
 
-import static org.junit.Assert.assertNotNull;
-
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Properties;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 
 import com.buschmais.cdo.api.CdoManager;
 import com.buschmais.cdo.api.CdoManagerFactory;
-import com.buschmais.cdo.impl.schema.v1.Cdo;
-import com.buschmais.cdo.impl.schema.v1.CdoUnitType;
+import com.buschmais.cdo.api.ConcurrencyMode;
+import com.buschmais.cdo.api.Transaction;
+import com.buschmais.cdo.api.ValidationMode;
+import com.buschmais.cdo.api.bootstrap.CdoUnit;
+import com.buschmais.cdo.impl.bootstrap.CdoUnitFactory;
 import com.buschmais.cdo.spi.metadata.type.TypeMetadata;
 import com.puresoltechnologies.xo.titan.api.TitanXOProvider;
 import com.puresoltechnologies.xo.titan.impl.TitanCassandraStore;
@@ -34,58 +38,22 @@ public abstract class AbstractXOTitanTest {
 	private static final String CDO_CONFIGURATION_RESOURCE = "/META-INF/cdo.xml";
 
 	/**
-	 * This method cleans all titan keyspaces for test.
-	 * 
-	 * @throws JAXBException
-	 *             is thrown in case the {@value #CDO_CONFIGURATION_RESOURCE}
-	 *             file cannot be read for configuration.
-	 * @throws URISyntaxException
-	 *             is thrown in case the URI in
-	 *             {@value #CDO_CONFIGURATION_RESOURCE} is invalid.
+	 * This is the default local URI for testing.
 	 */
-	@BeforeClass
-	public static void deleteTitanKeyspace() throws JAXBException,
-			URISyntaxException {
-		Cdo cdoConfiguration = readCdoXml();
-		clearTitanKeyspaces(cdoConfiguration);
+	private static final URI DEFAULT_LOCAL_URI;
+	static {
+		try {
+			DEFAULT_LOCAL_URI = new URI(
+					"titan-cassandra://localhost:9160/titantest");
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-	/**
-	 * This method reads the configuration {@value #CDO_CONFIGURATION_RESOURCE}.
-	 * 
-	 * @return A {@link Cdo} object is returned containing the configuration.
-	 * @throws JAXBException
-	 *             is thrown if the configuration cannot be loaded.
-	 */
-	private static Cdo readCdoXml() throws JAXBException {
-		JAXBContext context = JAXBContext.newInstance(Cdo.class);
-		Unmarshaller unmarshaller = context.createUnmarshaller();
-		URL cdoResource = AbstractXOTitanTest.class
-				.getResource(CDO_CONFIGURATION_RESOURCE);
-		assertNotNull("Could not find cdo.xml at '"
-				+ CDO_CONFIGURATION_RESOURCE + "'.", cdoResource);
-		Cdo cdoConfiguration = (Cdo) unmarshaller.unmarshal(cdoResource);
-		return cdoConfiguration;
-	}
-
-	/**
-	 * This method clears all keyspaces which are assigned to a
-	 * {@link TitanXOProvider}.
-	 * 
-	 * @param cdoConfiguration
-	 *            is the configuration read from
-	 *            {@value #CDO_CONFIGURATION_RESOURCE}.
-	 * @throws URISyntaxException
-	 *             is throw if the URI in the configuration is found invalid.
-	 */
-	private static void clearTitanKeyspaces(Cdo cdoConfiguration)
-			throws URISyntaxException {
-		for (CdoUnitType cdoUnit : cdoConfiguration.getCdoUnit()) {
-			String provider = cdoUnit.getProvider();
-			if (TitanXOProvider.class.getName().equals(provider)) {
-				URI uri = new URI(cdoUnit.getUrl());
-				clearTitanKeyspace(uri);
-			}
+	private static void clearTitanKeyspace(CdoUnit cdoUnit) {
+		Class<?> provider = cdoUnit.getProvider();
+		if (TitanXOProvider.class.equals(provider)) {
+			clearTitanKeyspace(cdoUnit.getUri());
 		}
 	}
 
@@ -97,7 +65,7 @@ public abstract class AbstractXOTitanTest {
 	 * @throws URISyntaxException
 	 *             is thrown if the URI is found invalid.
 	 */
-	private static void clearTitanKeyspace(URI uri) throws URISyntaxException {
+	private static void clearTitanKeyspace(URI uri) {
 		String host = uri.getHost();
 		int port = Integer.valueOf(uri.getPort());
 		String keyspace = TitanCassandraStore.retrieveKeyspaceFromURI(uri);
@@ -112,15 +80,112 @@ public abstract class AbstractXOTitanTest {
 		titanGraph.commit();
 	}
 
+	protected static Collection<Object[]> configuredCdoUnits()
+			throws IOException {
+		List<Object[]> cdoUnits = new ArrayList<>();
+		List<CdoUnit> readCdoUnits = CdoUnitFactory.getInstance().getCdoUnits(
+				AbstractXOTitanTest.class
+						.getResource(CDO_CONFIGURATION_RESOURCE));
+		for (CdoUnit cdoUnit : readCdoUnits) {
+			cdoUnits.add(new Object[] { cdoUnit });
+		}
+		return cdoUnits;
+	}
+
+	protected static Collection<Object[]> cdoUnits() {
+		return cdoUnits(Arrays.asList(DEFAULT_LOCAL_URI),
+				Collections.<Class<?>> emptyList(),
+				Collections.<Class<?>> emptyList(), ValidationMode.AUTO,
+				ConcurrencyMode.SINGLETHREADED,
+				Transaction.TransactionAttribute.MANDATORY);
+	}
+
+	protected static Collection<Object[]> cdoUnits(Class<?>... types) {
+		return cdoUnits(Arrays.asList(DEFAULT_LOCAL_URI), Arrays.asList(types),
+				Collections.<Class<?>> emptyList(), ValidationMode.AUTO,
+				ConcurrencyMode.SINGLETHREADED,
+				Transaction.TransactionAttribute.MANDATORY);
+	}
+
+	protected static Collection<Object[]> cdoUnits(List<URI> uris,
+			List<? extends Class<?>> types) {
+		return cdoUnits(uris, types, Collections.<Class<?>> emptyList(),
+				ValidationMode.AUTO, ConcurrencyMode.SINGLETHREADED,
+				Transaction.TransactionAttribute.MANDATORY);
+	}
+
+	protected static Collection<Object[]> cdoUnits(
+			List<? extends Class<?>> types,
+			List<? extends Class<?>> instanceListeners,
+			ValidationMode validationMode, ConcurrencyMode concurrencyMode,
+			Transaction.TransactionAttribute transactionAttribute) {
+		return cdoUnits(Arrays.asList(DEFAULT_LOCAL_URI), types,
+				instanceListeners, validationMode, concurrencyMode,
+				transactionAttribute);
+	}
+
+	protected static Collection<Object[]> cdoUnits(List<URI> uris,
+			List<? extends Class<?>> types,
+			List<? extends Class<?>> instanceListenerTypes,
+			ValidationMode valiationMode, ConcurrencyMode concurrencyMode,
+			Transaction.TransactionAttribute transactionAttribute) {
+		List<Object[]> cdoUnits = new ArrayList<>(uris.size());
+		for (URI uri : uris) {
+			CdoUnit unit = new CdoUnit("default", "Default CDO unit", uri,
+					TitanXOProvider.class, new HashSet<>(types),
+					instanceListenerTypes, valiationMode, concurrencyMode,
+					transactionAttribute, new Properties());
+			cdoUnits.add(new Object[] { unit });
+		}
+		return cdoUnits;
+	}
+
 	/**
 	 * This method adds the Starwars characters data into the Titan database for
 	 * testing purposes.
 	 * 
+	 * @param cdoManager2
+	 * 
 	 * @param cdoManagerFactory
 	 */
-	protected static void addStarwarsData(CdoManagerFactory cdoManagerFactory) {
-		CdoManager cdoManager = cdoManagerFactory.createCdoManager();
+	protected static void addStarwarsData(CdoManager cdoManager) {
 		TestData.addStarwars(cdoManager);
-		cdoManager.close();
 	}
+
+	private CdoManagerFactory cdoManagerFactory;
+	private CdoManager cdoManager;
+
+	private final CdoUnit cdoUnit;
+
+	public AbstractXOTitanTest(CdoUnit cdoUnit) {
+		super();
+		this.cdoUnit = cdoUnit;
+	}
+
+	@Before
+	public final void setup() {
+		cdoManagerFactory = com.buschmais.cdo.api.bootstrap.Cdo
+				.createCdoManagerFactory("Titan");
+		cdoManager = cdoManagerFactory.createCdoManager();
+		clearTitanKeyspace(cdoUnit);
+	}
+
+	@After
+	public final void destroy() {
+		if (cdoManager != null) {
+			cdoManager.close();
+		}
+		if (cdoManagerFactory != null) {
+			cdoManagerFactory.close();
+		}
+	}
+
+	public CdoManagerFactory getCdoManagerFactory() {
+		return cdoManagerFactory;
+	}
+
+	public CdoManager getCdoManager() {
+		return cdoManager;
+	}
+
 }

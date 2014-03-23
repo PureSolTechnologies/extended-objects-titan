@@ -4,49 +4,35 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import java.io.IOException;
+import java.util.Collection;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import com.buschmais.cdo.api.CdoManager;
-import com.buschmais.cdo.api.CdoManagerFactory;
 import com.buschmais.cdo.api.ResultIterable;
 import com.buschmais.cdo.api.ResultIterator;
-import com.buschmais.cdo.api.bootstrap.Cdo;
+import com.buschmais.cdo.api.bootstrap.CdoUnit;
 import com.puresoltechnologies.xo.titan.test.AbstractXOTitanTest;
 import com.puresoltechnologies.xo.titan.test.bootstrap.TestEntity;
 
+@RunWith(Parameterized.class)
 public class StoreAndReadVerticesIT extends AbstractXOTitanTest {
 
-	private static CdoManagerFactory cdoManagerFactory;
-	private CdoManager cdoManager;
-
-	@BeforeClass
-	public static void initialize() {
-		cdoManagerFactory = Cdo.createCdoManagerFactory("Titan");
+	public StoreAndReadVerticesIT(CdoUnit cdoUnit) {
+		super(cdoUnit);
 	}
 
-	@AfterClass
-	public static void teardown() {
-		if (cdoManagerFactory != null) {
-			cdoManagerFactory.close();
-		}
-	}
-
-	@Before
-	public void setup() {
-		cdoManager = cdoManagerFactory.createCdoManager();
-	}
-
-	@After
-	public void destroy() {
-		cdoManager.close();
+	@Parameterized.Parameters
+	public static Collection<Object[]> getCdoUnits() throws IOException {
+		return cdoUnits();
 	}
 
 	@Test
 	public void test() {
+		CdoManager cdoManager = getCdoManager();
 		cdoManager.currentTransaction().begin();
 		TestEntity createdA = cdoManager.create(TestEntity.class);
 		createdA.setName("Test");
