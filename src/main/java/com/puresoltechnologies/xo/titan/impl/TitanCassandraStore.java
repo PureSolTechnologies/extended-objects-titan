@@ -35,7 +35,14 @@ public class TitanCassandraStore
 	 * This constant contains the default name of the Titan keyspace which is
 	 * set to {@value #DEFAULT_TITAN_KEYSPACE}.
 	 */
-	private static final String DEFAULT_TITAN_KEYSPACE = "titan";
+	public static final String DEFAULT_TITAN_KEYSPACE = "titan";
+
+	/**
+	 * This constant contains the default port
+	 * {@value #DEFAULT_CASSANDRA_THRIFT_PORT} for the Thrift interface of
+	 * Cassandra.
+	 */
+	public static final int DEFAULT_CASSANDRA_THRIFT_PORT = 9160;
 
 	/**
 	 * This is a helper method to retrieve the keyspace name from a store URI.
@@ -93,14 +100,33 @@ public class TitanCassandraStore
 	 *            is
 	 */
 	public TitanCassandraStore(String host, int port, String keyspace) {
+		if ((host == null) || (host.isEmpty())) {
+			throw new IllegalArgumentException(
+					"The host must not be null or empty.");
+		}
 		this.host = host;
-		this.port = port;
+		if (port <= 0) {
+			this.port = DEFAULT_CASSANDRA_THRIFT_PORT;
+		} else {
+			this.port = port;
+		}
 		if ((keyspace == null) || (keyspace.isEmpty())) {
-			// Titan will use its default keyspace.
 			this.keyspace = DEFAULT_TITAN_KEYSPACE;
 		} else {
 			this.keyspace = keyspace;
 		}
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public String getKeyspace() {
+		return keyspace;
 	}
 
 	/**

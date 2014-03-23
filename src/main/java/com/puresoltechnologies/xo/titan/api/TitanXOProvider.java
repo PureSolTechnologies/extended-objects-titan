@@ -36,7 +36,13 @@ public class TitanXOProvider
 	@Override
 	public Datastore<TitanStoreSession, TitanNodeMetadata, String, TitanRelationMetadata, String> createDatastore(
 			CdoUnit cdoUnit) {
+		if (cdoUnit == null) {
+			throw new IllegalArgumentException("CdoUnit must not be null!");
+		}
 		URI uri = cdoUnit.getUri();
+		if (uri == null) {
+			throw new CdoException("No URI is specified for the store.");
+		}
 		String scheme = uri.getScheme();
 		if (!scheme.startsWith(scheme)) {
 			throw new CdoException("Only URIs starting with '"

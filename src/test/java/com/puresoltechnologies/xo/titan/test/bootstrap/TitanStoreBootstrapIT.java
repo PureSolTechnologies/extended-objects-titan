@@ -9,7 +9,7 @@ import org.junit.runners.Parameterized;
 
 import com.buschmais.cdo.api.CdoManager;
 import com.buschmais.cdo.api.bootstrap.CdoUnit;
-import com.puresoltechnologies.xo.titan.test.AbstractXOTitanTest;
+import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 
 @RunWith(Parameterized.class)
 public class TitanStoreBootstrapIT extends AbstractXOTitanTest {

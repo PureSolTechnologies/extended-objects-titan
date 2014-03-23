@@ -1,9 +1,8 @@
 package com.puresoltechnologies.xo.titan.impl;
 
-import java.lang.reflect.AnnotatedElement;
-
 import com.buschmais.cdo.api.CdoException;
 import com.buschmais.cdo.spi.datastore.DatastoreSession;
+import com.buschmais.cdo.spi.reflection.AnnotatedElement;
 import com.puresoltechnologies.xo.titan.api.annotation.Gremlin;
 
 /**
@@ -25,8 +24,9 @@ public class GremlinManager {
 	public static <QL> String getGremlinExpression(QL expression) {
 		if (expression instanceof String) {
 			return (String) expression;
-		} else if (expression instanceof AnnotatedElement) {
-			AnnotatedElement typeExpression = (AnnotatedElement) expression;
+		} else if (AnnotatedElement.class.isAssignableFrom(expression
+				.getClass())) {
+			AnnotatedElement<?> typeExpression = (AnnotatedElement<?>) expression;
 			Gremlin gremlin = typeExpression.getAnnotation(Gremlin.class);
 			if (gremlin == null) {
 				throw new CdoException(typeExpression

@@ -30,6 +30,9 @@ public class TitanStoreTransaction implements DatastoreTransaction {
 	 *            transaction shall work on.
 	 */
 	public TitanStoreTransaction(TitanGraph titanGraph) {
+		if (titanGraph == null) {
+			throw new IllegalArgumentException("titanGraph must not be null");
+		}
 		this.titanGraph = titanGraph;
 	}
 

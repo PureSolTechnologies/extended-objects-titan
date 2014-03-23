@@ -15,7 +15,7 @@ import com.buschmais.cdo.api.CdoManager;
 import com.buschmais.cdo.api.Query;
 import com.buschmais.cdo.api.Query.Result;
 import com.buschmais.cdo.api.bootstrap.CdoUnit;
-import com.puresoltechnologies.xo.titan.test.AbstractXOTitanTest;
+import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 import com.puresoltechnologies.xo.titan.test.data.Person;
 
 @RunWith(Parameterized.class)
