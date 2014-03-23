@@ -16,7 +16,7 @@ import com.buschmais.cdo.api.Query;
 import com.buschmais.cdo.api.Query.Result;
 import com.buschmais.cdo.api.ResultIterable;
 import com.buschmais.cdo.api.bootstrap.CdoUnit;
-import com.puresoltechnologies.xo.titan.test.AbstractXOTitanTest;
+import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 import com.puresoltechnologies.xo.titan.test.data.Person;
 
 @RunWith(Parameterized.class)
@@ -28,7 +28,7 @@ public class QueryIT extends AbstractXOTitanTest {
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getCdoUnits() throws IOException {
-		return cdoUnits();
+		return configuredCdoUnits();
 	}
 
 	@Before

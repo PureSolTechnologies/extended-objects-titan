@@ -32,7 +32,7 @@ public class TitanStoreSession
 	/**
 	 * This constant contains the prefix for discriminator properties.
 	 */
-	private static final String XO_DISCRIMINATORS_PROPERTY = "_xo_discriminator_";
+	public static final String XO_DISCRIMINATORS_PROPERTY = "_xo_discriminator_";
 
 	/**
 	 * This field contains the Titan graph as {@link TitanGraph} object.

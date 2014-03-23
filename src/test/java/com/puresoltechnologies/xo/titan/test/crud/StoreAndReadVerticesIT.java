@@ -15,7 +15,7 @@ import com.buschmais.cdo.api.CdoManager;
 import com.buschmais.cdo.api.ResultIterable;
 import com.buschmais.cdo.api.ResultIterator;
 import com.buschmais.cdo.api.bootstrap.CdoUnit;
-import com.puresoltechnologies.xo.titan.test.AbstractXOTitanTest;
+import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 import com.puresoltechnologies.xo.titan.test.bootstrap.TestEntity;
 
 @RunWith(Parameterized.class)
@@ -27,7 +27,7 @@ public class StoreAndReadVerticesIT extends AbstractXOTitanTest {
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getCdoUnits() throws IOException {
-		return cdoUnits();
+		return configuredCdoUnits();
 	}
 
 	@Test

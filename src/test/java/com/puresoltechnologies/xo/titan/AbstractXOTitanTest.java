@@ -1,4 +1,4 @@
-package com.puresoltechnologies.xo.titan.test;
+package com.puresoltechnologies.xo.titan;
 
 import java.io.IOException;
 import java.net.URI;
@@ -19,6 +19,7 @@ import com.buschmais.cdo.api.CdoManagerFactory;
 import com.buschmais.cdo.api.ConcurrencyMode;
 import com.buschmais.cdo.api.Transaction;
 import com.buschmais.cdo.api.ValidationMode;
+import com.buschmais.cdo.api.bootstrap.Cdo;
 import com.buschmais.cdo.api.bootstrap.CdoUnit;
 import com.buschmais.cdo.impl.bootstrap.CdoUnitFactory;
 import com.buschmais.cdo.spi.metadata.type.TypeMetadata;
@@ -164,8 +165,7 @@ public abstract class AbstractXOTitanTest {
 
 	@Before
 	public final void setup() {
-		cdoManagerFactory = com.buschmais.cdo.api.bootstrap.Cdo
-				.createCdoManagerFactory("Titan");
+		cdoManagerFactory = Cdo.createCdoManagerFactory(cdoUnit);
 		cdoManager = cdoManagerFactory.createCdoManager();
 		clearTitanKeyspace(cdoUnit);
 	}
