@@ -27,7 +27,7 @@ public class StoreAndReadVerticesIT extends AbstractXOTitanTest {
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getCdoUnits() throws IOException {
-		return cdoUnits();
+		return configuredCdoUnits();
 	}
 
 	@Test

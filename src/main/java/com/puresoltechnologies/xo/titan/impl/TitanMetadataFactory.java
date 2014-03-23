@@ -37,9 +37,12 @@ public class TitanMetadataFactory
 			Map<Class<?>, TypeMetadata> metadataByType) {
 		VertexDefinition annotation = annotatedType
 				.getAnnotation(VertexDefinition.class);
-		String value = annotation.value();
-		if ((value == null) || (value.isEmpty())) {
-			value = annotatedType.getName();
+		String value = null;
+		if (annotation != null) {
+			value = annotation.value();
+			if ((value == null) || (value.isEmpty())) {
+				value = annotatedType.getName();
+			}
 		}
 		return new TitanNodeMetadata(value);
 	}

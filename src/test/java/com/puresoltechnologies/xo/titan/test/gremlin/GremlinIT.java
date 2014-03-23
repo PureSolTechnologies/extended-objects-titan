@@ -27,7 +27,7 @@ public class GremlinIT extends AbstractXOTitanTest {
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getCdoUnits() throws IOException {
-		return cdoUnits();
+		return configuredCdoUnits();
 	}
 
 	@Before
