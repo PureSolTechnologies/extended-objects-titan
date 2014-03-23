@@ -3,50 +3,41 @@ package com.puresoltechnologies.xo.titan.test.gremlin;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import org.junit.After;
-import org.junit.AfterClass;
+import java.io.IOException;
+import java.util.Collection;
+
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import com.buschmais.cdo.api.CdoManager;
-import com.buschmais.cdo.api.CdoManagerFactory;
 import com.buschmais.cdo.api.Query;
 import com.buschmais.cdo.api.Query.Result;
-import com.buschmais.cdo.api.bootstrap.Cdo;
+import com.buschmais.cdo.api.bootstrap.CdoUnit;
 import com.puresoltechnologies.xo.titan.test.AbstractXOTitanTest;
 import com.puresoltechnologies.xo.titan.test.data.Person;
 
+@RunWith(Parameterized.class)
 public class GremlinIT extends AbstractXOTitanTest {
 
-	private static CdoManagerFactory cdoManagerFactory;
-	private CdoManager cdoManager;
-
-	@BeforeClass
-	public static void initialize() {
-		cdoManagerFactory = Cdo.createCdoManagerFactory("Titan");
-		addStarwarsData(cdoManagerFactory);
+	public GremlinIT(CdoUnit cdoUnit) {
+		super(cdoUnit);
 	}
 
-	@AfterClass
-	public static void teardown() {
-		if (cdoManagerFactory != null) {
-			cdoManagerFactory.close();
-		}
+	@Parameterized.Parameters
+	public static Collection<Object[]> getCdoUnits() throws IOException {
+		return cdoUnits();
 	}
 
 	@Before
-	public void setup() {
-		cdoManager = cdoManagerFactory.createCdoManager();
-	}
-
-	@After
-	public void destroy() {
-		cdoManager.close();
+	public void setupData() {
+		addStarwarsData(getCdoManager());
 	}
 
 	@Test
 	public void findSkywalkerFamily() {
+		CdoManager cdoManager = getCdoManager();
 		cdoManager.currentTransaction().begin();
 
 		Query<Person> query = cdoManager.createQuery(

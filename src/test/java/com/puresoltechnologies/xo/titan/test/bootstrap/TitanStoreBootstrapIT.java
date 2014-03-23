@@ -1,45 +1,31 @@
 package com.puresoltechnologies.xo.titan.test.bootstrap;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import java.io.IOException;
+import java.util.Collection;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import com.buschmais.cdo.api.CdoManager;
-import com.buschmais.cdo.api.CdoManagerFactory;
-import com.buschmais.cdo.api.bootstrap.Cdo;
+import com.buschmais.cdo.api.bootstrap.CdoUnit;
 import com.puresoltechnologies.xo.titan.test.AbstractXOTitanTest;
 
+@RunWith(Parameterized.class)
 public class TitanStoreBootstrapIT extends AbstractXOTitanTest {
 
-	private static CdoManagerFactory cdoManagerFactory;
-	private CdoManager cdoManager;
-
-	@BeforeClass
-	public static void initialize() {
-		cdoManagerFactory = Cdo.createCdoManagerFactory("Titan");
+	public TitanStoreBootstrapIT(CdoUnit cdoUnit) {
+		super(cdoUnit);
 	}
 
-	@AfterClass
-	public static void teardown() {
-		if (cdoManagerFactory != null) {
-			cdoManagerFactory.close();
-		}
-	}
-
-	@Before
-	public void setup() {
-		cdoManager = cdoManagerFactory.createCdoManager();
-	}
-
-	@After
-	public void destroy() {
-		cdoManager.close();
+	@Parameterized.Parameters
+	public static Collection<Object[]> getCdoUnits() throws IOException {
+		return cdoUnits();
 	}
 
 	@Test
 	public void bootstrap() {
+		CdoManager cdoManager = getCdoManager();
 		cdoManager.currentTransaction().begin();
 		TestEntity a = cdoManager.create(TestEntity.class);
 		a.setName("Test");
