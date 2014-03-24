@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.buschmais.cdo.api.CdoManager;
 import com.buschmais.cdo.spi.annotation.EntityDefinition;
 
 /**
@@ -21,5 +22,15 @@ public @interface VertexDefinition {
 	 * @return Returns the name of the type as {@link String}.
 	 */
 	String value() default "";
+
+	/**
+	 * @return The (super) type containing an indexed property ({@link Indexed}
+	 *         ).
+	 *         <p>
+	 *         An index will be created for this label and the indexed property
+	 *         and used by {@link CdoManager#find(Class, Object)}.
+	 *         </p>
+	 */
+	Class<?> usingIndexedPropertyOf() default Object.class;
 
 }
