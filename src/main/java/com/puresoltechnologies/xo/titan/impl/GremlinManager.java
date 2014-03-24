@@ -1,5 +1,7 @@
 package com.puresoltechnologies.xo.titan.impl;
 
+import java.lang.reflect.Method;
+
 import com.buschmais.cdo.api.CdoException;
 import com.buschmais.cdo.spi.datastore.DatastoreSession;
 import com.buschmais.cdo.spi.reflection.AnnotatedElement;
@@ -31,6 +33,22 @@ public class GremlinManager {
 			if (gremlin == null) {
 				throw new CdoException(typeExpression
 						+ " must be annotated with " + Gremlin.class.getName());
+			}
+			return gremlin.value();
+		} else if (Class.class.isAssignableFrom(expression.getClass())) {
+			Class<?> clazz = (Class<?>) expression;
+			Gremlin gremlin = clazz.getAnnotation(Gremlin.class);
+			if (gremlin == null) {
+				throw new CdoException(expression + " must be annotated with "
+						+ Gremlin.class.getName());
+			}
+			return gremlin.value();
+		} else if (Method.class.isAssignableFrom(expression.getClass())) {
+			Method method = (Method) expression;
+			Gremlin gremlin = method.getAnnotation(Gremlin.class);
+			if (gremlin == null) {
+				throw new CdoException(expression + " must be annotated with "
+						+ Gremlin.class.getName());
 			}
 			return gremlin.value();
 		}

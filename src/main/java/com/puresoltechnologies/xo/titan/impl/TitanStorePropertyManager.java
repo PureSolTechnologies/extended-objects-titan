@@ -151,10 +151,10 @@ public class TitanStorePropertyManager
 			RelationTypeMetadata.Direction direction, Vertex target) {
 		String name = metadata.getDatastoreMetadata().getDiscriminator();
 		switch (direction) {
-		case TO:
-			return target.addEdge(name, source);
 		case FROM:
 			return source.addEdge(name, target);
+		case TO:
+			return target.addEdge(name, source);
 		default:
 			throw new CdoException("Unknown direction '" + direction.name()
 					+ "'.");

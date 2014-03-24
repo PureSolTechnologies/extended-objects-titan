@@ -198,7 +198,18 @@ public class TitanStoreSession
 			Set<String> discriminators,
 			TypeMetadataSet<EntityTypeMetadata<TitanNodeMetadata>> targetTypes,
 			Set<String> targetDiscriminators) {
-		// TODO
+		for (String discriminator : discriminators) {
+			if (!targetDiscriminators.contains(discriminator)) {
+				vertex.removeProperty(XO_DISCRIMINATORS_PROPERTY
+						+ discriminator);
+			}
+		}
+		for (String discriminator : targetDiscriminators) {
+			if (!discriminators.contains(discriminator)) {
+				vertex.setProperty(XO_DISCRIMINATORS_PROPERTY + discriminator,
+						discriminator);
+			}
+		}
 	}
 
 	@Override
