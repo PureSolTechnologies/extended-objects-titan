@@ -185,7 +185,14 @@ public abstract class AbstractXOTitanTest {
 	}
 
 	public XOManager getXOManager() {
+		if (xoManager == null) {
+			xoManager = xoManagerFactory.createXOManager();
+		}
 		return xoManager;
 	}
 
+	public void closeXOManager() {
+		xoManager.close();
+		xoManager = null;
+	}
 }

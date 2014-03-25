@@ -20,4 +20,6 @@ import com.buschmais.xo.spi.annotation.IndexDefinition;
 @Target(ElementType.METHOD)
 public @interface Indexed {
 
+	boolean unique() default false;
+
 }
