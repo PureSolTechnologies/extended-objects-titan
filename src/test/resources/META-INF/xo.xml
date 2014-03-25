@@ -1,5 +1,5 @@
-<v1:cdo version="1.0" xmlns:v1="http://buschmais.com/cdo/schema/v1.0">
-    <cdo-unit name="Titan">
+<v1:xo version="1.0" xmlns:v1="http://buschmais.com/xo/schema/v1.0">
+    <xo-unit name="Titan">
         <description>This is a test unit for the Titan file datastore.</description>
         <url>titan-cassandra://localhost:9160/titantest</url>
         <provider>com.puresoltechnologies.xo.titan.api.TitanXOProvider</provider>
@@ -11,5 +11,5 @@
             <type>com.puresoltechnologies.xo.titan.test.data.HasSister</type>
             <type>com.puresoltechnologies.xo.titan.test.data.HasBrother</type>
         </types>
-    </cdo-unit>
-</v1:cdo>
+    </xo-unit>
+</v1:xo>
