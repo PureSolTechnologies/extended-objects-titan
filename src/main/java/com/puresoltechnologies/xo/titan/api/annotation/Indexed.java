@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.buschmais.cdo.spi.annotation.IndexDefinition;
+import com.buschmais.xo.spi.annotation.IndexDefinition;
 
 /**
  * Marks a property as indexed.

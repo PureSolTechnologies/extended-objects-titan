@@ -10,72 +10,72 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import com.buschmais.cdo.api.CdoManager;
-import com.buschmais.cdo.api.bootstrap.CdoUnit;
+import com.buschmais.xo.api.XOManager;
+import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 
 @RunWith(Parameterized.class)
 public class EntityImplementedByIT extends AbstractXOTitanTest {
 
-	public EntityImplementedByIT(CdoUnit cdoUnit) {
-		super(cdoUnit);
+	public EntityImplementedByIT(XOUnit xoUnit) {
+		super(xoUnit);
 	}
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getCdoUnits() throws URISyntaxException {
-		return cdoUnits(A.class, B.class, A2B.class);
+		return xoUnits(A.class, B.class, A2B.class);
 	}
 
 	@Test
 	public void nonPropertyMethod() {
-		CdoManager cdoManager = getCdoManagerFactory().createCdoManager();
-		cdoManager.currentTransaction().begin();
-		A a = cdoManager.create(A.class);
+		XOManager xoManager = getXOManagerFactory().createXOManager();
+		xoManager.currentTransaction().begin();
+		A a = xoManager.create(A.class);
 		a.setValue(1);
 		int i = a.incrementValue();
 		assertThat(i, equalTo(2));
-		cdoManager.currentTransaction().commit();
-		cdoManager.close();
+		xoManager.currentTransaction().commit();
+		xoManager.close();
 	}
 
 	@Test
 	public void propertyMethods() {
-		CdoManager cdoManager = getCdoManagerFactory().createCdoManager();
-		cdoManager.currentTransaction().begin();
-		A a = cdoManager.create(A.class);
+		XOManager xoManager = getXOManagerFactory().createXOManager();
+		xoManager.currentTransaction().begin();
+		A a = xoManager.create(A.class);
 		a.setCustomValue("VALUE");
 		String value = a.getCustomValue();
 		assertThat(value, equalTo("set_VALUE_get"));
-		cdoManager.currentTransaction().commit();
-		cdoManager.close();
+		xoManager.currentTransaction().commit();
+		xoManager.close();
 	}
 
 	@Test
 	public void compareTo() {
-		CdoManager cdoManager = getCdoManagerFactory().createCdoManager();
-		cdoManager.currentTransaction().begin();
-		A a1 = cdoManager.create(A.class);
+		XOManager xoManager = getXOManagerFactory().createXOManager();
+		xoManager.currentTransaction().begin();
+		A a1 = xoManager.create(A.class);
 		a1.setValue(100);
-		A a2 = cdoManager.create(A.class);
+		A a2 = xoManager.create(A.class);
 		a2.setValue(200);
-		cdoManager.currentTransaction().commit();
-		cdoManager.currentTransaction().begin();
+		xoManager.currentTransaction().commit();
+		xoManager.currentTransaction().begin();
 		assertThat(a1.compareTo(a2), equalTo(-100));
-		cdoManager.currentTransaction().commit();
-		cdoManager.close();
+		xoManager.currentTransaction().commit();
+		xoManager.close();
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void unsupportedOperation() {
-		CdoManager cdoManager = getCdoManagerFactory().createCdoManager();
-		cdoManager.currentTransaction().begin();
-		A a = cdoManager.create(A.class);
-		cdoManager.currentTransaction().commit();
-		cdoManager.currentTransaction().begin();
+		XOManager xoManager = getXOManagerFactory().createXOManager();
+		xoManager.currentTransaction().begin();
+		A a = xoManager.create(A.class);
+		xoManager.currentTransaction().commit();
+		xoManager.currentTransaction().begin();
 		try {
 			a.unsupportedOperation();
 		} finally {
-			cdoManager.currentTransaction().commit();
+			xoManager.currentTransaction().commit();
 		}
 	}
 }

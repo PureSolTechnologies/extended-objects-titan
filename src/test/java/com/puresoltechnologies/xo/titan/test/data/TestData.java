@@ -1,6 +1,6 @@
 package com.puresoltechnologies.xo.titan.test.data;
 
-import com.buschmais.cdo.api.CdoManager;
+import com.buschmais.xo.api.XOManager;
 
 /**
  * This class provides some test data for testing.
@@ -13,29 +13,29 @@ public class TestData {
 	/**
 	 * Adds the Starwars example data to the Titan database.
 	 */
-	public static void addStarwars(CdoManager cdoManager) {
-		cdoManager.currentTransaction().begin();
+	public static void addStarwars(XOManager xoManager) {
+		xoManager.currentTransaction().begin();
 
-		Person padmeSkywalker = cdoManager.create(Person.class);
+		Person padmeSkywalker = xoManager.create(Person.class);
 		padmeSkywalker.setFirstName("Padme");
 		padmeSkywalker.setLastName("Skywalker");
 
-		Person anakinSkywalker = cdoManager.create(Person.class);
+		Person anakinSkywalker = xoManager.create(Person.class);
 		anakinSkywalker.setFirstName("Anakin");
 		anakinSkywalker.setLastName("Skywalker");
 
-		Person leaSkywalker = cdoManager.create(Person.class);
+		Person leaSkywalker = xoManager.create(Person.class);
 		leaSkywalker.setFirstName("Lea");
 		leaSkywalker.setLastName("Skywalker");
 		leaSkywalker.setMother(padmeSkywalker);
 		leaSkywalker.setFather(anakinSkywalker);
 
-		Person lukeSkywalker = cdoManager.create(Person.class);
+		Person lukeSkywalker = xoManager.create(Person.class);
 		lukeSkywalker.setFirstName("Luke");
 		lukeSkywalker.setLastName("Skywalker");
 		lukeSkywalker.setMother(padmeSkywalker);
 		lukeSkywalker.setFather(anakinSkywalker);
 
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 	}
 }

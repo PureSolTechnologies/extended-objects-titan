@@ -14,15 +14,15 @@ import java.util.Properties;
 import org.junit.After;
 import org.junit.Before;
 
-import com.buschmais.cdo.api.CdoManager;
-import com.buschmais.cdo.api.CdoManagerFactory;
-import com.buschmais.cdo.api.ConcurrencyMode;
-import com.buschmais.cdo.api.Transaction;
-import com.buschmais.cdo.api.ValidationMode;
-import com.buschmais.cdo.api.bootstrap.Cdo;
-import com.buschmais.cdo.api.bootstrap.CdoUnit;
-import com.buschmais.cdo.impl.bootstrap.CdoUnitFactory;
-import com.buschmais.cdo.spi.metadata.type.TypeMetadata;
+import com.buschmais.xo.api.ConcurrencyMode;
+import com.buschmais.xo.api.Transaction;
+import com.buschmais.xo.api.ValidationMode;
+import com.buschmais.xo.api.XOManager;
+import com.buschmais.xo.api.XOManagerFactory;
+import com.buschmais.xo.api.bootstrap.XO;
+import com.buschmais.xo.api.bootstrap.XOUnit;
+import com.buschmais.xo.impl.bootstrap.XOUnitFactory;
+import com.buschmais.xo.spi.metadata.type.TypeMetadata;
 import com.puresoltechnologies.xo.titan.api.TitanXOProvider;
 import com.puresoltechnologies.xo.titan.impl.TitanCassandraStore;
 import com.puresoltechnologies.xo.titan.test.data.TestData;
@@ -36,7 +36,7 @@ import com.tinkerpop.blueprints.Vertex;
  */
 public abstract class AbstractXOTitanTest {
 
-	private static final String CDO_CONFIGURATION_RESOURCE = "/META-INF/cdo.xml";
+	private static final String XO_CONFIGURATION_RESOURCE = "/META-INF/xo.xml";
 
 	/**
 	 * This is the default local URI for testing.
@@ -51,10 +51,10 @@ public abstract class AbstractXOTitanTest {
 		}
 	}
 
-	private static void clearTitanKeyspace(CdoUnit cdoUnit) {
-		Class<?> provider = cdoUnit.getProvider();
+	private static void clearTitanKeyspace(XOUnit xoUnit) {
+		Class<?> provider = xoUnit.getProvider();
 		if (TitanXOProvider.class.equals(provider)) {
-			clearTitanKeyspace(cdoUnit.getUri());
+			clearTitanKeyspace(xoUnit.getUri());
 		}
 	}
 
@@ -81,111 +81,111 @@ public abstract class AbstractXOTitanTest {
 		titanGraph.commit();
 	}
 
-	protected static Collection<Object[]> configuredCdoUnits()
+	protected static Collection<Object[]> configuredXOUnits()
 			throws IOException {
-		List<Object[]> cdoUnits = new ArrayList<>();
-		List<CdoUnit> readCdoUnits = CdoUnitFactory.getInstance().getCdoUnits(
+		List<Object[]> xoUnits = new ArrayList<>();
+		List<XOUnit> readXOUnits = XOUnitFactory.getInstance().getXOUnits(
 				AbstractXOTitanTest.class
-						.getResource(CDO_CONFIGURATION_RESOURCE));
-		for (CdoUnit cdoUnit : readCdoUnits) {
-			cdoUnits.add(new Object[] { cdoUnit });
+						.getResource(XO_CONFIGURATION_RESOURCE));
+		for (XOUnit xoUnit : readXOUnits) {
+			xoUnits.add(new Object[] { xoUnit });
 		}
-		return cdoUnits;
+		return xoUnits;
 	}
 
-	protected static Collection<Object[]> cdoUnits() {
-		return cdoUnits(Arrays.asList(DEFAULT_LOCAL_URI),
+	protected static Collection<Object[]> xoUnits() {
+		return xoUnits(Arrays.asList(DEFAULT_LOCAL_URI),
 				Collections.<Class<?>> emptyList(),
 				Collections.<Class<?>> emptyList(), ValidationMode.AUTO,
 				ConcurrencyMode.SINGLETHREADED,
 				Transaction.TransactionAttribute.MANDATORY);
 	}
 
-	protected static Collection<Object[]> cdoUnits(Class<?>... types) {
-		return cdoUnits(Arrays.asList(DEFAULT_LOCAL_URI), Arrays.asList(types),
+	protected static Collection<Object[]> xoUnits(Class<?>... types) {
+		return xoUnits(Arrays.asList(DEFAULT_LOCAL_URI), Arrays.asList(types),
 				Collections.<Class<?>> emptyList(), ValidationMode.AUTO,
 				ConcurrencyMode.SINGLETHREADED,
 				Transaction.TransactionAttribute.MANDATORY);
 	}
 
-	protected static Collection<Object[]> cdoUnits(List<URI> uris,
+	protected static Collection<Object[]> xoUnits(List<URI> uris,
 			List<? extends Class<?>> types) {
-		return cdoUnits(uris, types, Collections.<Class<?>> emptyList(),
+		return xoUnits(uris, types, Collections.<Class<?>> emptyList(),
 				ValidationMode.AUTO, ConcurrencyMode.SINGLETHREADED,
 				Transaction.TransactionAttribute.MANDATORY);
 	}
 
-	protected static Collection<Object[]> cdoUnits(
+	protected static Collection<Object[]> xoUnits(
 			List<? extends Class<?>> types,
 			List<? extends Class<?>> instanceListeners,
 			ValidationMode validationMode, ConcurrencyMode concurrencyMode,
 			Transaction.TransactionAttribute transactionAttribute) {
-		return cdoUnits(Arrays.asList(DEFAULT_LOCAL_URI), types,
+		return xoUnits(Arrays.asList(DEFAULT_LOCAL_URI), types,
 				instanceListeners, validationMode, concurrencyMode,
 				transactionAttribute);
 	}
 
-	protected static Collection<Object[]> cdoUnits(List<URI> uris,
+	protected static Collection<Object[]> xoUnits(List<URI> uris,
 			List<? extends Class<?>> types,
 			List<? extends Class<?>> instanceListenerTypes,
 			ValidationMode valiationMode, ConcurrencyMode concurrencyMode,
 			Transaction.TransactionAttribute transactionAttribute) {
-		List<Object[]> cdoUnits = new ArrayList<>(uris.size());
+		List<Object[]> xoUnits = new ArrayList<>(uris.size());
 		for (URI uri : uris) {
-			CdoUnit unit = new CdoUnit("default", "Default CDO unit", uri,
+			XOUnit xoUnit = new XOUnit("default", "Default XO unit", uri,
 					TitanXOProvider.class, new HashSet<>(types),
 					instanceListenerTypes, valiationMode, concurrencyMode,
 					transactionAttribute, new Properties());
-			cdoUnits.add(new Object[] { unit });
+			xoUnits.add(new Object[] { xoUnit });
 		}
-		return cdoUnits;
+		return xoUnits;
 	}
 
 	/**
 	 * This method adds the Starwars characters data into the Titan database for
 	 * testing purposes.
 	 * 
-	 * @param cdoManager2
+	 * @param xoManager
 	 * 
-	 * @param cdoManagerFactory
+	 * @param xoManagerFactory
 	 */
-	protected static void addStarwarsData(CdoManager cdoManager) {
-		TestData.addStarwars(cdoManager);
+	protected static void addStarwarsData(XOManager xoManager) {
+		TestData.addStarwars(xoManager);
 	}
 
-	private CdoManagerFactory cdoManagerFactory;
-	private CdoManager cdoManager;
+	private XOManagerFactory xoManagerFactory;
+	private XOManager xoManager;
 
-	private final CdoUnit cdoUnit;
+	private final XOUnit xoUnit;
 
-	public AbstractXOTitanTest(CdoUnit cdoUnit) {
+	public AbstractXOTitanTest(XOUnit xoUnit) {
 		super();
-		this.cdoUnit = cdoUnit;
+		this.xoUnit = xoUnit;
 	}
 
 	@Before
 	public final void setup() {
-		cdoManagerFactory = Cdo.createCdoManagerFactory(cdoUnit);
-		cdoManager = cdoManagerFactory.createCdoManager();
-		clearTitanKeyspace(cdoUnit);
+		xoManagerFactory = XO.createXOManagerFactory(xoUnit);
+		xoManager = xoManagerFactory.createXOManager();
+		clearTitanKeyspace(xoUnit);
 	}
 
 	@After
 	public final void destroy() {
-		if (cdoManager != null) {
-			cdoManager.close();
+		if (xoManager != null) {
+			xoManager.close();
 		}
-		if (cdoManagerFactory != null) {
-			cdoManagerFactory.close();
+		if (xoManagerFactory != null) {
+			xoManagerFactory.close();
 		}
 	}
 
-	public CdoManagerFactory getCdoManagerFactory() {
-		return cdoManagerFactory;
+	public XOManagerFactory getXOManagerFactory() {
+		return xoManagerFactory;
 	}
 
-	public CdoManager getCdoManager() {
-		return cdoManager;
+	public XOManager getXOManager() {
+		return xoManager;
 	}
 
 }

@@ -4,12 +4,12 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.buschmais.cdo.spi.datastore.DatastoreMetadataFactory;
-import com.buschmais.cdo.spi.metadata.type.TypeMetadata;
-import com.buschmais.cdo.spi.reflection.AnnotatedElement;
-import com.buschmais.cdo.spi.reflection.AnnotatedMethod;
-import com.buschmais.cdo.spi.reflection.AnnotatedType;
-import com.buschmais.cdo.spi.reflection.PropertyMethod;
+import com.buschmais.xo.spi.datastore.DatastoreMetadataFactory;
+import com.buschmais.xo.spi.metadata.type.TypeMetadata;
+import com.buschmais.xo.spi.reflection.AnnotatedElement;
+import com.buschmais.xo.spi.reflection.AnnotatedMethod;
+import com.buschmais.xo.spi.reflection.AnnotatedType;
+import com.buschmais.xo.spi.reflection.PropertyMethod;
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition;
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Incoming;
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Outgoing;

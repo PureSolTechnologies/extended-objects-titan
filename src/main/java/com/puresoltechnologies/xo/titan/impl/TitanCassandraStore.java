@@ -6,10 +6,10 @@ import java.util.Collection;
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
 
-import com.buschmais.cdo.api.CdoException;
-import com.buschmais.cdo.spi.datastore.Datastore;
-import com.buschmais.cdo.spi.datastore.DatastoreMetadataFactory;
-import com.buschmais.cdo.spi.metadata.type.TypeMetadata;
+import com.buschmais.xo.api.XOException;
+import com.buschmais.xo.spi.datastore.Datastore;
+import com.buschmais.xo.spi.datastore.DatastoreMetadataFactory;
+import com.buschmais.xo.spi.metadata.type.TypeMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanNodeMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
 import com.thinkaurelius.titan.core.TitanFactory;
@@ -64,7 +64,7 @@ public class TitanCassandraStore
 		}
 		String[] splits = path.split("/");
 		if (splits.length > 1) {
-			throw new CdoException(
+			throw new XOException(
 					"The URI for this store may only contain a single path entry for the keyspace.");
 		}
 		return splits[0];

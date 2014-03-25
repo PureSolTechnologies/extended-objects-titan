@@ -1,6 +1,6 @@
 package com.puresoltechnologies.xo.titan.test.implementedby;
 
-import com.buschmais.cdo.api.proxy.ProxyMethod;
+import com.buschmais.xo.api.proxy.ProxyMethod;
 import com.tinkerpop.blueprints.Edge;
 
 public class RelationIncrementValueMethod implements ProxyMethod<Edge> {

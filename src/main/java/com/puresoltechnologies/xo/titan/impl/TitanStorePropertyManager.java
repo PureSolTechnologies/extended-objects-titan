@@ -2,10 +2,10 @@ package com.puresoltechnologies.xo.titan.impl;
 
 import java.util.Iterator;
 
-import com.buschmais.cdo.api.CdoException;
-import com.buschmais.cdo.spi.datastore.DatastorePropertyManager;
-import com.buschmais.cdo.spi.metadata.method.PrimitivePropertyMethodMetadata;
-import com.buschmais.cdo.spi.metadata.type.RelationTypeMetadata;
+import com.buschmais.xo.api.XOException;
+import com.buschmais.xo.spi.datastore.DatastorePropertyManager;
+import com.buschmais.xo.spi.metadata.method.PrimitivePropertyMethodMetadata;
+import com.buschmais.xo.spi.metadata.type.RelationTypeMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanNodeMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
 import com.tinkerpop.blueprints.Direction;
@@ -89,11 +89,11 @@ public class TitanStorePropertyManager
 					.count();
 			break;
 		default:
-			throw new CdoException("Unkown direction '" + direction.name()
+			throw new XOException("Unkown direction '" + direction.name()
 					+ "'.");
 		}
 		if (count > 1) {
-			throw new CdoException("Multiple results are available.");
+			throw new XOException("Multiple results are available.");
 		}
 		return count == 1;
 	}
@@ -112,16 +112,16 @@ public class TitanStorePropertyManager
 			edges = source.getEdges(Direction.IN, label);
 			break;
 		default:
-			throw new CdoException("Unkown direction '" + direction.name()
+			throw new XOException("Unkown direction '" + direction.name()
 					+ "'.");
 		}
 		Iterator<Edge> iterator = edges.iterator();
 		if (!iterator.hasNext()) {
-			throw new CdoException("No result is available.");
+			throw new XOException("No result is available.");
 		}
 		Edge result = iterator.next();
 		if (iterator.hasNext()) {
-			throw new CdoException("Multiple results are available.");
+			throw new XOException("Multiple results are available.");
 		}
 		return result;
 	}
@@ -139,7 +139,7 @@ public class TitanStorePropertyManager
 			query = query.direction(Direction.OUT);
 			break;
 		default:
-			throw new CdoException("Unknown direction '" + direction.name()
+			throw new XOException("Unknown direction '" + direction.name()
 					+ "'.");
 		}
 		return query.edges();
@@ -156,7 +156,7 @@ public class TitanStorePropertyManager
 		case TO:
 			return target.addEdge(name, source);
 		default:
-			throw new CdoException("Unknown direction '" + direction.name()
+			throw new XOException("Unknown direction '" + direction.name()
 					+ "'.");
 		}
 	}

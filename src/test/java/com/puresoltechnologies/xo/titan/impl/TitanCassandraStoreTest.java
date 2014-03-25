@@ -9,7 +9,7 @@ import java.net.URISyntaxException;
 
 import org.junit.Test;
 
-import com.buschmais.cdo.api.CdoException;
+import com.buschmais.xo.api.XOException;
 
 public class TitanCassandraStoreTest {
 
@@ -35,7 +35,7 @@ public class TitanCassandraStoreTest {
 		assertEquals("", keyspace);
 	}
 
-	@Test(expected = CdoException.class)
+	@Test(expected = XOException.class)
 	public void testRetrieveMultipleKeyspace() throws URISyntaxException {
 		TitanCassandraStore.retrieveKeyspaceFromURI(new URI(
 				"protocol://host:1234/multi/path/"));

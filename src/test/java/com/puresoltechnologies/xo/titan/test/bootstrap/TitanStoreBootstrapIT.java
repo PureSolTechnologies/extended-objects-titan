@@ -9,38 +9,38 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import com.buschmais.cdo.api.CdoManager;
-import com.buschmais.cdo.api.Query;
-import com.buschmais.cdo.api.bootstrap.CdoUnit;
+import com.buschmais.xo.api.Query;
+import com.buschmais.xo.api.XOManager;
+import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 
 @RunWith(Parameterized.class)
 public class TitanStoreBootstrapIT extends AbstractXOTitanTest {
 
-	public TitanStoreBootstrapIT(CdoUnit cdoUnit) {
-		super(cdoUnit);
+	public TitanStoreBootstrapIT(XOUnit xoUnit) {
+		super(xoUnit);
 	}
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getCdoUnits() throws IOException {
-		return configuredCdoUnits();
+		return configuredXOUnits();
 	}
 
 	@Test
 	public void bootstrap() {
-		CdoManager cdoManager = getCdoManager();
+		XOManager xoManager = getXOManager();
 
-		cdoManager.currentTransaction().begin();
-		TestEntity a = cdoManager.create(TestEntity.class);
+		xoManager.currentTransaction().begin();
+		TestEntity a = xoManager.create(TestEntity.class);
 		a.setName("Test");
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 
-		cdoManager.currentTransaction().begin();
-		Query<TestEntity> query = cdoManager.createQuery(
+		xoManager.currentTransaction().begin();
+		Query<TestEntity> query = xoManager.createQuery(
 				"_().has('name','Test')", TestEntity.class);
 		TestEntity readA = query.execute().getSingleResult();
 		assertEquals(a.getName(), readA.getName());
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 	}
 
 }

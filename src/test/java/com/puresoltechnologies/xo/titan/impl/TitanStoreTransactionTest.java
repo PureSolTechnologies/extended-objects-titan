@@ -7,7 +7,7 @@ import static org.mockito.Mockito.mock;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.buschmais.cdo.api.CdoException;
+import com.buschmais.xo.api.XOException;
 import com.thinkaurelius.titan.core.TitanGraph;
 
 /**
@@ -62,7 +62,7 @@ public class TitanStoreTransactionTest {
 		transaction.rollback();
 	}
 
-	@Test(expected = CdoException.class)
+	@Test(expected = XOException.class)
 	public void testDoubleBegin() {
 		transaction.begin();
 		transaction.begin();

@@ -17,33 +17,34 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import com.buschmais.cdo.api.CdoManager;
-import com.buschmais.cdo.api.ConcurrencyMode;
-import com.buschmais.cdo.api.Transaction;
-import com.buschmais.cdo.api.ValidationMode;
-import com.buschmais.cdo.api.bootstrap.CdoUnit;
+import com.buschmais.xo.api.ConcurrencyMode;
+import com.buschmais.xo.api.Transaction;
+import com.buschmais.xo.api.ValidationMode;
+import com.buschmais.xo.api.XOManager;
+import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 
 @RunWith(Parameterized.class)
 public class MultithreadedIT extends AbstractXOTitanTest {
 
-	public MultithreadedIT(CdoUnit cdoUnit) {
-		super(cdoUnit);
+	public MultithreadedIT(XOUnit xoUnit) {
+		super(xoUnit);
 	}
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getCdoUnits() {
-		return cdoUnits(asList(TestEntity.class), Collections.<Class<?>> emptyList(),
-				ValidationMode.AUTO, ConcurrencyMode.MULTITHREADED,
+		return xoUnits(asList(TestEntity.class),
+				Collections.<Class<?>> emptyList(), ValidationMode.AUTO,
+				ConcurrencyMode.MULTITHREADED,
 				Transaction.TransactionAttribute.REQUIRES);
 	}
 
 	@Test
 	public void instance() throws ExecutionException, InterruptedException {
-		CdoManager cdoManager = getCdoManager();
-		cdoManager.currentTransaction().begin();
-		TestEntity a = cdoManager.create(TestEntity.class);
-		cdoManager.currentTransaction().commit();
+		XOManager xoManager = getXOManager();
+		xoManager.currentTransaction().begin();
+		TestEntity a = xoManager.create(TestEntity.class);
+		xoManager.currentTransaction().commit();
 		ExecutorService executorService = Executors.newCachedThreadPool();
 		Future<Integer> future1 = executorService.submit(new Worker(a));
 		TimeUnit.SECONDS.sleep(1);

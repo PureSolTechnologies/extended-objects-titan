@@ -11,43 +11,43 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import com.buschmais.cdo.api.CdoManager;
-import com.buschmais.cdo.api.ResultIterable;
-import com.buschmais.cdo.api.ResultIterator;
-import com.buschmais.cdo.api.bootstrap.CdoUnit;
+import com.buschmais.xo.api.ResultIterable;
+import com.buschmais.xo.api.ResultIterator;
+import com.buschmais.xo.api.XOManager;
+import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 import com.puresoltechnologies.xo.titan.test.bootstrap.TestEntity;
 
 @RunWith(Parameterized.class)
 public class StoreAndReadVerticesIT extends AbstractXOTitanTest {
 
-	public StoreAndReadVerticesIT(CdoUnit cdoUnit) {
-		super(cdoUnit);
+	public StoreAndReadVerticesIT(XOUnit xoUnit) {
+		super(xoUnit);
 	}
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getCdoUnits() throws IOException {
-		return configuredCdoUnits();
+		return configuredXOUnits();
 	}
 
 	@Test
 	public void test() {
-		CdoManager cdoManager = getCdoManager();
-		cdoManager.currentTransaction().begin();
-		TestEntity createdA = cdoManager.create(TestEntity.class);
+		XOManager xoManager = getXOManager();
+		xoManager.currentTransaction().begin();
+		TestEntity createdA = xoManager.create(TestEntity.class);
 		createdA.setName("Test");
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 
-		cdoManager.currentTransaction().begin();
-		ResultIterable<TestEntity> aa = cdoManager.find(TestEntity.class,
-				"Test");
+		xoManager.currentTransaction().begin();
+		ResultIterable<TestEntity> aa = xoManager
+				.find(TestEntity.class, "Test");
 		assertNotNull(aa);
 		ResultIterator<TestEntity> iterator = aa.iterator();
 		assertTrue(iterator.hasNext());
 		TestEntity readA = iterator.next();
 		assertNotNull(readA);
 		assertEquals("Test", readA.getName());
-		cdoManager.currentTransaction().rollback();
+		xoManager.currentTransaction().rollback();
 	}
 
 }

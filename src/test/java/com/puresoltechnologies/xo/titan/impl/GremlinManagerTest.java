@@ -7,8 +7,8 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 
-import com.buschmais.cdo.api.CdoException;
-import com.buschmais.cdo.spi.reflection.AnnotatedType;
+import com.buschmais.xo.api.XOException;
+import com.buschmais.xo.spi.reflection.AnnotatedType;
 import com.puresoltechnologies.xo.titan.api.annotation.Gremlin;
 
 public class GremlinManagerTest {
@@ -31,7 +31,7 @@ public class GremlinManagerTest {
 		assertThat(expression, is("This is a Gremlin expression."));
 	}
 
-	@Test(expected = CdoException.class)
+	@Test(expected = XOException.class)
 	public void testIllegalQuery() {
 		GremlinManager.getGremlinExpression(new Object());
 	}

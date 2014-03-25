@@ -6,13 +6,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import com.buschmais.cdo.api.CdoException;
-import com.buschmais.cdo.api.ResultIterator;
-import com.buschmais.cdo.spi.datastore.DatastorePropertyManager;
-import com.buschmais.cdo.spi.datastore.DatastoreSession;
-import com.buschmais.cdo.spi.datastore.DatastoreTransaction;
-import com.buschmais.cdo.spi.datastore.TypeMetadataSet;
-import com.buschmais.cdo.spi.metadata.type.EntityTypeMetadata;
+import com.buschmais.xo.api.ResultIterator;
+import com.buschmais.xo.api.XOException;
+import com.buschmais.xo.spi.datastore.DatastorePropertyManager;
+import com.buschmais.xo.spi.datastore.DatastoreSession;
+import com.buschmais.xo.spi.datastore.DatastoreTransaction;
+import com.buschmais.xo.spi.datastore.TypeMetadataSet;
+import com.buschmais.xo.spi.metadata.type.EntityTypeMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanNodeMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
 import com.thinkaurelius.titan.core.TitanGraph;
@@ -75,7 +75,7 @@ public class TitanStoreSession
 			}
 		}
 		if (discriminators.size() == 0) {
-			throw new CdoException(
+			throw new XOException(
 					"A vertex was found without discriminators. Does another framework alter the database?");
 		}
 		return discriminators;

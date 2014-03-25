@@ -1,8 +1,8 @@
 package com.puresoltechnologies.xo.titan.test.mapping;
 
-import com.buschmais.cdo.api.Query.Result;
-import com.buschmais.cdo.api.annotation.ResultOf;
-import com.buschmais.cdo.api.annotation.ResultOf.Parameter;
+import com.buschmais.xo.api.Query.Result;
+import com.buschmais.xo.api.annotation.ResultOf;
+import com.buschmais.xo.api.annotation.ResultOf.Parameter;
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition;
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Incoming;
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Outgoing;

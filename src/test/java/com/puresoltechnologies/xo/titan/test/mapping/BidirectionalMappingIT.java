@@ -12,92 +12,92 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import com.buschmais.cdo.api.CdoManager;
-import com.buschmais.cdo.api.bootstrap.CdoUnit;
+import com.buschmais.xo.api.XOManager;
+import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 
 @Ignore("Not fully implemented, yet.")
 @RunWith(Parameterized.class)
 public class BidirectionalMappingIT extends AbstractXOTitanTest {
 
-	public BidirectionalMappingIT(CdoUnit cdoUnit) {
-		super(cdoUnit);
+	public BidirectionalMappingIT(XOUnit xoUnit) {
+		super(xoUnit);
 	}
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getCdoUnits() throws URISyntaxException {
-		return cdoUnits(G.class, H.class);
+		return xoUnits(G.class, H.class);
 	}
 
 	@Test
 	public void oneToOne() {
-		CdoManager cdoManager = getCdoManager();
+		XOManager xoManager = getXOManager();
 
-		cdoManager.currentTransaction().begin();
-		G g1 = cdoManager.create(G.class);
-		H h = cdoManager.create(H.class);
+		xoManager.currentTransaction().begin();
+		G g1 = xoManager.create(G.class);
+		H h = xoManager.create(H.class);
 		g1.setOneToOneH(h);
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 
-		cdoManager.currentTransaction().begin();
+		xoManager.currentTransaction().begin();
 		assertThat(h.getOneToOneG(), equalTo(g1));
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 
-		cdoManager.currentTransaction().begin();
-		G g2 = cdoManager.create(G.class);
+		xoManager.currentTransaction().begin();
+		G g2 = xoManager.create(G.class);
 		h.setOneToOneG(g2);
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 
-		cdoManager.currentTransaction().begin();
+		xoManager.currentTransaction().begin();
 		assertThat(g1.getOneToOneH(), equalTo(null));
 		assertThat(g2.getOneToOneH(), equalTo(h));
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 	}
 
 	@Test
 	public void oneToMany() {
-		CdoManager cdoManager = getCdoManager();
+		XOManager xoManager = getXOManager();
 
-		cdoManager.currentTransaction().begin();
-		G g1 = cdoManager.create(G.class);
-		H h = cdoManager.create(H.class);
+		xoManager.currentTransaction().begin();
+		G g1 = xoManager.create(G.class);
+		H h = xoManager.create(H.class);
 		g1.getOneToManyH().add(h);
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 
-		cdoManager.currentTransaction().begin();
+		xoManager.currentTransaction().begin();
 		assertThat(h.getManyToOneG(), equalTo(g1));
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 
-		cdoManager.currentTransaction().begin();
-		G g2 = cdoManager.create(G.class);
+		xoManager.currentTransaction().begin();
+		G g2 = xoManager.create(G.class);
 		h.setManyToOneG(g2);
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 
-		cdoManager.currentTransaction().begin();
+		xoManager.currentTransaction().begin();
 		assertThat(g1.getOneToManyH().size(), equalTo(0));
 		assertThat(g2.getOneToManyH(), hasItems(h));
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 	}
 
 	@Test
 	public void ManyToMany() {
-		CdoManager cdoManager = getCdoManager();
-		cdoManager.currentTransaction().begin();
-		G g1 = cdoManager.create(G.class);
-		H h = cdoManager.create(H.class);
+		XOManager xoManager = getXOManager();
+		xoManager.currentTransaction().begin();
+		G g1 = xoManager.create(G.class);
+		H h = xoManager.create(H.class);
 		g1.getManyToManyH().add(h);
-		cdoManager.currentTransaction().commit();
-		cdoManager.currentTransaction().begin();
+		xoManager.currentTransaction().commit();
+		xoManager.currentTransaction().begin();
 		assertThat(h.getManyToManyG(), hasItems(g1));
-		cdoManager.currentTransaction().commit();
-		cdoManager.currentTransaction().begin();
-		G g2 = cdoManager.create(G.class);
+		xoManager.currentTransaction().commit();
+		xoManager.currentTransaction().begin();
+		G g2 = xoManager.create(G.class);
 		assertThat(h.getManyToManyG().remove(g1), equalTo(true));
 		h.getManyToManyG().add(g2);
-		cdoManager.currentTransaction().commit();
-		cdoManager.currentTransaction().begin();
+		xoManager.currentTransaction().commit();
+		xoManager.currentTransaction().begin();
 		assertThat(g1.getManyToManyH().size(), equalTo(0));
 		assertThat(g2.getManyToManyH(), hasItems(h));
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 	}
 }

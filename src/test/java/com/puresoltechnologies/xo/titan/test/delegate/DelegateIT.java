@@ -12,12 +12,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import com.buschmais.cdo.api.CdoManager;
-import com.buschmais.cdo.api.CompositeObject;
-import com.buschmais.cdo.api.Query;
-import com.buschmais.cdo.api.Query.Result;
-import com.buschmais.cdo.api.Query.Result.CompositeRowObject;
-import com.buschmais.cdo.api.bootstrap.CdoUnit;
+import com.buschmais.xo.api.CompositeObject;
+import com.buschmais.xo.api.Query;
+import com.buschmais.xo.api.Query.Result;
+import com.buschmais.xo.api.Query.Result.CompositeRowObject;
+import com.buschmais.xo.api.XOManager;
+import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 import com.puresoltechnologies.xo.titan.impl.TitanStoreSession;
 import com.tinkerpop.blueprints.Edge;
@@ -26,35 +26,35 @@ import com.tinkerpop.blueprints.Vertex;
 @RunWith(Parameterized.class)
 public class DelegateIT extends AbstractXOTitanTest {
 
-	public DelegateIT(CdoUnit cdoUnit) {
-		super(cdoUnit);
+	public DelegateIT(XOUnit xoUnit) {
+		super(xoUnit);
 	}
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getCdoUnits() throws URISyntaxException {
-		return cdoUnits(A.class, B.class, A2B.class);
+		return xoUnits(A.class, B.class, A2B.class);
 	}
 
 	@Test
 	public void entity() {
-		CdoManager cdoManager = getCdoManager();
-		cdoManager.currentTransaction().begin();
-		Vertex node = ((CompositeObject) cdoManager.create(A.class))
+		XOManager xoManager = getXOManager();
+		xoManager.currentTransaction().begin();
+		Vertex node = ((CompositeObject) xoManager.create(A.class))
 				.getDelegate();
 		assertThat(
 				node.<String> getProperty(TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
 						+ "A"), equalTo("A"));
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 	}
 
 	@Test
 	public void relation() {
-		CdoManager cdoManager = getCdoManager();
-		cdoManager.currentTransaction().begin();
-		A a = cdoManager.create(A.class);
-		B b = cdoManager.create(B.class);
-		cdoManager.create(a, A2B.class, b);
-		Query<A2B> query = cdoManager.createQuery("_().has('"
+		XOManager xoManager = getXOManager();
+		xoManager.currentTransaction().begin();
+		A a = xoManager.create(A.class);
+		B b = xoManager.create(B.class);
+		xoManager.create(a, A2B.class, b);
+		Query<A2B> query = xoManager.createQuery("_().has('"
 				+ TitanStoreSession.XO_DISCRIMINATORS_PROPERTY + "A').outE",
 				A2B.class);
 		Result<A2B> result = query.execute();
@@ -62,21 +62,21 @@ public class DelegateIT extends AbstractXOTitanTest {
 		CompositeObject composite = (CompositeObject) a2b;
 		Edge edge = composite.getDelegate();
 		assertThat(edge.getLabel(), equalTo("RELATION"));
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 	}
 
 	@Test
 	public void row() {
-		CdoManager cdoManager = getCdoManager();
+		XOManager xoManager = getXOManager();
 
-		cdoManager.currentTransaction().begin();
-		cdoManager.create(A.class);
-		Query<CompositeRowObject> query = cdoManager.createQuery("_().has('"
+		xoManager.currentTransaction().begin();
+		xoManager.create(A.class);
+		Query<CompositeRowObject> query = xoManager.createQuery("_().has('"
 				+ TitanStoreSession.XO_DISCRIMINATORS_PROPERTY + "A').map");
 		Result<CompositeRowObject> row = query.execute();
 		Map<String, Object> delegate = row.getSingleResult().getDelegate();
 		assertThat(delegate, IsMapContaining.<String, Object> hasEntry(
 				TitanStoreSession.XO_DISCRIMINATORS_PROPERTY + "A", "A"));
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 	}
 }

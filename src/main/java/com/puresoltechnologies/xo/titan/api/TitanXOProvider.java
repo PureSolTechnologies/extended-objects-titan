@@ -2,10 +2,10 @@ package com.puresoltechnologies.xo.titan.api;
 
 import java.net.URI;
 
-import com.buschmais.cdo.api.CdoException;
-import com.buschmais.cdo.api.bootstrap.CdoUnit;
-import com.buschmais.cdo.spi.bootstrap.CdoDatastoreProvider;
-import com.buschmais.cdo.spi.datastore.Datastore;
+import com.buschmais.xo.api.XOException;
+import com.buschmais.xo.api.bootstrap.XOUnit;
+import com.buschmais.xo.spi.bootstrap.XODatastoreProvider;
+import com.buschmais.xo.spi.datastore.Datastore;
 import com.puresoltechnologies.xo.titan.impl.TitanCassandraStore;
 import com.puresoltechnologies.xo.titan.impl.TitanStoreSession;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanNodeMetadata;
@@ -18,7 +18,7 @@ import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
  */
 public class TitanXOProvider
 		implements
-		CdoDatastoreProvider<TitanNodeMetadata, String, TitanRelationMetadata, String> {
+		XODatastoreProvider<TitanNodeMetadata, String, TitanRelationMetadata, String> {
 
 	/**
 	 * This constant contains {@value #TITAN_SCHEME_PREFIX} as prefix for all
@@ -35,17 +35,17 @@ public class TitanXOProvider
 
 	@Override
 	public Datastore<TitanStoreSession, TitanNodeMetadata, String, TitanRelationMetadata, String> createDatastore(
-			CdoUnit cdoUnit) {
-		if (cdoUnit == null) {
+			XOUnit xoUnit) {
+		if (xoUnit == null) {
 			throw new IllegalArgumentException("CdoUnit must not be null!");
 		}
-		URI uri = cdoUnit.getUri();
+		URI uri = xoUnit.getUri();
 		if (uri == null) {
-			throw new CdoException("No URI is specified for the store.");
+			throw new XOException("No URI is specified for the store.");
 		}
 		String scheme = uri.getScheme();
 		if (!scheme.startsWith(scheme)) {
-			throw new CdoException("Only URIs starting with '"
+			throw new XOException("Only URIs starting with '"
 					+ TITAN_SCHEME_PREFIX + "' are supported by this store.");
 		}
 		String host = uri.getHost();
@@ -55,7 +55,7 @@ public class TitanXOProvider
 		case TITAN_CASSANDRA_SCHEME:
 			return new TitanCassandraStore(host, port, keyspace);
 		default:
-			throw new CdoException("Scheme '" + scheme
+			throw new XOException("Scheme '" + scheme
 					+ "' is not supported by this store.");
 		}
 	}

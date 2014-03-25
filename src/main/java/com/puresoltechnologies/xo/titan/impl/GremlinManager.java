@@ -2,9 +2,9 @@ package com.puresoltechnologies.xo.titan.impl;
 
 import java.lang.reflect.Method;
 
-import com.buschmais.cdo.api.CdoException;
-import com.buschmais.cdo.spi.datastore.DatastoreSession;
-import com.buschmais.cdo.spi.reflection.AnnotatedElement;
+import com.buschmais.xo.api.XOException;
+import com.buschmais.xo.spi.datastore.DatastoreSession;
+import com.buschmais.xo.spi.reflection.AnnotatedElement;
 import com.puresoltechnologies.xo.titan.api.annotation.Gremlin;
 
 /**
@@ -31,7 +31,7 @@ public class GremlinManager {
 			AnnotatedElement<?> typeExpression = (AnnotatedElement<?>) expression;
 			Gremlin gremlin = typeExpression.getAnnotation(Gremlin.class);
 			if (gremlin == null) {
-				throw new CdoException(typeExpression
+				throw new XOException(typeExpression
 						+ " must be annotated with " + Gremlin.class.getName());
 			}
 			return gremlin.value();
@@ -39,7 +39,7 @@ public class GremlinManager {
 			Class<?> clazz = (Class<?>) expression;
 			Gremlin gremlin = clazz.getAnnotation(Gremlin.class);
 			if (gremlin == null) {
-				throw new CdoException(expression + " must be annotated with "
+				throw new XOException(expression + " must be annotated with "
 						+ Gremlin.class.getName());
 			}
 			return gremlin.value();
@@ -47,12 +47,12 @@ public class GremlinManager {
 			Method method = (Method) expression;
 			Gremlin gremlin = method.getAnnotation(Gremlin.class);
 			if (gremlin == null) {
-				throw new CdoException(expression + " must be annotated with "
+				throw new XOException(expression + " must be annotated with "
 						+ Gremlin.class.getName());
 			}
 			return gremlin.value();
 		}
-		throw new CdoException("Unsupported query expression " + expression);
+		throw new XOException("Unsupported query expression " + expression);
 	}
 
 }

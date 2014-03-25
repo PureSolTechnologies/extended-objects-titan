@@ -12,61 +12,61 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import com.buschmais.cdo.api.CdoManager;
-import com.buschmais.cdo.api.Query;
-import com.buschmais.cdo.api.Query.Result.CompositeRowObject;
-import com.buschmais.cdo.api.bootstrap.CdoUnit;
+import com.buschmais.xo.api.Query;
+import com.buschmais.xo.api.Query.Result.CompositeRowObject;
+import com.buschmais.xo.api.XOManager;
+import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 
 @Ignore("Not fully implemented, yet.")
 @RunWith(Parameterized.class)
 public class PrimitivePropertyMappingIT extends AbstractXOTitanTest {
 
-	public PrimitivePropertyMappingIT(CdoUnit cdoUnit) {
-		super(cdoUnit);
+	public PrimitivePropertyMappingIT(XOUnit xoUnit) {
+		super(xoUnit);
 	}
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getCdoUnits() throws URISyntaxException {
-		return cdoUnits(A.class);
+		return xoUnits(A.class);
 	}
 
 	@Test
 	public void primitiveProperty() {
-		CdoManager cdoManager = getCdoManager();
-		cdoManager.currentTransaction().begin();
-		A a = cdoManager.create(A.class);
+		XOManager xoManager = getXOManager();
+		xoManager.currentTransaction().begin();
+		A a = xoManager.create(A.class);
 		a.setString("value");
-		cdoManager.currentTransaction().commit();
-		cdoManager.currentTransaction().begin();
+		xoManager.currentTransaction().commit();
+		xoManager.currentTransaction().begin();
 		assertThat(a.getString(), equalTo("value"));
 		a.setString("updatedValue");
-		cdoManager.currentTransaction().commit();
-		cdoManager.currentTransaction().begin();
+		xoManager.currentTransaction().commit();
+		xoManager.currentTransaction().begin();
 		assertThat(a.getString(), equalTo("updatedValue"));
 		a.setString(null);
-		cdoManager.currentTransaction().commit();
-		cdoManager.currentTransaction().begin();
+		xoManager.currentTransaction().commit();
+		xoManager.currentTransaction().begin();
 		assertThat(a.getString(), equalTo(null));
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 	}
 
 	@Test
 	public void mappedPrimitiveProperty() {
-		CdoManager cdoManager = getCdoManager();
+		XOManager xoManager = getXOManager();
 
-		cdoManager.currentTransaction().begin();
-		A a = cdoManager.create(A.class);
+		xoManager.currentTransaction().begin();
+		A a = xoManager.create(A.class);
 		a.setMappedString("mappedValue");
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 
-		cdoManager.currentTransaction().begin();
-		Query<CompositeRowObject> query = cdoManager
+		xoManager.currentTransaction().begin();
+		Query<CompositeRowObject> query = xoManager
 				.createQuery("_().has('_xo_discriminator_A').map");
 		CompositeRowObject result = query.execute().getSingleResult();
 		// TestResult result =
 		// executeQuery("match (a:A) return a.MAPPED_STRING as v");
 		assertThat(result.get("MAPPED_STRING", String.class), is("mappedValue"));
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 	}
 }

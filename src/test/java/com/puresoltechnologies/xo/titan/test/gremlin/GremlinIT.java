@@ -11,36 +11,36 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import com.buschmais.cdo.api.CdoManager;
-import com.buschmais.cdo.api.Query;
-import com.buschmais.cdo.api.Query.Result;
-import com.buschmais.cdo.api.bootstrap.CdoUnit;
+import com.buschmais.xo.api.Query;
+import com.buschmais.xo.api.Query.Result;
+import com.buschmais.xo.api.XOManager;
+import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 import com.puresoltechnologies.xo.titan.test.data.Person;
 
 @RunWith(Parameterized.class)
 public class GremlinIT extends AbstractXOTitanTest {
 
-	public GremlinIT(CdoUnit cdoUnit) {
-		super(cdoUnit);
+	public GremlinIT(XOUnit xoUnit) {
+		super(xoUnit);
 	}
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getCdoUnits() throws IOException {
-		return configuredCdoUnits();
+		return configuredXOUnits();
 	}
 
 	@Before
 	public void setupData() {
-		addStarwarsData(getCdoManager());
+		addStarwarsData(getXOManager());
 	}
 
 	@Test
 	public void findSkywalkerFamily() {
-		CdoManager cdoManager = getCdoManager();
-		cdoManager.currentTransaction().begin();
+		XOManager xoManager = getXOManager();
+		xoManager.currentTransaction().begin();
 
-		Query<Person> query = cdoManager.createQuery(
+		Query<Person> query = xoManager.createQuery(
 				"_().has('lastName', 'Skywalker')", Person.class);
 		assertNotNull(query);
 
@@ -54,6 +54,6 @@ public class GremlinIT extends AbstractXOTitanTest {
 		}
 		assertEquals(4, count);
 
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 	}
 }

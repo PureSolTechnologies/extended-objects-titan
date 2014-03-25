@@ -1,6 +1,6 @@
 package com.puresoltechnologies.xo.titan.test.implementedby;
 
-import com.buschmais.cdo.api.annotation.ImplementedBy;
+import com.buschmais.xo.api.annotation.ImplementedBy;
 import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
 
 @VertexDefinition("A")

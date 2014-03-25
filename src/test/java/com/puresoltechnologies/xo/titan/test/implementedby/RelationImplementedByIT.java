@@ -10,63 +10,63 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import com.buschmais.cdo.api.CdoManager;
-import com.buschmais.cdo.api.bootstrap.CdoUnit;
+import com.buschmais.xo.api.XOManager;
+import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 
 @RunWith(Parameterized.class)
 public class RelationImplementedByIT extends AbstractXOTitanTest {
 
-	public RelationImplementedByIT(CdoUnit cdoUnit) {
-		super(cdoUnit);
+	public RelationImplementedByIT(XOUnit xoUnit) {
+		super(xoUnit);
 	}
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getCdoUnits() throws URISyntaxException {
-		return cdoUnits(A.class, B.class, A2B.class);
+		return xoUnits(A.class, B.class, A2B.class);
 	}
 
 	@Test
 	public void nonPropertyMethod() {
-		CdoManager cdoManager = getCdoManagerFactory().createCdoManager();
-		cdoManager.currentTransaction().begin();
-		A a = cdoManager.create(A.class);
-		B b = cdoManager.create(B.class);
-		A2B a2b = cdoManager.create(a, A2B.class, b);
+		XOManager xoManager = getXOManagerFactory().createXOManager();
+		xoManager.currentTransaction().begin();
+		A a = xoManager.create(A.class);
+		B b = xoManager.create(B.class);
+		A2B a2b = xoManager.create(a, A2B.class, b);
 		a2b.setValue(1);
 		int i = a2b.incrementValue();
 		assertThat(i, equalTo(2));
-		cdoManager.currentTransaction().commit();
-		cdoManager.close();
+		xoManager.currentTransaction().commit();
+		xoManager.close();
 	}
 
 	@Test
 	public void propertyMethods() {
-		CdoManager cdoManager = getCdoManagerFactory().createCdoManager();
-		cdoManager.currentTransaction().begin();
-		A a = cdoManager.create(A.class);
-		B b = cdoManager.create(B.class);
-		A2B a2b = cdoManager.create(a, A2B.class, b);
+		XOManager xoManager = getXOManagerFactory().createXOManager();
+		xoManager.currentTransaction().begin();
+		A a = xoManager.create(A.class);
+		B b = xoManager.create(B.class);
+		A2B a2b = xoManager.create(a, A2B.class, b);
 		a2b.setCustomValue("VALUE");
 		String value = a2b.getCustomValue();
 		assertThat(value, equalTo("set_VALUE_get"));
-		cdoManager.currentTransaction().commit();
-		cdoManager.close();
+		xoManager.currentTransaction().commit();
+		xoManager.close();
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void unsupportedOperation() {
-		CdoManager cdoManager = getCdoManagerFactory().createCdoManager();
-		cdoManager.currentTransaction().begin();
-		A a = cdoManager.create(A.class);
-		B b = cdoManager.create(B.class);
-		A2B a2b = cdoManager.create(a, A2B.class, b);
-		cdoManager.currentTransaction().commit();
-		cdoManager.currentTransaction().begin();
+		XOManager xoManager = getXOManagerFactory().createXOManager();
+		xoManager.currentTransaction().begin();
+		A a = xoManager.create(A.class);
+		B b = xoManager.create(B.class);
+		A2B a2b = xoManager.create(a, A2B.class, b);
+		xoManager.currentTransaction().commit();
+		xoManager.currentTransaction().begin();
 		try {
 			a2b.unsupportedOperation();
 		} finally {
-			cdoManager.currentTransaction().commit();
+			xoManager.currentTransaction().commit();
 		}
 	}
 }

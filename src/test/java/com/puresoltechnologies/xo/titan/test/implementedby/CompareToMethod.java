@@ -1,6 +1,6 @@
 package com.puresoltechnologies.xo.titan.test.implementedby;
 
-import com.buschmais.cdo.api.proxy.ProxyMethod;
+import com.buschmais.xo.api.proxy.ProxyMethod;
 import com.tinkerpop.blueprints.Vertex;
 
 public class CompareToMethod implements ProxyMethod<Vertex> {

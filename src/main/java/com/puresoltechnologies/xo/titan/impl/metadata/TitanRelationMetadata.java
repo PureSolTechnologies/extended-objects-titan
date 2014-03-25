@@ -1,6 +1,6 @@
 package com.puresoltechnologies.xo.titan.impl.metadata;
 
-import com.buschmais.cdo.spi.datastore.DatastoreRelationMetadata;
+import com.buschmais.xo.spi.datastore.DatastoreRelationMetadata;
 
 public class TitanRelationMetadata implements DatastoreRelationMetadata<String> {
 

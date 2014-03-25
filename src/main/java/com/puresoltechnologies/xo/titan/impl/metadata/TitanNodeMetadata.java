@@ -1,6 +1,6 @@
 package com.puresoltechnologies.xo.titan.impl.metadata;
 
-import com.buschmais.cdo.spi.datastore.DatastoreEntityMetadata;
+import com.buschmais.xo.spi.datastore.DatastoreEntityMetadata;
 
 public class TitanNodeMetadata implements DatastoreEntityMetadata<String> {
 

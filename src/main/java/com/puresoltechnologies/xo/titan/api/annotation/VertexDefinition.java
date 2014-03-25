@@ -5,8 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.buschmais.cdo.api.CdoManager;
-import com.buschmais.cdo.spi.annotation.EntityDefinition;
+import com.buschmais.xo.spi.annotation.EntityDefinition;
 
 /**
  * This annotation marks enties as Titan vertex.

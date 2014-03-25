@@ -8,9 +8,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import com.buschmais.cdo.spi.annotation.RelationDefinition;
-import com.buschmais.cdo.spi.annotation.RelationDefinition.FromDefinition;
-import com.buschmais.cdo.spi.annotation.RelationDefinition.ToDefinition;
+import com.buschmais.xo.spi.annotation.RelationDefinition;
+import com.buschmais.xo.spi.annotation.RelationDefinition.FromDefinition;
+import com.buschmais.xo.spi.annotation.RelationDefinition.ToDefinition;
 
 /**
  * <p>

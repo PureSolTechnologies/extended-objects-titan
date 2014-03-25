@@ -10,8 +10,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.buschmais.cdo.api.CdoException;
-import com.buschmais.cdo.api.bootstrap.CdoUnit;
+import com.buschmais.xo.api.XOException;
+import com.buschmais.xo.api.bootstrap.XOUnit;
 
 public class TitanXOProviderTest {
 
@@ -27,18 +27,18 @@ public class TitanXOProviderTest {
 		titanXOProvider.createDatastore(null);
 	}
 
-	@Test(expected = CdoException.class)
+	@Test(expected = XOException.class)
 	public void testNullURI() {
-		CdoUnit cdoUnit = Mockito.mock(CdoUnit.class);
-		when(cdoUnit.getUri()).thenReturn(null);
-		titanXOProvider.createDatastore(cdoUnit);
+		XOUnit xoUnit = Mockito.mock(XOUnit.class);
+		when(xoUnit.getUri()).thenReturn(null);
+		titanXOProvider.createDatastore(xoUnit);
 	}
 
-	@Test(expected = CdoException.class)
+	@Test(expected = XOException.class)
 	public void testIllegalProtocol() throws URISyntaxException {
-		CdoUnit cdoUnit = mock(CdoUnit.class);
+		XOUnit xoUnit = mock(XOUnit.class);
 		URI uri = new URI("illegal-titan-cassandra://titan");
-		when(cdoUnit.getUri()).thenReturn(uri);
-		titanXOProvider.createDatastore(cdoUnit);
+		when(xoUnit.getUri()).thenReturn(uri);
+		titanXOProvider.createDatastore(xoUnit);
 	}
 }

@@ -2,8 +2,8 @@ package com.puresoltechnologies.xo.titan.test.concurrency;
 
 import java.util.concurrent.TimeUnit;
 
-import com.buschmais.cdo.api.annotation.ImplementedBy;
-import com.buschmais.cdo.api.proxy.ProxyMethod;
+import com.buschmais.xo.api.annotation.ImplementedBy;
+import com.buschmais.xo.api.proxy.ProxyMethod;
 import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
 import com.tinkerpop.blueprints.Vertex;
 

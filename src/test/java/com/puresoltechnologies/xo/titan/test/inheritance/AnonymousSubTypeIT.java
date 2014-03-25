@@ -10,34 +10,34 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import com.buschmais.cdo.api.CdoManager;
-import com.buschmais.cdo.api.bootstrap.CdoUnit;
+import com.buschmais.xo.api.XOManager;
+import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 
 @RunWith(Parameterized.class)
 public class AnonymousSubTypeIT extends AbstractXOTitanTest {
 
-	public AnonymousSubTypeIT(CdoUnit cdoUnit) {
-		super(cdoUnit);
+	public AnonymousSubTypeIT(XOUnit xoUnit) {
+		super(xoUnit);
 	}
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getCdoUnits() throws URISyntaxException {
-		return cdoUnits(D.class);
+		return xoUnits(D.class);
 	}
 
 	@Test
 	public void anonymousSubType() {
-		CdoManager cdoManager = getCdoManager();
-		cdoManager.currentTransaction().begin();
-		D b = cdoManager.create(D.class);
+		XOManager xoManager = getXOManager();
+		xoManager.currentTransaction().begin();
+		D b = xoManager.create(D.class);
 		b.setIndex("1");
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 
-		cdoManager.currentTransaction().begin();
-		A a = cdoManager.find(A.class, "1").iterator().next();
+		xoManager.currentTransaction().begin();
+		A a = xoManager.find(A.class, "1").iterator().next();
 		assertThat(a.getIndex(), equalTo("1"));
-		cdoManager.currentTransaction().commit();
+		xoManager.currentTransaction().commit();
 	}
 
 }

@@ -4,7 +4,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<cdo.version>0.2.1</cdo.version>
+		<xo.version>0.3.0-SNAPSHOT</xo.version>
 		<cassandra.driver.version>2.0.1</cassandra.driver.version>
 		<titan.version>0.4.2</titan.version>
 	</properties>
@@ -79,19 +79,19 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.buschmais.cdo</groupId>
-			<artifactId>cdo.api</artifactId>
-			<version>${cdo.version}</version>
+			<groupId>com.buschmais.xo</groupId>
+			<artifactId>xo.api</artifactId>
+			<version>${xo.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.buschmais.cdo</groupId>
-			<artifactId>cdo.spi</artifactId>
-			<version>${cdo.version}</version>
+			<groupId>com.buschmais.xo</groupId>
+			<artifactId>xo.spi</artifactId>
+			<version>${xo.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.buschmais.cdo</groupId>
-			<artifactId>cdo.impl</artifactId>
-			<version>${cdo.version}</version>
+			<groupId>com.buschmais.xo</groupId>
+			<artifactId>xo.impl</artifactId>
+			<version>${xo.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.thinkaurelius.titan</groupId>
