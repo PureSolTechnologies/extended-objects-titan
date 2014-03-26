@@ -6,11 +6,14 @@ import java.util.Collection;
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
 
+import com.buschmais.xo.api.CompositeObject;
 import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.spi.datastore.Datastore;
 import com.buschmais.xo.spi.datastore.DatastoreMetadataFactory;
 import com.buschmais.xo.spi.metadata.method.IndexedPropertyMethodMetadata;
 import com.buschmais.xo.spi.metadata.type.TypeMetadata;
+import com.buschmais.xo.spi.reflection.AnnotatedType;
+import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanIndexedPropertyMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanNodeMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
@@ -20,6 +23,7 @@ import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.core.TitanKey;
 import com.thinkaurelius.titan.core.TitanType;
 import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.Vertex;
 
@@ -164,7 +168,31 @@ public class TitanCassandraStore
 			configuration.setProperty("storage.keyspace", keyspace);
 		}
 		titanGraph = TitanFactory.open(configuration);
+		checkAndInitializeDiscriminatorProperties(registeredMetadata);
 		checkAndInitializePropertyIndizes(registeredMetadata);
+	}
+
+	private void checkAndInitializeDiscriminatorProperties(
+			Collection<TypeMetadata> registeredMetadata) {
+		for (TypeMetadata metadata : registeredMetadata) {
+			AnnotatedType annotatedType = metadata.getAnnotatedType();
+			if (CompositeObject.class.equals(annotatedType
+					.getAnnotatedElement())) {
+				continue;
+			}
+			String propertyName = TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
+					+ annotatedType.getName();
+			Class<? extends Element> type;
+			if (annotatedType.getAnnotation(VertexDefinition.class) != null) {
+				type = Vertex.class;
+			} else if (annotatedType.getAnnotation(VertexDefinition.class) != null) {
+				type = Edge.class;
+			} else {
+				throw new XOException("Type '" + propertyName
+						+ "' is neither a vertex nor an edge.");
+			}
+			checkAndCreatePropertyIndex(propertyName, String.class, type, false);
+		}
 	}
 
 	private void checkAndInitializePropertyIndizes(
@@ -175,17 +203,17 @@ public class TitanCassandraStore
 			if (indexedProperty != null) {
 				TitanIndexedPropertyMetadata datastoreMetadata = (TitanIndexedPropertyMetadata) indexedProperty
 						.getDatastoreMetadata();
-				checkAndCreatePropertyIndex(datastoreMetadata);
+				String name = datastoreMetadata.getName();
+				Class<?> dataType = datastoreMetadata.getDataType();
+				Class<? extends Element> type = datastoreMetadata.getType();
+				boolean unique = datastoreMetadata.isUnique();
+				checkAndCreatePropertyIndex(name, dataType, type, unique);
 			}
 		}
 	}
 
-	private void checkAndCreatePropertyIndex(
-			TitanIndexedPropertyMetadata datastoreMetadata) {
-		String name = datastoreMetadata.getName();
-		Class<?> dataType = datastoreMetadata.getDataType();
-		Class<? extends Element> type = datastoreMetadata.getType();
-		boolean unique = datastoreMetadata.isUnique();
+	private void checkAndCreatePropertyIndex(String name, Class<?> dataType,
+			Class<? extends Element> type, boolean unique) {
 		TitanType titanType = titanGraph.getType(name);
 		if (titanType != null) {
 			if (titanType.isPropertyKey()) {

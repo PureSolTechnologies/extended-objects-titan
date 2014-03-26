@@ -13,9 +13,11 @@ import com.buschmais.xo.spi.datastore.DatastoreSession;
 import com.buschmais.xo.spi.datastore.DatastoreTransaction;
 import com.buschmais.xo.spi.datastore.TypeMetadataSet;
 import com.buschmais.xo.spi.metadata.type.EntityTypeMetadata;
+import com.puresoltechnologies.xo.titan.impl.metadata.TitanIndexedPropertyMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanNodeMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
 import com.thinkaurelius.titan.core.TitanGraph;
+import com.thinkaurelius.titan.core.TitanGraphQuery;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.pipes.Pipe;
@@ -117,8 +119,12 @@ public class TitanStoreSession
 	public ResultIterator<Vertex> findEntity(
 			EntityTypeMetadata<TitanNodeMetadata> type, String discriminator,
 			Object value) {
-		Iterable<Vertex> vertices = titanGraph.query()
-				.has(XO_DISCRIMINATORS_PROPERTY + discriminator).vertices();
+		TitanGraphQuery query = titanGraph.query();
+		query = query.has(XO_DISCRIMINATORS_PROPERTY + discriminator);
+		TitanIndexedPropertyMetadata indexedPropertyMetadata = (TitanIndexedPropertyMetadata) type
+				.getIndexedProperty().getDatastoreMetadata();
+		query = query.has(indexedPropertyMetadata.getName(), value);
+		Iterable<Vertex> vertices = query.vertices();
 		final Iterator<Vertex> iterator = vertices.iterator();
 
 		return new ResultIterator<Vertex>() {
