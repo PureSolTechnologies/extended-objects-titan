@@ -37,6 +37,7 @@ public class QualifiedRelationIT extends AbstractXOTitanTest {
 		B b1 = xoManager.create(B.class);
 		a.setOneToOne(b1);
 		xoManager.currentTransaction().commit();
+
 		xoManager.currentTransaction().begin();
 		assertThat(a.getOneToOne(), equalTo(b1));
 		assertThat(b1.getOneToOne(), equalTo(a));
@@ -45,6 +46,7 @@ public class QualifiedRelationIT extends AbstractXOTitanTest {
 		B b2 = xoManager.create(B.class);
 		a.setOneToOne(b2);
 		xoManager.currentTransaction().commit();
+
 		xoManager.currentTransaction().begin();
 		assertThat(a.getOneToOne(), equalTo(b2));
 		assertThat(b2.getOneToOne(), equalTo(a));
@@ -53,6 +55,7 @@ public class QualifiedRelationIT extends AbstractXOTitanTest {
 		// .getColumn("b"), hasItem(b2));
 		a.setOneToOne(null);
 		xoManager.currentTransaction().commit();
+
 		xoManager.currentTransaction().begin();
 		assertThat(a.getOneToOne(), equalTo(null));
 		assertThat(b1.getOneToOne(), equalTo(null));
@@ -70,6 +73,7 @@ public class QualifiedRelationIT extends AbstractXOTitanTest {
 		a.getOneToMany().add(b1);
 		a.getOneToMany().add(b2);
 		xoManager.currentTransaction().commit();
+
 		xoManager.currentTransaction().begin();
 		assertThat(a.getOneToMany(), hasItems(b1, b2));
 		assertThat(b1.getManyToOne(), equalTo(a));
@@ -83,6 +87,7 @@ public class QualifiedRelationIT extends AbstractXOTitanTest {
 		a.getOneToMany().add(b3);
 		a.getOneToMany().add(b4);
 		xoManager.currentTransaction().commit();
+
 		xoManager.currentTransaction().begin();
 		assertThat(a.getOneToMany(), hasItems(b3, b4));
 		assertThat(b1.getManyToOne(), equalTo(null));
@@ -107,6 +112,7 @@ public class QualifiedRelationIT extends AbstractXOTitanTest {
 		a2.getManyToMany().add(b1);
 		a2.getManyToMany().add(b2);
 		xoManager.currentTransaction().commit();
+
 		xoManager.currentTransaction().begin();
 		assertThat(a1.getManyToMany(), hasItems(b1, b2));
 		assertThat(a2.getManyToMany(), hasItems(b1, b2));
