@@ -16,15 +16,15 @@ public interface TestEntity {
 	public class IncrementAndGet implements ProxyMethod<Vertex> {
 
 		@Override
-		public Object invoke(Vertex node, Object instance, Object[] args)
+		public Object invoke(Vertex vertex, Object instance, Object[] args)
 				throws Exception {
-			Integer value = node.getProperty("value");
+			Integer value = vertex.getProperty("value");
 			if (value == null) {
 				value = 0;
 			}
 			TimeUnit.SECONDS.sleep(5);
 			value++;
-			node.setProperty("value", value);
+			vertex.setProperty("value", value);
 			return value;
 		}
 	}

@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.spi.datastore.DatastoreMetadataFactory;
+import com.buschmais.xo.spi.metadata.method.IndexedPropertyMethodMetadata;
 import com.buschmais.xo.spi.metadata.type.TypeMetadata;
 import com.buschmais.xo.spi.reflection.AnnotatedElement;
 import com.buschmais.xo.spi.reflection.AnnotatedMethod;
@@ -43,14 +44,19 @@ public class TitanMetadataFactory
 		VertexDefinition annotation = annotatedType
 				.getAnnotation(VertexDefinition.class);
 		String value = null;
+		IndexedPropertyMethodMetadata<?> indexedProperty = null;
 		if (annotation != null) {
 			value = annotation.value();
 			if ((value == null) || (value.isEmpty())) {
 				value = annotatedType.getName();
 			}
+			Class<?> usingIndexOf = annotation.usingIndexedPropertyOf();
+			if (!Object.class.equals(usingIndexOf)) {
+				TypeMetadata typeMetadata = metadataByType.get(usingIndexOf);
+				indexedProperty = typeMetadata.getIndexedProperty();
+			}
 		}
-		Class<?> useIndexOfType = annotation.usingIndexedPropertyOf();
-		return new TitanNodeMetadata(value, useIndexOfType);
+		return new TitanNodeMetadata(value, indexedProperty);
 	}
 
 	@Override
@@ -127,9 +133,6 @@ public class TitanMetadataFactory
 	public TitanIndexedPropertyMetadata createIndexedPropertyMetadata(
 			PropertyMethod propertyMethod) {
 		String name = determinePropertyName(propertyMethod);
-		Indexed indexedAnnotation = propertyMethod.getAnnotation(Indexed.class);
-		boolean unique = indexedAnnotation.unique();
-		Class<?> dataType = propertyMethod.getType();
 		Class<?> declaringClass = propertyMethod.getAnnotatedElement()
 				.getDeclaringClass();
 		Class<? extends Element> type = null;
@@ -143,6 +146,9 @@ public class TitanMetadataFactory
 							+ name
 							+ "' was found with index annotation, but the declaring type is neither a vertex nor an edge.");
 		}
+		Indexed indexedAnnotation = propertyMethod.getAnnotation(Indexed.class);
+		boolean unique = indexedAnnotation.unique();
+		Class<?> dataType = propertyMethod.getType();
 		return new TitanIndexedPropertyMetadata(name, unique, dataType, type);
 	}
 

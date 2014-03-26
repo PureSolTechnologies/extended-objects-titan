@@ -12,9 +12,11 @@ import com.buschmais.xo.spi.datastore.DatastorePropertyManager;
 import com.buschmais.xo.spi.datastore.DatastoreSession;
 import com.buschmais.xo.spi.datastore.DatastoreTransaction;
 import com.buschmais.xo.spi.datastore.TypeMetadataSet;
+import com.buschmais.xo.spi.metadata.method.IndexedPropertyMethodMetadata;
+import com.buschmais.xo.spi.metadata.method.PrimitivePropertyMethodMetadata;
 import com.buschmais.xo.spi.metadata.type.EntityTypeMetadata;
-import com.puresoltechnologies.xo.titan.impl.metadata.TitanIndexedPropertyMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanNodeMetadata;
+import com.puresoltechnologies.xo.titan.impl.metadata.TitanPropertyMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.core.TitanGraphQuery;
@@ -121,9 +123,21 @@ public class TitanStoreSession
 			Object value) {
 		TitanGraphQuery query = titanGraph.query();
 		query = query.has(XO_DISCRIMINATORS_PROPERTY + discriminator);
-		TitanIndexedPropertyMetadata indexedPropertyMetadata = (TitanIndexedPropertyMetadata) type
-				.getIndexedProperty().getDatastoreMetadata();
-		query = query.has(indexedPropertyMetadata.getName(), value);
+
+		IndexedPropertyMethodMetadata<?> indexedProperty = type
+				.getDatastoreMetadata().getIndexedProperty();
+		if (indexedProperty == null) {
+			indexedProperty = type.getIndexedProperty();
+		}
+		if (indexedProperty == null) {
+			throw new XOException("Type "
+					+ type.getAnnotatedType().getAnnotatedElement().getName()
+					+ " has no indexed property.");
+		}
+		PrimitivePropertyMethodMetadata<TitanPropertyMetadata> propertyMethodMetadata = indexedProperty
+				.getPropertyMethodMetadata();
+		query = query.has(propertyMethodMetadata.getDatastoreMetadata()
+				.getName(), value);
 		Iterable<Vertex> vertices = query.vertices();
 		final Iterator<Vertex> iterator = vertices.iterator();
 

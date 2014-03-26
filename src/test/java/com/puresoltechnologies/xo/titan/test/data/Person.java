@@ -3,6 +3,7 @@ package com.puresoltechnologies.xo.titan.test.data;
 import java.util.Set;
 
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Outgoing;
+import com.puresoltechnologies.xo.titan.api.annotation.Indexed;
 import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
 
 @VertexDefinition
@@ -14,6 +15,7 @@ public interface Person {
 
 	void setLastName(String lastName);
 
+	@Indexed
 	String getLastName();
 
 	void setMother(Person mother);

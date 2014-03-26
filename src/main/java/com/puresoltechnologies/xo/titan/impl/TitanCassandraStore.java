@@ -168,8 +168,8 @@ public class TitanCassandraStore
 			configuration.setProperty("storage.keyspace", keyspace);
 		}
 		titanGraph = TitanFactory.open(configuration);
-		checkAndInitializeDiscriminatorProperties(registeredMetadata);
-		checkAndInitializePropertyIndizes(registeredMetadata);
+		// checkAndInitializeDiscriminatorProperties(registeredMetadata);
+		// checkAndInitializePropertyIndizes(registeredMetadata);
 	}
 
 	private void checkAndInitializeDiscriminatorProperties(
@@ -188,8 +188,7 @@ public class TitanCassandraStore
 			} else if (annotatedType.getAnnotation(VertexDefinition.class) != null) {
 				type = Edge.class;
 			} else {
-				throw new XOException("Type '" + propertyName
-						+ "' is neither a vertex nor an edge.");
+				continue;
 			}
 			checkAndCreatePropertyIndex(propertyName, String.class, type, false);
 		}

@@ -40,7 +40,8 @@ public class QueryIT extends AbstractXOTitanTest {
 	public void test() {
 		XOManager xoManager = getXOManager();
 		xoManager.currentTransaction().begin();
-		ResultIterable<Person> people = xoManager.find(Person.class, "Test");
+		ResultIterable<Person> people = xoManager.find(Person.class,
+				"Skywalker");
 		assertNotNull(people);
 
 		int count = 0;

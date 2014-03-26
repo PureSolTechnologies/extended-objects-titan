@@ -1,16 +1,18 @@
 package com.puresoltechnologies.xo.titan.impl.metadata;
 
 import com.buschmais.xo.spi.datastore.DatastoreEntityMetadata;
+import com.buschmais.xo.spi.metadata.method.IndexedPropertyMethodMetadata;
 
 public class TitanNodeMetadata implements DatastoreEntityMetadata<String> {
 
 	private final String discriminator;
-	private final Class<?> useIndexOfType;
+	private final IndexedPropertyMethodMetadata<?> indexedProperty;
 
-	public TitanNodeMetadata(String discriminator, Class<?> useIndexOfType) {
+	public TitanNodeMetadata(String discriminator,
+			IndexedPropertyMethodMetadata<?> indexedProperty) {
 		super();
 		this.discriminator = discriminator;
-		this.useIndexOfType = useIndexOfType;
+		this.indexedProperty = indexedProperty;
 	}
 
 	@Override
@@ -18,8 +20,8 @@ public class TitanNodeMetadata implements DatastoreEntityMetadata<String> {
 		return discriminator;
 	}
 
-	public Class<?> getUseIndexOfType() {
-		return useIndexOfType;
+	public IndexedPropertyMethodMetadata<?> getIndexedProperty() {
+		return indexedProperty;
 	}
 
 }
