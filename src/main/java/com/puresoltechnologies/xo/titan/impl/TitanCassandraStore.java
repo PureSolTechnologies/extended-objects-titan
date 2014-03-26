@@ -9,11 +9,19 @@ import org.apache.commons.configuration.Configuration;
 import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.spi.datastore.Datastore;
 import com.buschmais.xo.spi.datastore.DatastoreMetadataFactory;
+import com.buschmais.xo.spi.metadata.method.IndexedPropertyMethodMetadata;
 import com.buschmais.xo.spi.metadata.type.TypeMetadata;
+import com.puresoltechnologies.xo.titan.impl.metadata.TitanIndexedPropertyMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanNodeMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
+import com.thinkaurelius.titan.core.KeyMaker;
 import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
+import com.thinkaurelius.titan.core.TitanKey;
+import com.thinkaurelius.titan.core.TitanType;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Element;
+import com.tinkerpop.blueprints.Vertex;
 
 /**
  * <p>
@@ -156,6 +164,67 @@ public class TitanCassandraStore
 			configuration.setProperty("storage.keyspace", keyspace);
 		}
 		titanGraph = TitanFactory.open(configuration);
+		checkAndInitializePropertyIndizes(registeredMetadata);
+	}
+
+	private void checkAndInitializePropertyIndizes(
+			Collection<TypeMetadata> registeredMetadata) {
+		for (TypeMetadata metadata : registeredMetadata) {
+			IndexedPropertyMethodMetadata indexedProperty = metadata
+					.getIndexedProperty();
+			if (indexedProperty != null) {
+				TitanIndexedPropertyMetadata datastoreMetadata = (TitanIndexedPropertyMetadata) indexedProperty
+						.getDatastoreMetadata();
+				checkAndCreatePropertyIndex(datastoreMetadata);
+			}
+		}
+	}
+
+	private void checkAndCreatePropertyIndex(
+			TitanIndexedPropertyMetadata datastoreMetadata) {
+		String name = datastoreMetadata.getName();
+		Class<?> dataType = datastoreMetadata.getDataType();
+		Class<? extends Element> type = datastoreMetadata.getType();
+		boolean unique = datastoreMetadata.isUnique();
+		TitanType titanType = titanGraph.getType(name);
+		if (titanType != null) {
+			if (titanType.isPropertyKey()) {
+				TitanKey titanKey = (TitanKey) titanType;
+				for (String key : titanKey.getIndexes(Vertex.class)) {
+					System.out.println(key);
+				}
+				if (titanKey.hasIndex("standard", type)) {
+					if (unique != titanKey.isUnique(Direction.IN)) {
+						throw new XOException(
+								"Property '"
+										+ name
+										+ "' shall be an indexed property with unique='"
+										+ unique
+										+ "', but this index is already in use with different unique setting.");
+					}
+				} else {
+					createIndex(name, unique, dataType, type);
+				}
+			} else {
+				throw new XOException(
+						"Property '"
+								+ name
+								+ "' shall be an indexed property, but this name is already in use, but not as property.");
+			}
+		} else {
+			createIndex(name, unique, dataType, type);
+		}
+	}
+
+	private void createIndex(String name, boolean unique, Class<?> dataType,
+			Class<? extends Element> type) {
+		KeyMaker makeKey = titanGraph.makeKey(name);
+		makeKey.dataType(dataType);
+		makeKey.indexed(type);
+		if (unique) {
+			makeKey.unique();
+		}
+		makeKey.make();
 	}
 
 	@Override

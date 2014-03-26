@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.spi.datastore.DatastoreMetadataFactory;
 import com.buschmais.xo.spi.metadata.type.TypeMetadata;
 import com.buschmais.xo.spi.reflection.AnnotatedElement;
@@ -13,6 +14,7 @@ import com.buschmais.xo.spi.reflection.PropertyMethod;
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition;
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Incoming;
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Outgoing;
+import com.puresoltechnologies.xo.titan.api.annotation.Indexed;
 import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanCollectionPropertyMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanIndexedPropertyMetadata;
@@ -21,6 +23,9 @@ import com.puresoltechnologies.xo.titan.impl.metadata.TitanPropertyMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanReferencePropertyMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
 import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Element;
+import com.tinkerpop.blueprints.Vertex;
 
 /**
  * This class implements the XO {@link DatastoreMetadataFactory} for Titan
@@ -44,7 +49,8 @@ public class TitanMetadataFactory
 				value = annotatedType.getName();
 			}
 		}
-		return new TitanNodeMetadata(value);
+		Class<?> useIndexOfType = annotation.usingIndexedPropertyOf();
+		return new TitanNodeMetadata(value, useIndexOfType);
 	}
 
 	@Override
@@ -56,7 +62,7 @@ public class TitanMetadataFactory
 	@Override
 	public TitanCollectionPropertyMetadata createCollectionPropertyMetadata(
 			PropertyMethod propertyMethod) {
-		String name = determineVertexName(propertyMethod);
+		String name = determinePropertyName(propertyMethod);
 		Direction direction = determineEdgeDirection(propertyMethod);
 		return new TitanCollectionPropertyMetadata(name, direction);
 	}
@@ -64,7 +70,7 @@ public class TitanMetadataFactory
 	@Override
 	public TitanReferencePropertyMetadata createReferencePropertyMetadata(
 			PropertyMethod propertyMethod) {
-		String name = determineVertexName(propertyMethod);
+		String name = determinePropertyName(propertyMethod);
 		Direction direction = determineEdgeDirection(propertyMethod);
 		return new TitanReferencePropertyMetadata(name, direction);
 	}
@@ -72,7 +78,7 @@ public class TitanMetadataFactory
 	@Override
 	public TitanPropertyMetadata createPropertyMetadata(
 			PropertyMethod propertyMethod) {
-		String name = determineVertexName(propertyMethod);
+		String name = determinePropertyName(propertyMethod);
 		return new TitanPropertyMetadata(name);
 	}
 
@@ -86,7 +92,7 @@ public class TitanMetadataFactory
 	 * @return A {@link String} object is returned containing the name of the
 	 *         edge.
 	 */
-	private static String determineVertexName(PropertyMethod propertyMethod) {
+	private static String determinePropertyName(PropertyMethod propertyMethod) {
 		VertexDefinition property = propertyMethod
 				.getAnnotationOfProperty(VertexDefinition.class);
 		return property != null ? property.value() : propertyMethod.getName();
@@ -120,8 +126,24 @@ public class TitanMetadataFactory
 	@Override
 	public TitanIndexedPropertyMetadata createIndexedPropertyMetadata(
 			PropertyMethod propertyMethod) {
-		String name = determineVertexName(propertyMethod);
-		return new TitanIndexedPropertyMetadata(name);
+		String name = determinePropertyName(propertyMethod);
+		Indexed indexedAnnotation = propertyMethod.getAnnotation(Indexed.class);
+		boolean unique = indexedAnnotation.unique();
+		Class<?> dataType = propertyMethod.getType();
+		Class<?> declaringClass = propertyMethod.getAnnotatedElement()
+				.getDeclaringClass();
+		Class<? extends Element> type = null;
+		if (declaringClass.getAnnotation(VertexDefinition.class) != null) {
+			type = Vertex.class;
+		} else if (declaringClass.getAnnotation(EdgeDefinition.class) != null) {
+			type = Edge.class;
+		} else {
+			throw new XOException(
+					"Property '"
+							+ name
+							+ "' was found with index annotation, but the declaring type is neither a vertex nor an edge.");
+		}
+		return new TitanIndexedPropertyMetadata(name, unique, dataType, type);
 	}
 
 	@Override
