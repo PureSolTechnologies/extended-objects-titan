@@ -54,6 +54,15 @@ public class TitanStoreSession
 		this.titanGraph = titanGraph;
 	}
 
+	/**
+	 * Returns the Titan graph which is currently opened.
+	 * 
+	 * @return A {@link TitanGraph} object is returned.
+	 */
+	public final TitanGraph getTitanGraph() {
+		return titanGraph;
+	}
+
 	@Override
 	public DatastoreTransaction getDatastoreTransaction() {
 		return new TitanStoreTransaction(titanGraph);

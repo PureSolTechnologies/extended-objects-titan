@@ -129,14 +129,29 @@ public class TitanCassandraStore
 		}
 	}
 
+	/**
+	 * Returns the host name of the Cassandra server.
+	 * 
+	 * @return A {@link String} with the host name is returned.
+	 */
 	public String getHost() {
 		return host;
 	}
 
+	/**
+	 * Returns the port of the Cassandra server.
+	 * 
+	 * @return An <code>int</code> is returned with the port.
+	 */
 	public int getPort() {
 		return port;
 	}
 
+	/**
+	 * Returns the currently used keyspace.
+	 * 
+	 * @return A {@link String} is returned with the name of the keyspace.
+	 */
 	public String getKeyspace() {
 		return keyspace;
 	}
