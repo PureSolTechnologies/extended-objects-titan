@@ -11,7 +11,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -21,7 +20,6 @@ import com.buschmais.xo.api.annotation.PreUpdate;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 
-@Ignore("Not fully implemented, yet.")
 @RunWith(Parameterized.class)
 public class ValidationIT extends AbstractXOTitanTest {
 

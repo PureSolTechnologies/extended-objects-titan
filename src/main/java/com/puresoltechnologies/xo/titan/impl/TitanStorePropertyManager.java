@@ -106,7 +106,7 @@ public class TitanStorePropertyManager
 					.count();
 			break;
 		case TO:
-			count = source.query().direction(Direction.OUT).labels(label)
+			count = source.query().direction(Direction.IN).labels(label)
 					.count();
 			break;
 		default:
