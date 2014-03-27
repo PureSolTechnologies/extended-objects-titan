@@ -23,7 +23,6 @@ import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 
-@Ignore("Not fully implemented, yet.")
 @RunWith(Parameterized.class)
 public class CollectionPropertyMappingIT extends AbstractXOTitanTest {
 
@@ -53,6 +52,7 @@ public class CollectionPropertyMappingIT extends AbstractXOTitanTest {
 		xoManager.currentTransaction().commit();
 	}
 
+	@Ignore("Not fully implemented, yet.")
 	@Test
 	public void mappedSetProperty() {
 		XOManager xoManager = getXOManager();
@@ -64,7 +64,7 @@ public class CollectionPropertyMappingIT extends AbstractXOTitanTest {
 
 		xoManager.currentTransaction().begin();
 		Query<CompositeRowObject> query = xoManager
-				.createQuery("_().has('_xo_discriminator_A').outE.label('MAPPED_SET_OF_B').V.map");
+				.createQuery("_().has('_xo_discriminator_A').outE.has('label', 'MAPPED_SET_OF_B').V.map");
 		CompositeRowObject result = query.execute().getSingleResult();
 		// TestResult result =
 		// executeQuery("match (a:A)-[:MAPPED_SET_OF_B]->(b) return b");
@@ -90,6 +90,7 @@ public class CollectionPropertyMappingIT extends AbstractXOTitanTest {
 		xoManager.currentTransaction().commit();
 	}
 
+	@Ignore("Not fully implemented, yet.")
 	@Test
 	public void mappedListProperty() {
 		XOManager xoManager = getXOManager();
@@ -102,7 +103,7 @@ public class CollectionPropertyMappingIT extends AbstractXOTitanTest {
 
 		xoManager.currentTransaction().begin();
 		Query<CompositeRowObject> query = xoManager
-				.createQuery("_().has('_xo_discriminator_A').outE.label('MAPPED_SET_OF_B').V.map");
+				.createQuery("_().has('_xo_discriminator_A').outE.has('label', 'MAPPED_SET_OF_B').V.map");
 		ResultIterator<CompositeRowObject> result = query.execute().iterator();
 		assertTrue(result.hasNext());
 		CompositeRowObject result1 = result.next();

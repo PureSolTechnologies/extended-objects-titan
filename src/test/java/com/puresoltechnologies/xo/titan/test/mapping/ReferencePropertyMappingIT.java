@@ -18,7 +18,6 @@ import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 
-@Ignore("Not fully implemented, yet.")
 @RunWith(Parameterized.class)
 public class ReferencePropertyMappingIT extends AbstractXOTitanTest {
 
@@ -53,6 +52,7 @@ public class ReferencePropertyMappingIT extends AbstractXOTitanTest {
 		xoManager.currentTransaction().commit();
 	}
 
+	@Ignore("Not fully implemented, yet.")
 	@Test
 	public void mappedReferenceProperty() {
 		XOManager xoManager = getXOManager();

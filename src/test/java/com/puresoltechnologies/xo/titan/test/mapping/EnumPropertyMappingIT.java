@@ -7,6 +7,7 @@ import static org.junit.Assert.assertThat;
 import java.net.URISyntaxException;
 import java.util.Collection;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -18,9 +19,9 @@ import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 
 @RunWith(Parameterized.class)
-public class EnumPropertyMappingT extends AbstractXOTitanTest {
+public class EnumPropertyMappingIT extends AbstractXOTitanTest {
 
-	public EnumPropertyMappingT(XOUnit xoUnit) {
+	public EnumPropertyMappingIT(XOUnit xoUnit) {
 		super(xoUnit);
 	}
 
@@ -68,6 +69,7 @@ public class EnumPropertyMappingT extends AbstractXOTitanTest {
 		xoManager.currentTransaction().commit();
 	}
 
+	@Ignore("Not fully implemented, yet.")
 	@Test
 	public void enumerationProperty() {
 		XOManager xoManager = getXOManager();

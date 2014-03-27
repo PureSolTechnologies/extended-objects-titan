@@ -31,6 +31,7 @@ public class ImplicitRelationIT extends AbstractXOTitanTest {
 		return xoUnits(A.class, B.class);
 	}
 
+	@Ignore("Not fully implemented, yet.")
 	@Test
 	public void oneToOne() {
 		XOManager xoManager = getXOManager();

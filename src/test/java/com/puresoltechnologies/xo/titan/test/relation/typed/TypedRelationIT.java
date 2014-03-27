@@ -121,6 +121,7 @@ public class TypedRelationIT extends AbstractXOTitanTest {
 		xoManager.currentTransaction().commit();
 	}
 
+	@Ignore("Not fully implemented, yet.")
 	@Test
 	public void manyToMany() {
 		XOManager xoManager = getXOManager();

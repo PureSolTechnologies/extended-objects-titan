@@ -16,7 +16,6 @@ import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 
-@Ignore("Not fully implemented, yet.")
 @RunWith(Parameterized.class)
 public class QualifiedRelationIT extends AbstractXOTitanTest {
 
@@ -29,6 +28,7 @@ public class QualifiedRelationIT extends AbstractXOTitanTest {
 		return xoUnits(A.class, B.class);
 	}
 
+	@Ignore("Not fully implemented, yet.")
 	@Test
 	public void oneToOne() {
 		XOManager xoManager = getXOManager();
@@ -63,6 +63,7 @@ public class QualifiedRelationIT extends AbstractXOTitanTest {
 		xoManager.currentTransaction().commit();
 	}
 
+	@Ignore("Not fully implemented, yet.")
 	@Test
 	public void oneToMany() {
 		XOManager xoManager = getXOManager();
@@ -99,6 +100,7 @@ public class QualifiedRelationIT extends AbstractXOTitanTest {
 		xoManager.currentTransaction().commit();
 	}
 
+	@Ignore("Not fully implemented, yet.")
 	@Test
 	public void manyToMany() {
 		XOManager xoManager = getXOManager();
