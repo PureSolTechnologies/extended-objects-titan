@@ -9,17 +9,18 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import com.buschmais.xo.api.ConcurrencyMode;
+import com.buschmais.xo.api.Query;
 import com.buschmais.xo.api.Transaction;
 import com.buschmais.xo.api.ValidationMode;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
+import com.puresoltechnologies.xo.titan.test.transaction.A.ByValue;
 
 @RunWith(Parameterized.class)
 public class TransactionAttributeRequiresIT extends AbstractXOTitanTest {
@@ -36,7 +37,6 @@ public class TransactionAttributeRequiresIT extends AbstractXOTitanTest {
 				Transaction.TransactionAttribute.REQUIRES);
 	}
 
-	@Ignore("Not fully implemented, yet.")
 	@Test
 	public void withoutTransactionContext() {
 		XOManager xoManager = getXOManager();
@@ -45,10 +45,11 @@ public class TransactionAttributeRequiresIT extends AbstractXOTitanTest {
 		assertThat(a.getValue(), equalTo("value1"));
 		assertThat(xoManager.find(A.class, "value1").getSingleResult(),
 				equalTo(a));
-		assertThat(
-				xoManager.createQuery(A.ByValue.class)
-						.withParameter("value", "value1").execute()
-						.getSingleResult().getA(), equalTo(a));
+		Query<ByValue> query = xoManager.createQuery(A.ByValue.class);
+		query = query.withParameter("value", "value1");
+		ByValue result = query.execute().getSingleResult();
+		assertThat(result.getA().getValue(),
+				equalTo(a.getValue()));
 		assertThat(a.getByValue("value1").getA(), equalTo(a));
 		a.setValue("value2");
 		assertThat(a.getValue(), equalTo("value2"));

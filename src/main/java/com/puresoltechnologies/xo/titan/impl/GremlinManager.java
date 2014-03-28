@@ -1,6 +1,7 @@
 package com.puresoltechnologies.xo.titan.impl;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 
 import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.spi.datastore.DatastoreSession;
@@ -23,9 +24,25 @@ public class GremlinManager {
 	 *            {@link DatastoreSession#executeQuery(Object, java.util.Map)}.
 	 * @return A {@link String} containing a Gremlin expression is returned.
 	 */
-	public static <QL> String getGremlinExpression(QL expression) {
+	public static <QL> String getGremlinExpression(QL expression,
+			Map<String, Object> parameters) {
+		StringBuffer typeDefinitions = new StringBuffer();
+		for (String type : parameters.keySet()) {
+			Object value = parameters.get(type);
+			typeDefinitions.append(type);
+			typeDefinitions.append("=");
+			if (String.class.equals(value.getClass())) {
+				typeDefinitions.append("'");
+				typeDefinitions.append(value);
+				typeDefinitions.append("'");
+			} else {
+				typeDefinitions.append(value);
+			}
+			typeDefinitions.append("\n");
+		}
+		String gremlinExpression = null;
 		if (expression instanceof String) {
-			return (String) expression;
+			gremlinExpression = (String) expression;
 		} else if (AnnotatedElement.class.isAssignableFrom(expression
 				.getClass())) {
 			AnnotatedElement<?> typeExpression = (AnnotatedElement<?>) expression;
@@ -34,7 +51,7 @@ public class GremlinManager {
 				throw new XOException(typeExpression
 						+ " must be annotated with " + Gremlin.class.getName());
 			}
-			return gremlin.value();
+			gremlinExpression = gremlin.value();
 		} else if (Class.class.isAssignableFrom(expression.getClass())) {
 			Class<?> clazz = (Class<?>) expression;
 			Gremlin gremlin = clazz.getAnnotation(Gremlin.class);
@@ -42,7 +59,7 @@ public class GremlinManager {
 				throw new XOException(expression + " must be annotated with "
 						+ Gremlin.class.getName());
 			}
-			return gremlin.value();
+			gremlinExpression = gremlin.value();
 		} else if (Method.class.isAssignableFrom(expression.getClass())) {
 			Method method = (Method) expression;
 			Gremlin gremlin = method.getAnnotation(Gremlin.class);
@@ -50,9 +67,15 @@ public class GremlinManager {
 				throw new XOException(expression + " must be annotated with "
 						+ Gremlin.class.getName());
 			}
-			return gremlin.value();
+			gremlinExpression = gremlin.value();
+		} else {
+			throw new XOException("Unsupported query expression " + expression);
 		}
-		throw new XOException("Unsupported query expression " + expression);
+		for (String type : parameters.keySet()) {
+			String placeholder = "\\{" + type + "\\}";
+			gremlinExpression = gremlinExpression.replaceAll(placeholder, type);
+		}
+		return typeDefinitions.toString() + gremlinExpression;
 	}
 
 }

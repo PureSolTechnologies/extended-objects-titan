@@ -177,7 +177,8 @@ public class TitanStoreSession
 	@Override
 	public <QL> ResultIterator<Map<String, Object>> executeQuery(QL query,
 			Map<String, Object> parameters) {
-		String expression = GremlinManager.getGremlinExpression(query);
+		String expression = GremlinManager.getGremlinExpression(query,
+				parameters);
 		@SuppressWarnings("unchecked")
 		final Pipe<Vertex, ?> pipe = com.tinkerpop.gremlin.groovy.Gremlin
 				.compile(expression);
