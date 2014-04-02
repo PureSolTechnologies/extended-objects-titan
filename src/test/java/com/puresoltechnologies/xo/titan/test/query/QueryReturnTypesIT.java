@@ -7,7 +7,6 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -17,7 +16,6 @@ import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 
-@Ignore("Not fully implemented, yet.")
 @RunWith(Parameterized.class)
 public class QueryReturnTypesIT extends AbstractXOTitanTest {
 
@@ -46,7 +44,7 @@ public class QueryReturnTypesIT extends AbstractXOTitanTest {
 		XOManager xoManager = getXOManager();
 		xoManager.currentTransaction().begin();
 		Result<String> result = xoManager.createQuery(
-				"match (a:A) return a.value", String.class).execute();
+				"_().has('_xo_discriminator_A').value", String.class).execute();
 		assertThat(result.getSingleResult(), equalTo("A"));
 		xoManager.currentTransaction().commit();
 	}
@@ -55,8 +53,8 @@ public class QueryReturnTypesIT extends AbstractXOTitanTest {
 	public void cypherWithEntityReturnType() {
 		XOManager xoManager = getXOManager();
 		xoManager.currentTransaction().begin();
-		Result<A> result = xoManager.createQuery("match (a:A) return a",
-				A.class).execute();
+		Result<A> result = xoManager.createQuery(
+				"_().has('_xo_discriminator_A')", A.class).execute();
 		assertThat(result.getSingleResult(), equalTo(a));
 		xoManager.currentTransaction().commit();
 	}
