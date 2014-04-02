@@ -5,9 +5,9 @@ import java.util.Set;
 
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition;
 import com.puresoltechnologies.xo.titan.api.annotation.Indexed;
+import com.puresoltechnologies.xo.titan.api.annotation.Property;
 import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
 import com.puresoltechnologies.xo.titan.test.inheritance.Version;
-import com.tinkerpop.frames.Property;
 
 @VertexDefinition("A")
 public interface A extends Version {

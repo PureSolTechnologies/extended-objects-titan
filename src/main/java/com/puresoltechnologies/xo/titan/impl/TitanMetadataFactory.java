@@ -16,6 +16,7 @@ import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition;
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Incoming;
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Outgoing;
 import com.puresoltechnologies.xo.titan.api.annotation.Indexed;
+import com.puresoltechnologies.xo.titan.api.annotation.Property;
 import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanCollectionPropertyMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanIndexedPropertyMetadata;
@@ -84,7 +85,10 @@ public class TitanMetadataFactory
 	@Override
 	public TitanPropertyMetadata createPropertyMetadata(
 			PropertyMethod propertyMethod) {
-		String name = determinePropertyName(propertyMethod);
+		Property property = propertyMethod
+				.getAnnotationOfProperty(Property.class);
+		String name = property != null ? property.value()
+				: determinePropertyName(propertyMethod);
 		return new TitanPropertyMetadata(name);
 	}
 

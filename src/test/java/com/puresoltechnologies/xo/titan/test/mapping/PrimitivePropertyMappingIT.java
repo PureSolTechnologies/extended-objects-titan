@@ -7,7 +7,6 @@ import static org.junit.Assert.assertThat;
 import java.net.URISyntaxException;
 import java.util.Collection;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -50,7 +49,6 @@ public class PrimitivePropertyMappingIT extends AbstractXOTitanTest {
 		xoManager.currentTransaction().commit();
 	}
 
-	@Ignore("Not fully implemented, yet.")
 	@Test
 	public void mappedPrimitiveProperty() {
 		XOManager xoManager = getXOManager();

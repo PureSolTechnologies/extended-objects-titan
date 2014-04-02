@@ -44,9 +44,6 @@ public class EnumPropertyMappingIT extends AbstractXOTitanTest {
 		Query<CompositeRowObject> query = xoManager
 				.createQuery("_().has('_xo_discriminator_A').has('enumeration','FIRST').map");
 		CompositeRowObject result = query.execute().getSingleResult();
-		// assertThat(
-		// executeQuery("MATCH (a:A) WHERE a.enumeration='FIRST' RETURN a")
-		// .getColumn("a"), hasItem(a));
 		assertThat(result.get("_xo_discriminator_A", String.class), is("A"));
 		a.setEnumeration(Enumeration.SECOND);
 		xoManager.currentTransaction().commit();
@@ -56,10 +53,6 @@ public class EnumPropertyMappingIT extends AbstractXOTitanTest {
 		query = xoManager
 				.createQuery("_().has('_xo_discriminator_A').has('enumeration','SECOND').map");
 		result = query.execute().getSingleResult();
-		// assertThat(
-		// executeQuery(
-		// "MATCH (a:A) WHERE a.enumeration='SECOND' RETURN a")
-		// .getColumn("a"), hasItem(a));
 		assertThat(result.get("_xo_discriminator_A", String.class), is("A"));
 		a.setEnumeration(null);
 		xoManager.currentTransaction().commit();
@@ -82,7 +75,7 @@ public class EnumPropertyMappingIT extends AbstractXOTitanTest {
 		xoManager.currentTransaction().begin();
 		assertThat(a.getMappedEnumeration(), equalTo(Enumeration.FIRST));
 		Query<CompositeRowObject> query = xoManager
-				.createQuery("_().has('_xo_discriminator_A').has('MAPPED_ENUMERATION','FIRST').map");
+				.createQuery("_().has('_xo_discriminator_A').has('MAPPED_ENUMERATION','FIRST')");
 		CompositeRowObject result = query.execute().getSingleResult();
 		// assertThat(
 		// executeQuery(
@@ -95,7 +88,7 @@ public class EnumPropertyMappingIT extends AbstractXOTitanTest {
 		xoManager.currentTransaction().begin();
 		assertThat(a.getMappedEnumeration(), equalTo(Enumeration.SECOND));
 		query = xoManager
-				.createQuery("_().has('_xo_discriminator_A').has('MAPPED_ENUMERATION','SECOND').map");
+				.createQuery("_().has('_xo_discriminator_A').has('MAPPED_ENUMERATION','SECOND')");
 		result = query.execute().getSingleResult();
 		// assertThat(
 		// executeQuery(
