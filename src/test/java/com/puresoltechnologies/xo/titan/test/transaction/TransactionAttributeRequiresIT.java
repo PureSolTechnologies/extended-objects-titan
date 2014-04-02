@@ -41,15 +41,16 @@ public class TransactionAttributeRequiresIT extends AbstractXOTitanTest {
 	public void withoutTransactionContext() {
 		XOManager xoManager = getXOManager();
 		assertThat(xoManager.currentTransaction().isActive(), equalTo(false));
+
 		A a = createA(xoManager);
 		assertThat(a.getValue(), equalTo("value1"));
 		assertThat(xoManager.find(A.class, "value1").getSingleResult(),
 				equalTo(a));
+
 		Query<ByValue> query = xoManager.createQuery(A.ByValue.class);
 		query = query.withParameter("value", "value1");
 		ByValue result = query.execute().getSingleResult();
-		assertThat(result.getA().getValue(),
-				equalTo(a.getValue()));
+		assertThat(result.getA().getValue(), equalTo(a.getValue()));
 		assertThat(a.getByValue("value1").getA(), equalTo(a));
 		a.setValue("value2");
 		assertThat(a.getValue(), equalTo("value2"));

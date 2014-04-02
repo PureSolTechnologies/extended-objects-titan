@@ -1,5 +1,6 @@
 package com.puresoltechnologies.xo.titan.impl;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -177,12 +178,17 @@ public class TitanStoreSession
 	@Override
 	public <QL> ResultIterator<Map<String, Object>> executeQuery(QL query,
 			Map<String, Object> parameters) {
-		String expression = GremlinManager.getGremlinExpression(query,
-				parameters);
+		final GremlinExpression gremlinExpression = GremlinManager
+				.getGremlinExpression(query, parameters);
+		String expression = gremlinExpression.getExpression();
 		@SuppressWarnings("unchecked")
 		final Pipe<Vertex, ?> pipe = com.tinkerpop.gremlin.groovy.Gremlin
 				.compile(expression);
-		pipe.setStarts(titanGraph.query().vertices());
+		if (parameters.containsKey("this")) {
+			pipe.setStarts(Arrays.asList((Vertex) parameters.get("this")));
+		} else {
+			pipe.setStarts(titanGraph.query().vertices());
+		}
 		return new ResultIterator<Map<String, Object>>() {
 
 			@Override
@@ -195,11 +201,9 @@ public class TitanStoreSession
 				Map<String, Object> results = new HashMap<>();
 				Object next = pipe.next();
 				if (next instanceof Vertex) {
-					Vertex vertex = (Vertex) next;
-					results.put("vertex", vertex);
+					results.put(gremlinExpression.getResultName(), next);
 				} else if (next instanceof Edge) {
-					Edge edge = (Edge) next;
-					results.put("edge", edge);
+					results.put(gremlinExpression.getResultName(), next);
 				} else if (next instanceof Map) {
 					@SuppressWarnings("unchecked")
 					Map<String, Object> map = (Map<String, Object>) next;

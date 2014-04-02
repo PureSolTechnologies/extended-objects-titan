@@ -30,7 +30,7 @@ public interface A {
 	@ResultOf
 	ByValue getByValue(@Parameter("value") String value);
 
-	@Gremlin("_().has('value', {value})")
+	@Gremlin(value = "_().has('value', {value})", name = "a")
 	interface ByValue {
 		A getA();
 	}

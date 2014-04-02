@@ -26,4 +26,9 @@ public @interface Gremlin {
 	 */
 	String value();
 
+	/**
+	 * @return A name for the result is returned which needs to reflect a
+	 *         property type.
+	 */
+	String name() default "";
 }
