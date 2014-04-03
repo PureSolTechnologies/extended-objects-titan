@@ -50,7 +50,7 @@ public class QueryIT extends AbstractXOTitanTest {
 	}
 
 	@Test
-	public void cypherStringQuery() {
+	public void gremlinStringQuery() {
 		XOManager xoManager = getXOManager();
 		xoManager.currentTransaction().begin();
 		Result<CompositeRowObject> result = xoManager
@@ -72,7 +72,7 @@ public class QueryIT extends AbstractXOTitanTest {
 	}
 
 	@Test
-	public void cypherStringQuerySimple() {
+	public void gremlinStringQuerySimple() {
 		XOManager xoManager = getXOManager();
 
 		xoManager.currentTransaction().begin();

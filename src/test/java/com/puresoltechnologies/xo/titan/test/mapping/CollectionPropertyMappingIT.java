@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -52,7 +51,6 @@ public class CollectionPropertyMappingIT extends AbstractXOTitanTest {
 		xoManager.currentTransaction().commit();
 	}
 
-	@Ignore("Not fully implemented, yet.")
 	@Test
 	public void mappedSetProperty() {
 		XOManager xoManager = getXOManager();
@@ -90,7 +88,6 @@ public class CollectionPropertyMappingIT extends AbstractXOTitanTest {
 		xoManager.currentTransaction().commit();
 	}
 
-	@Ignore("Not fully implemented, yet.")
 	@Test
 	public void mappedListProperty() {
 		XOManager xoManager = getXOManager();

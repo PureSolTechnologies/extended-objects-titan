@@ -40,7 +40,7 @@ public class QueryReturnTypesIT extends AbstractXOTitanTest {
 	}
 
 	@Test
-	public void cypherWithPrimitiveReturnType() {
+	public void gremlinWithPrimitiveReturnType() {
 		XOManager xoManager = getXOManager();
 		xoManager.currentTransaction().begin();
 		Result<String> result = xoManager.createQuery(
@@ -50,7 +50,7 @@ public class QueryReturnTypesIT extends AbstractXOTitanTest {
 	}
 
 	@Test
-	public void cypherWithEntityReturnType() {
+	public void gremlinWithEntityReturnType() {
 		XOManager xoManager = getXOManager();
 		xoManager.currentTransaction().begin();
 		Result<A> result = xoManager.createQuery(

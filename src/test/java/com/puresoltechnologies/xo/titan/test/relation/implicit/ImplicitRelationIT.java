@@ -7,7 +7,6 @@ import static org.junit.Assert.assertThat;
 import java.net.URISyntaxException;
 import java.util.Collection;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -18,7 +17,6 @@ import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 
-@Ignore("Not fully implemented, yet.")
 @RunWith(Parameterized.class)
 public class ImplicitRelationIT extends AbstractXOTitanTest {
 
@@ -31,7 +29,6 @@ public class ImplicitRelationIT extends AbstractXOTitanTest {
 		return xoUnits(A.class, B.class);
 	}
 
-	@Ignore("Not fully implemented, yet.")
 	@Test
 	public void oneToOne() {
 		XOManager xoManager = getXOManager();

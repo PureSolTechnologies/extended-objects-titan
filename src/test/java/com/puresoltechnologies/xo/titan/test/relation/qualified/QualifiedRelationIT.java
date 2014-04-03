@@ -7,7 +7,6 @@ import static org.junit.Assert.assertThat;
 import java.net.URISyntaxException;
 import java.util.Collection;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -28,7 +27,6 @@ public class QualifiedRelationIT extends AbstractXOTitanTest {
 		return xoUnits(A.class, B.class);
 	}
 
-	@Ignore("Not fully implemented, yet.")
 	@Test
 	public void oneToOne() {
 		XOManager xoManager = getXOManager();
@@ -63,7 +61,6 @@ public class QualifiedRelationIT extends AbstractXOTitanTest {
 		xoManager.currentTransaction().commit();
 	}
 
-	@Ignore("Not fully implemented, yet.")
 	@Test
 	public void oneToMany() {
 		XOManager xoManager = getXOManager();
@@ -100,7 +97,6 @@ public class QualifiedRelationIT extends AbstractXOTitanTest {
 		xoManager.currentTransaction().commit();
 	}
 
-	@Ignore("Not fully implemented, yet.")
 	@Test
 	public void manyToMany() {
 		XOManager xoManager = getXOManager();

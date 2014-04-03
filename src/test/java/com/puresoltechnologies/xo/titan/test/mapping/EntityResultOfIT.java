@@ -8,7 +8,6 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -18,7 +17,6 @@ import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 
-@Ignore("Not fully implemented, yet.")
 @RunWith(Parameterized.class)
 public class EntityResultOfIT extends AbstractXOTitanTest {
 
@@ -98,23 +96,23 @@ public class EntityResultOfIT extends AbstractXOTitanTest {
 	}
 
 	@Test
-	public void resultUsingCypher() {
+	public void resultUsingGremlin() {
 		XOManager xoManager = getXOManager();
 		xoManager.currentTransaction().begin();
-		Result<F> result = e.getResultUsingCypher("F1");
+		Result<F> result = e.getResultUsingGremlin("F1");
 		assertThat(result, hasItems(equalTo(f1)));
-		result = e.getResultUsingCypher("unknownF");
+		result = e.getResultUsingGremlin("unknownF");
 		assertThat(result.iterator().hasNext(), equalTo(false));
 		xoManager.currentTransaction().commit();
 	}
 
 	@Test
-	public void singleResultUsingCypher() {
+	public void singleResultUsingGremlin() {
 		XOManager xoManager = getXOManager();
 		xoManager.currentTransaction().begin();
-		F result = e.getSingleResultUsingCypher("F1");
+		F result = e.getSingleResultUsingGremlin("F1");
 		assertThat(result, equalTo(f1));
-		result = e.getSingleResultUsingCypher("unknownF");
+		result = e.getSingleResultUsingGremlin("unknownF");
 		assertThat(result, equalTo(null));
 		xoManager.currentTransaction().commit();
 	}

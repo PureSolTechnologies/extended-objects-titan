@@ -35,11 +35,11 @@ public interface E {
 
 	@ResultOf
 	@Gremlin("_().has('_xo_discriminator_E').outE.has('label', 'RELATED_TO').V.has('_xo_discriminator_F').has('value', '{value}')")
-	Result<F> getResultUsingCypher(@Parameter("value") String value);
+	Result<F> getResultUsingGremlin(@Parameter("value") String value);
 
 	@ResultOf
 	@Gremlin("_().has('_xo_discriminator_E').outE.has('label', 'RELATED_TO').V.has('_xo_discriminator_F').has('value', '{value}')")
-	F getSingleResultUsingCypher(@Parameter("value") String value);
+	F getSingleResultUsingGremlin(@Parameter("value") String value);
 
 	List<E2F> getE2F();
 
