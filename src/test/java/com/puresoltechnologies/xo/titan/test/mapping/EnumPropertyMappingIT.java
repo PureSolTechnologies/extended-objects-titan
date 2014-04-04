@@ -16,6 +16,7 @@ import com.buschmais.xo.api.Query.Result.CompositeRowObject;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
+import com.puresoltechnologies.xo.titan.impl.TitanStoreSession;
 
 @RunWith(Parameterized.class)
 public class EnumPropertyMappingIT extends AbstractXOTitanTest {
@@ -72,8 +73,9 @@ public class EnumPropertyMappingIT extends AbstractXOTitanTest {
 
 		xoManager.currentTransaction().begin();
 		assertThat(a.getMappedEnumeration(), equalTo(Enumeration.FIRST));
-		Query<CompositeRowObject> query = xoManager
-				.createQuery("_().has('_xo_discriminator_A').has('MAPPED_ENUMERATION','FIRST')");
+		Query<CompositeRowObject> query = xoManager.createQuery("_().has('"
+				+ TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
+				+ "A').has('MAPPED_ENUMERATION','FIRST').map");
 		CompositeRowObject result = query.execute().getSingleResult();
 		// assertThat(
 		// executeQuery(
@@ -85,8 +87,9 @@ public class EnumPropertyMappingIT extends AbstractXOTitanTest {
 
 		xoManager.currentTransaction().begin();
 		assertThat(a.getMappedEnumeration(), equalTo(Enumeration.SECOND));
-		query = xoManager
-				.createQuery("_().has('_xo_discriminator_A').has('MAPPED_ENUMERATION','SECOND')");
+		query = xoManager.createQuery("_().has('"
+				+ TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
+				+ "A').has('MAPPED_ENUMERATION','SECOND').map");
 		result = query.execute().getSingleResult();
 		// assertThat(
 		// executeQuery(

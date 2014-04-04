@@ -62,7 +62,7 @@ public class ReferencePropertyMappingIT extends AbstractXOTitanTest {
 
 		xoManager.currentTransaction().begin();
 		Query<CompositeRowObject> query = xoManager
-				.createQuery("_().has('_xo_discriminator_A').E('label', 'MAPPED_B').V.map");
+				.createQuery("_().has('_xo_discriminator_A').outE('label', 'MAPPED_B').inV.map");
 		CompositeRowObject result = query.execute().getSingleResult();
 		// TestResult result =
 		// executeQuery("match (a:A)-[:MAPPED_B]->(b) return b");

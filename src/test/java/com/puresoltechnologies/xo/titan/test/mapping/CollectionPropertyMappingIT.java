@@ -21,6 +21,7 @@ import com.buschmais.xo.api.ResultIterator;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
+import com.puresoltechnologies.xo.titan.impl.TitanStoreSession;
 
 @RunWith(Parameterized.class)
 public class CollectionPropertyMappingIT extends AbstractXOTitanTest {
@@ -58,15 +59,17 @@ public class CollectionPropertyMappingIT extends AbstractXOTitanTest {
 		A a = xoManager.create(A.class);
 		B b = xoManager.create(B.class);
 		a.getMappedSetOfB().add(b);
+		a.getMappedSetOfB().add(b);
 		xoManager.currentTransaction().commit();
 
 		xoManager.currentTransaction().begin();
-		Query<CompositeRowObject> query = xoManager
-				.createQuery("_().has('_xo_discriminator_A').outE.has('label', 'MAPPED_SET_OF_B').V.map");
+		Query<CompositeRowObject> query = xoManager.createQuery("_().has('"
+				+ TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
+				+ "A').outE.has('label', 'MAPPED_SET_OF_B').inV.map");
 		CompositeRowObject result = query.execute().getSingleResult();
 		// TestResult result =
 		// executeQuery("match (a:A)-[:MAPPED_SET_OF_B]->(b) return b");
-		assertThat(result.get("_xo_discriminator_b", String.class), is("b"));
+		assertThat(result.get("_xo_discriminator_B", String.class), is("B"));
 		xoManager.currentTransaction().commit();
 	}
 
@@ -99,8 +102,9 @@ public class CollectionPropertyMappingIT extends AbstractXOTitanTest {
 		xoManager.currentTransaction().commit();
 
 		xoManager.currentTransaction().begin();
-		Query<CompositeRowObject> query = xoManager
-				.createQuery("_().has('_xo_discriminator_A').outE.has('label', 'MAPPED_SET_OF_B').V.map");
+		Query<CompositeRowObject> query = xoManager.createQuery("_().has('"
+				+ TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
+				+ "A').outE.has('label', 'MAPPED_LIST_OF_B').inV.map");
 		ResultIterator<CompositeRowObject> result = query.execute().iterator();
 		assertTrue(result.hasNext());
 		CompositeRowObject result1 = result.next();
@@ -109,8 +113,8 @@ public class CollectionPropertyMappingIT extends AbstractXOTitanTest {
 		assertFalse(result.hasNext());
 		// TestResult result =
 		// executeQuery("match (a:A)-[:MAPPED_LIST_OF_B]->(b) return b");
-		assertThat(result1.get("_xo_discriminator_b", String.class), is("b"));
-		assertThat(result2.get("_xo_discriminator_b", String.class), is("b"));
+		assertThat(result1.get("_xo_discriminator_B", String.class), is("B"));
+		assertThat(result2.get("_xo_discriminator_B", String.class), is("B"));
 		xoManager.currentTransaction().commit();
 	}
 }

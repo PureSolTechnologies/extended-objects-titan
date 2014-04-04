@@ -16,6 +16,7 @@ import com.buschmais.xo.api.Query.Result.CompositeRowObject;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
+import com.puresoltechnologies.xo.titan.impl.TitanStoreSession;
 
 @RunWith(Parameterized.class)
 public class ImplicitRelationIT extends AbstractXOTitanTest {
@@ -43,8 +44,9 @@ public class ImplicitRelationIT extends AbstractXOTitanTest {
 		assertThat(b1.getOneToOne(), equalTo(a));
 		// Query<CompositeRowObject> query = xoManager
 		// .createQuery("MATCH (a:A)-[:ImplicitOneToOne]->(b:B) RETURN b");
-		Query<CompositeRowObject> query = xoManager
-				.createQuery("_().has('_xo_discriminator_A').outE.has('label', 'ImplicitOneToOne').V.map");
+		Query<CompositeRowObject> query = xoManager.createQuery("_().has('"
+				+ TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
+				+ "A').outE.has('label', 'ImplicitOneToOne').inV.map");
 		CompositeRowObject result = query.execute().getSingleResult();
 		assertThat(result.get("b", String.class), is("b1"));
 		B b2 = xoManager.create(B.class);
