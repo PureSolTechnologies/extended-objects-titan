@@ -1,11 +1,6 @@
 package com.puresoltechnologies.xo.titan.impl;
 
-import java.util.HashSet;
 import java.util.Iterator;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.constraints.NotNull;
 
 import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.spi.datastore.DatastorePropertyManager;
@@ -32,14 +27,6 @@ public class TitanStorePropertyManager
 	public void setEntityProperty(Vertex vertex,
 			PrimitivePropertyMethodMetadata<TitanNodeMetadata> metadata,
 			Object value) {
-		if (value == null) {
-			if (metadata.getAnnotatedMethod().getAnnotation(NotNull.class) != null) {
-				throw new ConstraintViolationException("Type '"
-						+ metadata.getDatastoreMetadata().getDiscriminator()
-						+ "' has an annoted NotNull constrain which failed.",
-						new HashSet<ConstraintViolation<?>>());
-			}
-		}
 		vertex.setProperty(metadata.getAnnotatedMethod().getName(), value);
 	}
 
@@ -47,14 +34,6 @@ public class TitanStorePropertyManager
 	public void setRelationProperty(Edge edge,
 			PrimitivePropertyMethodMetadata<TitanNodeMetadata> metadata,
 			Object value) {
-		if (value == null) {
-			if (metadata.getAnnotatedMethod().getAnnotation(NotNull.class) != null) {
-				throw new ConstraintViolationException("Type '"
-						+ metadata.getDatastoreMetadata().getDiscriminator()
-						+ "' has an annoted NotNull constrain which failed.",
-						new HashSet<ConstraintViolation<?>>());
-			}
-		}
 		edge.setProperty(metadata.getAnnotatedMethod().getName(), value);
 	}
 
