@@ -33,7 +33,7 @@ public class QueryIT extends AbstractXOTitanTest {
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getXOUnits() throws URISyntaxException {
-		return xoUnits(A.class);
+		return xoUnits(A.class, B.class, A2B.class);
 	}
 
 	@Before
