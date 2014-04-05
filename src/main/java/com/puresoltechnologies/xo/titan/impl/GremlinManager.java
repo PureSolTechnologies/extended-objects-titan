@@ -8,6 +8,8 @@ import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.spi.datastore.DatastoreSession;
 import com.buschmais.xo.spi.reflection.AnnotatedElement;
 import com.puresoltechnologies.xo.titan.api.annotation.Gremlin;
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Vertex;
 
 /**
  * This class manages the Gremlin expressions for the
@@ -100,16 +102,23 @@ public class GremlinManager {
 			String type = entry.getKey();
 			if (!"this".equals(type)) {
 				Object value = entry.getValue();
-				typeDefinitions.append(type);
-				typeDefinitions.append("=");
 				if (String.class.equals(value.getClass())) {
+					typeDefinitions.append(type);
+					typeDefinitions.append("=");
 					typeDefinitions.append("'");
 					typeDefinitions.append(value);
 					typeDefinitions.append("'");
+					typeDefinitions.append("\n");
+				} else if (Edge.class.isAssignableFrom(value.getClass())) {
+					continue;
+				} else if (Vertex.class.isAssignableFrom(value.getClass())) {
+					continue;
 				} else {
+					typeDefinitions.append(type);
+					typeDefinitions.append("=");
 					typeDefinitions.append(value);
+					typeDefinitions.append("\n");
 				}
-				typeDefinitions.append("\n");
 			}
 		}
 		return typeDefinitions;

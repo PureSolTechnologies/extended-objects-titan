@@ -21,6 +21,7 @@ import com.puresoltechnologies.xo.titan.impl.metadata.TitanPropertyMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.core.TitanGraphQuery;
+import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.pipes.Pipe;
@@ -185,7 +186,19 @@ public class TitanStoreSession
 		final Pipe<Vertex, ?> pipe = com.tinkerpop.gremlin.groovy.Gremlin
 				.compile(expression);
 		if (parameters.containsKey("this")) {
-			pipe.setStarts(Arrays.asList((Vertex) parameters.get("this")));
+			Object setThis = parameters.get("this");
+			if (Vertex.class.isAssignableFrom(setThis.getClass())) {
+				Vertex vertex = (Vertex) setThis;
+				pipe.setStarts(Arrays.asList(vertex));
+			} else if (Edge.class.isAssignableFrom(setThis.getClass())) {
+				Edge edge = (Edge) setThis;
+				pipe.setStarts(Arrays.asList(edge.getVertex(Direction.IN),
+						edge.getVertex(Direction.OUT)));
+			} else {
+				throw new XOException("Unsupported start point '"
+						+ String.valueOf(setThis) + "' (class="
+						+ setThis.getClass() + ")");
+			}
 		} else {
 			pipe.setStarts(titanGraph.query().vertices());
 		}

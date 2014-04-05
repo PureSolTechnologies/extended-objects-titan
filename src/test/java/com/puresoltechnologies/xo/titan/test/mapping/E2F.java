@@ -7,6 +7,7 @@ import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition;
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Incoming;
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Outgoing;
 import com.puresoltechnologies.xo.titan.api.annotation.Gremlin;
+import com.puresoltechnologies.xo.titan.impl.TitanStoreSession;
 
 @EdgeDefinition("E2F")
 public interface E2F {
@@ -37,12 +38,14 @@ public interface E2F {
 
 	@ResultOf
 	// @Gremlin("match ()-[e2f:E2F]->(f:F) where e2f.value={value} return f")
-	@Gremlin("_().outE.has('label', 'E2F').has('value', {value}).inV.has('_xo_discriminator_F')")
+	@Gremlin("_().outE.has('label', 'E2F').has('value', {value}).inV.has('"
+			+ TitanStoreSession.XO_DISCRIMINATORS_PROPERTY + "F')")
 	Result<F> getResultUsingGremlin(@Parameter("value") String value);
 
 	@ResultOf
 	// @Gremlin("match ()-[e2f:E2F]->(f:F) where e2f.value={value} return f")
-	@Gremlin("_().outE.has('label', 'E2F').has('value', {value}).inV.has('_xo_discriminator_F')")
+	@Gremlin("_().outE.has('label', 'E2F').has('value', {value}).inV.has('"
+			+ TitanStoreSession.XO_DISCRIMINATORS_PROPERTY + "F')")
 	F getSingleResultUsingGremlin(@Parameter("value") String value);
 
 	void setValue(String value);
@@ -50,13 +53,15 @@ public interface E2F {
 	String getValue();
 
 	// @Gremlin("match ()-[e2f:E2F]->(f:F) where e2f={e2f} and e2f.value={value} return f")
-	@Gremlin("_().outE.has('label', 'E2F').has('value', {value}).inV.has('_xo_discriminator_F')")
+	@Gremlin(value = "_().outE.has('label', 'E2F').has('value', {value}).inV.has('"
+			+ TitanStoreSession.XO_DISCRIMINATORS_PROPERTY + "F')", name = "f")
 	public interface ByValue {
 		F getF();
 	}
 
 	// @Gremlin("match ()-[e2f:E2F]->(f:F) where e2f={this} and e2f.value={value} return f")
-	@Gremlin("_().outE.has('label', 'E2F').has('value', {value}).inV.has('_xo_discriminator_F')")
+	@Gremlin(value = "_().outE.has('label', 'E2F').has('value', {value}).inV.has('"
+			+ TitanStoreSession.XO_DISCRIMINATORS_PROPERTY + "F')", name = "f")
 	public interface ByValueUsingImplicitThis {
 		F getF();
 	}

@@ -35,7 +35,10 @@ public interface E {
 			@Parameter("value") String value);
 
 	@ResultOf
-	@Gremlin("_().has('_xo_discriminator_E').outE.has('label', 'RELATED_TO').inV.has('_xo_discriminator_F').has('value', {value})")
+	@Gremlin("_().has('" + TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
+			+ "E').outE.has('label', 'RELATED_TO').inV.has('"
+			+ TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
+			+ "F').has('value', {value})")
 	Result<F> getResultUsingGremlin(@Parameter("value") String value);
 
 	@ResultOf
