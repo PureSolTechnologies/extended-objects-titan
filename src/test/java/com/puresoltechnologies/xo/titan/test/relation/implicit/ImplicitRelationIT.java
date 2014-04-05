@@ -44,11 +44,13 @@ public class ImplicitRelationIT extends AbstractXOTitanTest {
 		assertThat(b1.getOneToOne(), equalTo(a));
 		// Query<CompositeRowObject> query = xoManager
 		// .createQuery("MATCH (a:A)-[:ImplicitOneToOne]->(b:B) RETURN b");
-		Query<CompositeRowObject> query = xoManager.createQuery("_().has('"
-				+ TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
-				+ "A').outE.has('label', 'ImplicitOneToOne').inV.map");
+		Query<CompositeRowObject> query = xoManager
+				.createQuery("_().has('"
+						+ TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
+						+ "A').outE.inV");
 		CompositeRowObject result = query.execute().getSingleResult();
-		assertThat(result.get("b", String.class), is("b1"));
+		assertThat(result.get(result.getColumns().iterator().next(), B.class),
+				is(b1));
 		B b2 = xoManager.create(B.class);
 		a.setOneToOne(b2);
 		xoManager.currentTransaction().commit();
@@ -60,9 +62,12 @@ public class ImplicitRelationIT extends AbstractXOTitanTest {
 		// query = xoManager
 		// .createQuery("MATCH (a:A)-[:ImplicitOneToOne]->(b:B) RETURN b");
 		query = xoManager
-				.createQuery("MATCH (a:A)-[:ImplicitOneToOne]->(b:B) RETURN b");
+				.createQuery("_().has('"
+						+ TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
+						+ "A').outE.inV");
 		result = query.execute().getSingleResult();
-		assertThat(result.get("b", String.class), is("b2"));
+		assertThat(result.get(result.getColumns().iterator().next(), B.class),
+				is(b2));
 		a.setOneToOne(null);
 		xoManager.currentTransaction().commit();
 		xoManager.currentTransaction().begin();

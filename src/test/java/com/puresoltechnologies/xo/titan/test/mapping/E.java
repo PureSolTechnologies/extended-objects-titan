@@ -8,6 +8,7 @@ import com.buschmais.xo.api.annotation.ResultOf.Parameter;
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition;
 import com.puresoltechnologies.xo.titan.api.annotation.Gremlin;
 import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
+import com.puresoltechnologies.xo.titan.impl.TitanStoreSession;
 
 @VertexDefinition("E")
 public interface E {
@@ -34,21 +35,32 @@ public interface E {
 			@Parameter("value") String value);
 
 	@ResultOf
-	@Gremlin("_().has('_xo_discriminator_E').outE.has('label', 'RELATED_TO').V.has('_xo_discriminator_F').has('value', '{value}')")
+	@Gremlin("_().has('_xo_discriminator_E').outE.has('label', 'RELATED_TO').inV.has('_xo_discriminator_F').has('value', {value})")
 	Result<F> getResultUsingGremlin(@Parameter("value") String value);
 
 	@ResultOf
-	@Gremlin("_().has('_xo_discriminator_E').outE.has('label', 'RELATED_TO').V.has('_xo_discriminator_F').has('value', '{value}')")
+	@Gremlin("_().has('" + TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
+			+ "E').outE.has('label', 'RELATED_TO').inV.has('"
+			+ TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
+			+ "F').has('value', {value})")
 	F getSingleResultUsingGremlin(@Parameter("value") String value);
 
 	List<E2F> getE2F();
 
-	@Gremlin("_().has('_xo_discriminator_E').outE.has('label', 'RELATED_TO').V.has('_xo_discriminator_F').has('value', '{value}') where e={e}")
+	// where where e={e}
+	@Gremlin(value = "_().has('" + TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
+			+ "E').outE.has('label', 'RELATED_TO').inV.has('"
+			+ TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
+			+ "F').has('value', {value})", name = "f")
 	interface ByValue {
 		F getF();
 	}
 
-	@Gremlin("_().has('_xo_discriminator_E').outE.has('label', 'RELATED_TO').V.has('_xo_discriminator_F').has('value', '{value}') where e={this}")
+	// where e={this}
+	@Gremlin(value = "_().has('" + TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
+			+ "E').outE.has('label', 'RELATED_TO').inV.has('"
+			+ TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
+			+ "F').has('value', {value})", name = "f")
 	interface ByValueUsingImplicitThis {
 		F getF();
 	}

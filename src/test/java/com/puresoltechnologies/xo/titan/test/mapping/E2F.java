@@ -36,23 +36,27 @@ public interface E2F {
 			@Parameter("value") String value);
 
 	@ResultOf
-	@Gremlin("match ()-[e2f:E2F]->(f:F) where e2f.value={value} return f")
+	// @Gremlin("match ()-[e2f:E2F]->(f:F) where e2f.value={value} return f")
+	@Gremlin("_().outE.has('label', 'E2F').has('value', {value}).inV.has('_xo_discriminator_F')")
 	Result<F> getResultUsingGremlin(@Parameter("value") String value);
 
 	@ResultOf
-	@Gremlin("match ()-[e2f:E2F]->(f:F) where e2f.value={value} return f")
+	// @Gremlin("match ()-[e2f:E2F]->(f:F) where e2f.value={value} return f")
+	@Gremlin("_().outE.has('label', 'E2F').has('value', {value}).inV.has('_xo_discriminator_F')")
 	F getSingleResultUsingGremlin(@Parameter("value") String value);
 
 	void setValue(String value);
 
 	String getValue();
 
-	@Gremlin("match ()-[e2f:E2F]->(f:F) where e2f={e2f} and e2f.value={value} return f")
+	// @Gremlin("match ()-[e2f:E2F]->(f:F) where e2f={e2f} and e2f.value={value} return f")
+	@Gremlin("_().outE.has('label', 'E2F').has('value', {value}).inV.has('_xo_discriminator_F')")
 	public interface ByValue {
 		F getF();
 	}
 
-	@Gremlin("match ()-[e2f:E2F]->(f:F) where e2f={this} and e2f.value={value} return f")
+	// @Gremlin("match ()-[e2f:E2F]->(f:F) where e2f={this} and e2f.value={value} return f")
+	@Gremlin("_().outE.has('label', 'E2F').has('value', {value}).inV.has('_xo_discriminator_F')")
 	public interface ByValueUsingImplicitThis {
 		F getF();
 	}
