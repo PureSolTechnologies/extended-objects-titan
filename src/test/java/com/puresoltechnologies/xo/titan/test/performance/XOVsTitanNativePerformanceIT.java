@@ -6,13 +6,18 @@ import static org.hamcrest.Matchers.is;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.buschmais.xo.api.ConcurrencyMode;
+import com.buschmais.xo.api.Transaction;
+import com.buschmais.xo.api.ValidationMode;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.XOManagerFactory;
 import com.buschmais.xo.api.bootstrap.XO;
@@ -60,8 +65,11 @@ public class XOVsTitanNativePerformanceIT {
 
 	@BeforeClass
 	public static void initialize() {
-		Collection<XOUnit[]> xoUnits = XOTitanTestUtils.xoUnits(TreeNode.class,
-				TreeNodeRelation.class);
+		Collection<XOUnit[]> xoUnits = XOTitanTestUtils.xoUnits(Arrays
+				.<Class<?>> asList(TreeNode.class, TreeNodeRelation.class),
+				Collections.<Class<?>> emptyList(), ValidationMode.NONE,
+				ConcurrencyMode.MULTITHREADED,
+				Transaction.TransactionAttribute.MANDATORY);
 		assertThat(xoUnits, hasSize(1));
 		XOUnit[] xoUnit = xoUnits.iterator().next();
 		assertThat(xoUnit.length, is(1));
@@ -227,5 +235,15 @@ public class XOVsTitanNativePerformanceIT {
 		double speedAvg = speedSum / measurements.size();
 		System.out.println(MessageFormat.format(
 				"average speed={0,number,#.##} vertices/s", speedAvg));
+	}
+
+	public static void main(String[] args) throws InterruptedException {
+		Thread.sleep(3000);
+		initialize();
+		try {
+			new XOVsTitanNativePerformanceIT().test();
+		} finally {
+			destroy();
+		}
 	}
 }
