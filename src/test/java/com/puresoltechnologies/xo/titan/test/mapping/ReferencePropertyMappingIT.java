@@ -16,6 +16,7 @@ import com.buschmais.xo.api.Query.Result.CompositeRowObject;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
+import com.puresoltechnologies.xo.titan.XOTitanTestUtils;
 
 @RunWith(Parameterized.class)
 public class ReferencePropertyMappingIT extends AbstractXOTitanTest {
@@ -25,8 +26,8 @@ public class ReferencePropertyMappingIT extends AbstractXOTitanTest {
 	}
 
 	@Parameterized.Parameters
-	public static Collection<Object[]> getCdoUnits() throws URISyntaxException {
-		return xoUnits(A.class, B.class);
+	public static Collection<XOUnit[]> getCdoUnits() throws URISyntaxException {
+		return XOTitanTestUtils.xoUnits(A.class, B.class);
 	}
 
 	@Test

@@ -23,6 +23,7 @@ import com.buschmais.xo.api.ValidationMode;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
+import com.puresoltechnologies.xo.titan.XOTitanTestUtils;
 
 @RunWith(Parameterized.class)
 public class MultithreadedIT extends AbstractXOTitanTest {
@@ -32,8 +33,8 @@ public class MultithreadedIT extends AbstractXOTitanTest {
 	}
 
 	@Parameterized.Parameters
-	public static Collection<Object[]> getCdoUnits() {
-		return xoUnits(asList(TestEntity.class),
+	public static Collection<XOUnit[]> getCdoUnits() {
+		return XOTitanTestUtils.xoUnits(asList(TestEntity.class),
 				Collections.<Class<?>> emptyList(), ValidationMode.AUTO,
 				ConcurrencyMode.MULTITHREADED,
 				Transaction.TransactionAttribute.REQUIRES);

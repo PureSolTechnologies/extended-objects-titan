@@ -15,6 +15,7 @@ import com.buschmais.xo.api.Query.Result.CompositeRowObject;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
+import com.puresoltechnologies.xo.titan.XOTitanTestUtils;
 
 @RunWith(Parameterized.class)
 public class LabelIT extends AbstractXOTitanTest {
@@ -24,8 +25,9 @@ public class LabelIT extends AbstractXOTitanTest {
 	}
 
 	@Parameterized.Parameters
-	public static Collection<Object[]> getCdoUnits() throws URISyntaxException {
-		return xoUnits(ImplicitLabel.class, ExplicitLabel.class);
+	public static Collection<XOUnit[]> getCdoUnits() throws URISyntaxException {
+		return XOTitanTestUtils.xoUnits(ImplicitLabel.class,
+				ExplicitLabel.class);
 	}
 
 	@Test

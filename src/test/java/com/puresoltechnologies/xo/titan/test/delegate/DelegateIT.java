@@ -19,6 +19,7 @@ import com.buschmais.xo.api.Query.Result.CompositeRowObject;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
+import com.puresoltechnologies.xo.titan.XOTitanTestUtils;
 import com.puresoltechnologies.xo.titan.impl.TitanStoreSession;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
@@ -31,8 +32,8 @@ public class DelegateIT extends AbstractXOTitanTest {
 	}
 
 	@Parameterized.Parameters
-	public static Collection<Object[]> getCdoUnits() throws URISyntaxException {
-		return xoUnits(A.class, B.class, A2B.class);
+	public static Collection<XOUnit[]> getCdoUnits() throws URISyntaxException {
+		return XOTitanTestUtils.xoUnits(A.class, B.class, A2B.class);
 	}
 
 	@Test

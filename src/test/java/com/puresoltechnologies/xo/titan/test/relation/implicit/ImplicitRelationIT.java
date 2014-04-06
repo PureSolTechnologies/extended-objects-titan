@@ -16,6 +16,7 @@ import com.buschmais.xo.api.Query.Result.CompositeRowObject;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
+import com.puresoltechnologies.xo.titan.XOTitanTestUtils;
 import com.puresoltechnologies.xo.titan.impl.TitanStoreSession;
 
 @RunWith(Parameterized.class)
@@ -26,8 +27,8 @@ public class ImplicitRelationIT extends AbstractXOTitanTest {
 	}
 
 	@Parameterized.Parameters
-	public static Collection<Object[]> getXOUnits() throws URISyntaxException {
-		return xoUnits(A.class, B.class);
+	public static Collection<XOUnit[]> getXOUnits() throws URISyntaxException {
+		return XOTitanTestUtils.xoUnits(A.class, B.class);
 	}
 
 	@Test

@@ -19,6 +19,7 @@ import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
+import com.puresoltechnologies.xo.titan.XOTitanTestUtils;
 
 @RunWith(Parameterized.class)
 public class QueryIT extends AbstractXOTitanTest {
@@ -32,8 +33,8 @@ public class QueryIT extends AbstractXOTitanTest {
 	}
 
 	@Parameterized.Parameters
-	public static Collection<Object[]> getXOUnits() throws URISyntaxException {
-		return xoUnits(A.class, B.class, A2B.class);
+	public static Collection<XOUnit[]> getXOUnits() throws URISyntaxException {
+		return XOTitanTestUtils.xoUnits(A.class, B.class, A2B.class);
 	}
 
 	@Before

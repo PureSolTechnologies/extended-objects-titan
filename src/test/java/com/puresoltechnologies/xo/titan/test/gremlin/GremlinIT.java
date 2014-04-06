@@ -16,6 +16,7 @@ import com.buschmais.xo.api.Query.Result;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
+import com.puresoltechnologies.xo.titan.XOTitanTestUtils;
 import com.puresoltechnologies.xo.titan.test.data.Person;
 
 @RunWith(Parameterized.class)
@@ -26,13 +27,13 @@ public class GremlinIT extends AbstractXOTitanTest {
 	}
 
 	@Parameterized.Parameters
-	public static Collection<Object[]> getCdoUnits() throws IOException {
-		return configuredXOUnits();
+	public static Collection<XOUnit[]> getCdoUnits() throws IOException {
+		return XOTitanTestUtils.configuredXOUnits();
 	}
 
 	@Before
 	public void setupData() {
-		addStarwarsData(getXOManager());
+		XOTitanTestUtils.addStarwarsData(getXOManager());
 	}
 
 	@Test

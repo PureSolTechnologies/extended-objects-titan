@@ -13,6 +13,7 @@ import com.buschmais.xo.api.Query;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
+import com.puresoltechnologies.xo.titan.XOTitanTestUtils;
 
 @RunWith(Parameterized.class)
 public class TitanStoreBootstrapIT extends AbstractXOTitanTest {
@@ -22,8 +23,8 @@ public class TitanStoreBootstrapIT extends AbstractXOTitanTest {
 	}
 
 	@Parameterized.Parameters
-	public static Collection<Object[]> getCdoUnits() throws IOException {
-		return configuredXOUnits();
+	public static Collection<XOUnit[]> getCdoUnits() throws IOException {
+		return XOTitanTestUtils.configuredXOUnits();
 	}
 
 	@Test

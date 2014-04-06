@@ -20,6 +20,7 @@ import com.buschmais.xo.api.ValidationMode;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
+import com.puresoltechnologies.xo.titan.XOTitanTestUtils;
 import com.puresoltechnologies.xo.titan.test.transaction.A.ByValue;
 
 @RunWith(Parameterized.class)
@@ -30,8 +31,8 @@ public class TransactionAttributeRequiresIT extends AbstractXOTitanTest {
 	}
 
 	@Parameterized.Parameters
-	public static Collection<Object[]> getXOUnits() throws URISyntaxException {
-		return xoUnits(asList(A.class, B.class),
+	public static Collection<XOUnit[]> getXOUnits() throws URISyntaxException {
+		return XOTitanTestUtils.xoUnits(asList(A.class, B.class),
 				Collections.<Class<?>> emptyList(), ValidationMode.AUTO,
 				ConcurrencyMode.SINGLETHREADED,
 				Transaction.TransactionAttribute.REQUIRES);
