@@ -274,4 +274,9 @@ public class TitanStoreSession
 		return new TitanStorePropertyManager();
 	}
 
+	@Override
+	public void close() {
+		// Nothing to do here...
+	}
+
 }
