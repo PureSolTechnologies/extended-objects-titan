@@ -16,9 +16,9 @@ import com.buschmais.xo.spi.datastore.TypeMetadataSet;
 import com.buschmais.xo.spi.metadata.method.IndexedPropertyMethodMetadata;
 import com.buschmais.xo.spi.metadata.method.PrimitivePropertyMethodMetadata;
 import com.buschmais.xo.spi.metadata.type.EntityTypeMetadata;
-import com.puresoltechnologies.xo.titan.impl.metadata.TitanNodeMetadata;
+import com.puresoltechnologies.xo.titan.impl.metadata.TitanVertexMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanPropertyMetadata;
-import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
+import com.puresoltechnologies.xo.titan.impl.metadata.TitanEdgeMetadata;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.core.TitanGraphQuery;
 import com.tinkerpop.blueprints.Direction;
@@ -33,7 +33,7 @@ import com.tinkerpop.pipes.Pipe;
  */
 public class TitanStoreSession
 		implements
-		DatastoreSession<Object, Vertex, TitanNodeMetadata, String, Object, Edge, TitanRelationMetadata, String> {
+		DatastoreSession<Object, Vertex, TitanVertexMetadata, String, Object, Edge, TitanEdgeMetadata, String> {
 
 	/**
 	 * This constant contains the prefix for discriminator properties.
@@ -113,7 +113,7 @@ public class TitanStoreSession
 
 	@Override
 	public Vertex createEntity(
-			TypeMetadataSet<EntityTypeMetadata<TitanNodeMetadata>> types,
+			TypeMetadataSet<EntityTypeMetadata<TitanVertexMetadata>> types,
 			Set<String> discriminators) {
 		Vertex vertex = titanGraph.addVertex(null);
 		for (String discriminator : discriminators) {
@@ -130,7 +130,7 @@ public class TitanStoreSession
 
 	@Override
 	public ResultIterator<Vertex> findEntity(
-			EntityTypeMetadata<TitanNodeMetadata> type, String discriminator,
+			EntityTypeMetadata<TitanVertexMetadata> type, String discriminator,
 			Object value) {
 		TitanGraphQuery query = titanGraph.query();
 		query = query.has(XO_DISCRIMINATORS_PROPERTY + discriminator);
@@ -241,9 +241,9 @@ public class TitanStoreSession
 
 	@Override
 	public void migrateEntity(Vertex vertex,
-			TypeMetadataSet<EntityTypeMetadata<TitanNodeMetadata>> types,
+			TypeMetadataSet<EntityTypeMetadata<TitanVertexMetadata>> types,
 			Set<String> discriminators,
-			TypeMetadataSet<EntityTypeMetadata<TitanNodeMetadata>> targetTypes,
+			TypeMetadataSet<EntityTypeMetadata<TitanVertexMetadata>> targetTypes,
 			Set<String> targetDiscriminators) {
 		for (String discriminator : discriminators) {
 			if (!targetDiscriminators.contains(discriminator)) {
@@ -270,7 +270,7 @@ public class TitanStoreSession
 	}
 
 	@Override
-	public DatastorePropertyManager<Vertex, Edge, ?, TitanRelationMetadata> getDatastorePropertyManager() {
+	public DatastorePropertyManager<Vertex, Edge, ?, TitanEdgeMetadata> getDatastorePropertyManager() {
 		return new TitanStorePropertyManager();
 	}
 

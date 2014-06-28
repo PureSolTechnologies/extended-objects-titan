@@ -3,12 +3,12 @@ package com.puresoltechnologies.xo.titan.impl.metadata;
 import com.buschmais.xo.spi.datastore.DatastoreEntityMetadata;
 import com.buschmais.xo.spi.metadata.method.IndexedPropertyMethodMetadata;
 
-public class TitanNodeMetadata implements DatastoreEntityMetadata<String> {
+public class TitanVertexMetadata implements DatastoreEntityMetadata<String> {
 
 	private final String discriminator;
 	private final IndexedPropertyMethodMetadata<?> indexedProperty;
 
-	public TitanNodeMetadata(String discriminator,
+	public TitanVertexMetadata(String discriminator,
 			IndexedPropertyMethodMetadata<?> indexedProperty) {
 		super();
 		this.discriminator = discriminator;

@@ -7,7 +7,7 @@ import com.buschmais.xo.spi.datastore.DatastorePropertyManager;
 import com.buschmais.xo.spi.metadata.method.PrimitivePropertyMethodMetadata;
 import com.buschmais.xo.spi.metadata.type.RelationTypeMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanPropertyMetadata;
-import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
+import com.puresoltechnologies.xo.titan.impl.metadata.TitanEdgeMetadata;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
@@ -21,7 +21,7 @@ import com.tinkerpop.blueprints.VertexQuery;
  */
 public class TitanStorePropertyManager
 	implements
-	DatastorePropertyManager<Vertex, Edge, TitanPropertyMetadata, TitanRelationMetadata> {
+	DatastorePropertyManager<Vertex, Edge, TitanPropertyMetadata, TitanEdgeMetadata> {
 
     @Override
     public void setEntityProperty(Vertex vertex,
@@ -75,7 +75,7 @@ public class TitanStorePropertyManager
 
     @Override
     public boolean hasSingleRelation(Vertex source,
-	    RelationTypeMetadata<TitanRelationMetadata> metadata,
+	    RelationTypeMetadata<TitanEdgeMetadata> metadata,
 	    RelationTypeMetadata.Direction direction) {
 	String label = metadata.getDatastoreMetadata().getDiscriminator();
 	long count;
@@ -100,7 +100,7 @@ public class TitanStorePropertyManager
 
     @Override
     public Edge getSingleRelation(Vertex source,
-	    RelationTypeMetadata<TitanRelationMetadata> metadata,
+	    RelationTypeMetadata<TitanEdgeMetadata> metadata,
 	    RelationTypeMetadata.Direction direction) {
 	String label = metadata.getDatastoreMetadata().getDiscriminator();
 	Iterable<Edge> edges;
@@ -128,7 +128,7 @@ public class TitanStorePropertyManager
 
     @Override
     public Iterable<Edge> getRelations(Vertex source,
-	    RelationTypeMetadata<TitanRelationMetadata> metadata,
+	    RelationTypeMetadata<TitanEdgeMetadata> metadata,
 	    RelationTypeMetadata.Direction direction) {
 	VertexQuery query = source.query();
 	String discriminator = metadata.getDatastoreMetadata()
@@ -149,7 +149,7 @@ public class TitanStorePropertyManager
 
     @Override
     public Edge createRelation(Vertex source,
-	    RelationTypeMetadata<TitanRelationMetadata> metadata,
+	    RelationTypeMetadata<TitanEdgeMetadata> metadata,
 	    RelationTypeMetadata.Direction direction, Vertex target) {
 	String name = metadata.getDatastoreMetadata().getDiscriminator();
 	switch (direction) {

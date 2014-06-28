@@ -8,8 +8,8 @@ import com.buschmais.xo.spi.bootstrap.XODatastoreProvider;
 import com.buschmais.xo.spi.datastore.Datastore;
 import com.puresoltechnologies.xo.titan.impl.TitanCassandraStore;
 import com.puresoltechnologies.xo.titan.impl.TitanStoreSession;
-import com.puresoltechnologies.xo.titan.impl.metadata.TitanNodeMetadata;
-import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
+import com.puresoltechnologies.xo.titan.impl.metadata.TitanVertexMetadata;
+import com.puresoltechnologies.xo.titan.impl.metadata.TitanEdgeMetadata;
 
 /**
  * This class implements the XO {@link CdoDatastoreProvider} for Titan database.
@@ -18,7 +18,7 @@ import com.puresoltechnologies.xo.titan.impl.metadata.TitanRelationMetadata;
  */
 public class TitanXOProvider
 	implements
-	XODatastoreProvider<TitanNodeMetadata, String, TitanRelationMetadata, String> {
+	XODatastoreProvider<TitanVertexMetadata, String, TitanEdgeMetadata, String> {
 
     /**
      * This constant contains {@value #TITAN_SCHEME_PREFIX} as prefix for all
@@ -34,7 +34,7 @@ public class TitanXOProvider
 	    + "cassandra";
 
     @Override
-    public Datastore<TitanStoreSession, TitanNodeMetadata, String, TitanRelationMetadata, String> createDatastore(
+    public Datastore<TitanStoreSession, TitanVertexMetadata, String, TitanEdgeMetadata, String> createDatastore(
 	    XOUnit xoUnit) {
 	if (xoUnit == null) {
 	    throw new IllegalArgumentException("CdoUnit must not be null!");

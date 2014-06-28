@@ -2,11 +2,11 @@ package com.puresoltechnologies.xo.titan.impl.metadata;
 
 import com.buschmais.xo.spi.datastore.DatastoreRelationMetadata;
 
-public class TitanRelationMetadata implements DatastoreRelationMetadata<String> {
+public class TitanEdgeMetadata implements DatastoreRelationMetadata<String> {
 
 	private final String label;
 
-	public TitanRelationMetadata(String label) {
+	public TitanEdgeMetadata(String label) {
 		this.label = label;
 	}
 
