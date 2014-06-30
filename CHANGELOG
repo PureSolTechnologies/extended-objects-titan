@@ -1,0 +1,11 @@
+=======
+v0.1.1
+=======
+149	xo-titan	Bug		Blocker		One to Many and Many to Many Relationships are not resolved correctly if multiple types are used
+150	xo-titan	Feature	Critical	The discriminator indizes shall be indexed automatically
+
+======
+v0.1.0
+======
+n/a	xo-titan	Feature	Normal		Base implementation of data store provider for Titan based in Cassandra on eXtended Objects version 0.3.0
+	
