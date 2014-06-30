@@ -196,8 +196,12 @@ public class TitanCassandraStore
 	    configuration.setProperty("storage.keyspace", keyspace);
 	}
 	titanGraph = TitanFactory.open(configuration);
-	checkAndInitializeDiscriminatorProperties(registeredMetadata);
-	checkAndInitializePropertyIndizes(registeredMetadata);
+	try {
+	    checkAndInitializeDiscriminatorProperties(registeredMetadata);
+	    checkAndInitializePropertyIndizes(registeredMetadata);
+	} finally {
+	    titanGraph.commit();
+	}
     }
 
     private void checkAndInitializeDiscriminatorProperties(
