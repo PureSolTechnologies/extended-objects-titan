@@ -22,11 +22,13 @@ import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanEdgeMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanIndexedPropertyMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanVertexMetadata;
-import com.thinkaurelius.titan.core.KeyMaker;
+import com.thinkaurelius.titan.core.Cardinality;
+import com.thinkaurelius.titan.core.PropertyKey;
 import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
-import com.thinkaurelius.titan.core.TitanKey;
-import com.thinkaurelius.titan.core.TitanType;
+import com.thinkaurelius.titan.core.schema.PropertyKeyMaker;
+import com.thinkaurelius.titan.core.schema.TitanManagement;
+import com.thinkaurelius.titan.core.schema.TitanManagement.IndexBuilder;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.Vertex;
@@ -233,7 +235,7 @@ public class TitanCassandraStore
 		    + discriminatorName
 		    + "' is used in vertizes or edges. Check for presence of index...");
 	    checkAndCreatePropertyIndex(discriminatorName, String.class, type,
-		    false);
+		    false, Cardinality.SINGLE);
 	}
     }
 
@@ -251,46 +253,36 @@ public class TitanCassandraStore
 		boolean unique = datastoreMetadata.isUnique();
 		logger.info("Indexed property '" + name
 			+ "' was found. Check for presence of index...");
-		checkAndCreatePropertyIndex(name, dataType, type, unique);
+		checkAndCreatePropertyIndex(name, dataType, type, unique,
+			unique ? Cardinality.SET : Cardinality.LIST);
 	    }
 	}
     }
 
     private void checkAndCreatePropertyIndex(String name, Class<?> dataType,
-	    Class<? extends Element> type, boolean unique) {
-	TitanType titanType = titanGraph.getType(name);
-	if (titanType == null) {
-	    logger.info("Create index for property (or discriminator) '" + name
-		    + "'.");
-	    createIndex(name, unique, dataType, type);
-	} else if (titanType.isPropertyKey()) {
-	    TitanKey titanKey = (TitanKey) titanType;
-	    if (!titanKey.hasIndex(INDEX_NAME, type)) {
-		logger.warn("Property (or discriminator) '"
-			+ name
-			+ "' shall be an indexed property, but this property is already in use and does not have an index. It is not possible to do anything about it. :-(");
+	    Class<? extends Element> type, boolean unique,
+	    Cardinality cardinality) {
+	TitanManagement managementSystem = titanGraph.getManagementSystem();
+	try {
+	    PropertyKey propertyKey = managementSystem.getPropertyKey(name);
+	    if (propertyKey == null) {
+		PropertyKeyMaker propertyKeyMaker = managementSystem
+			.makePropertyKey(name);
+		propertyKeyMaker.cardinality(cardinality);
+		propertyKeyMaker.dataType(dataType);
+		propertyKey = propertyKeyMaker.make();
+		IndexBuilder indexBuilder = managementSystem.buildIndex(name
+			+ "_index", type);
+		indexBuilder.addKey(propertyKey);
+		if (unique) {
+		    indexBuilder.unique();
+		}
+		indexBuilder.buildCompositeIndex();
+		managementSystem.commit();
 	    }
-	} else {
-	    throw new XOException(
-		    "Property '"
-			    + name
-			    + "' shall be an indexed property, but this name is already in use, but not as property.");
+	} catch (XOException e) {
+	    managementSystem.rollback();
 	}
-    }
-
-    private void createIndex(String name, boolean unique, Class<?> dataType,
-	    Class<? extends Element> type) {
-	logger.info("Create index for property '" + name + "'. (unique="
-		+ unique + ";dataType=" + dataType.getName() + ";type="
-		+ type.getName() + ")");
-	KeyMaker makeKey = titanGraph.makeKey(name);
-	makeKey.single();
-	makeKey.dataType(dataType);
-	makeKey.indexed(INDEX_NAME, type);
-	if (unique) {
-	    makeKey.unique();
-	}
-	makeKey.make();
     }
 
     @Override
