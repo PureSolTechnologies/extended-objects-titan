@@ -32,6 +32,10 @@ public class GremlinManager {
 		GremlinExpression gremlinExpression = null;
 		if (expression instanceof String) {
 			gremlinExpression = new GremlinExpression("", (String) expression);
+		} else if (expression instanceof Gremlin) {
+			Gremlin gremlin = (Gremlin) expression;
+			gremlinExpression = new GremlinExpression(gremlin.name(),
+					gremlin.value());
 		} else if (AnnotatedElement.class.isAssignableFrom(expression
 				.getClass())) {
 			AnnotatedElement<?> typeExpression = (AnnotatedElement<?>) expression;

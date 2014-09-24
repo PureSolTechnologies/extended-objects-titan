@@ -3,6 +3,7 @@ package com.puresoltechnologies.xo.titan.impl;
 import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.spi.datastore.DatastoreTransaction;
 import com.thinkaurelius.titan.core.TitanGraph;
+import com.thinkaurelius.titan.core.TitanTransaction;
 
 /**
  * This class implements an XO {@link DatastoreTransaction} for Titan databases.
@@ -12,15 +13,15 @@ import com.thinkaurelius.titan.core.TitanGraph;
 public class TitanStoreTransaction implements DatastoreTransaction {
 
 	/**
-	 * This field stores whether the transaction is currently active or not.
-	 */
-	private boolean active = false;
-
-	/**
 	 * This method contains the Titan graph as {@link TitanGraph} to handle on
 	 * it its transactions.
 	 */
 	private final TitanGraph titanGraph;
+
+	/**
+	 * This field contains a reference to a lock.
+	 */
+	private TitanTransaction transaction = null;
 
 	/**
 	 * This is the initial value constructor.
@@ -37,27 +38,33 @@ public class TitanStoreTransaction implements DatastoreTransaction {
 	}
 
 	@Override
-	public void begin() {
-		if (active) {
+	public synchronized void begin() {
+		if (transaction != null) {
 			throw new XOException("There is already an active transaction.");
 		}
-		active = true;
+		transaction = titanGraph.newTransaction();
 	}
 
 	@Override
-	public void commit() {
-		active = false;
-		titanGraph.commit();
+	public synchronized void commit() {
+		if (transaction == null) {
+			throw new XOException("There is no active transaction.");
+		}
+		transaction.commit();
+		transaction = null;
 	}
 
 	@Override
-	public void rollback() {
-		active = false;
-		titanGraph.rollback();
+	public synchronized void rollback() {
+		if (transaction == null) {
+			throw new XOException("There is no active transaction.");
+		}
+		transaction.rollback();
+		transaction = null;
 	}
 
 	@Override
-	public boolean isActive() {
-		return active;
+	public synchronized boolean isActive() {
+		return transaction != null && transaction.isOpen();
 	}
 }

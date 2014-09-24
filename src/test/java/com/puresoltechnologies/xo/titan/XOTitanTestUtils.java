@@ -34,161 +34,161 @@ import com.tinkerpop.blueprints.Vertex;
  */
 public class XOTitanTestUtils {
 
-    private static final String XO_CONFIGURATION_RESOURCE = "/META-INF/xo.xml";
+	private static final String XO_CONFIGURATION_RESOURCE = "/META-INF/xo.xml";
 
-    /**
-     * This is the default local URI for testing.
-     */
-    private static final URI DEFAULT_LOCAL_URI;
-    static {
-	try {
-	    DEFAULT_LOCAL_URI = new URI(
-		    "titan-cassandra://localhost:9160/titantest");
-	} catch (URISyntaxException e) {
-	    throw new RuntimeException(e);
+	/**
+	 * This is the default local URI for testing.
+	 */
+	private static final URI DEFAULT_LOCAL_URI;
+	static {
+		try {
+			DEFAULT_LOCAL_URI = new URI(
+					"titan-cassandra://localhost:9160/titantest");
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
 	}
-    }
 
-    public static Collection<XOUnit[]> configuredXOUnits() throws IOException {
-	List<XOUnit[]> xoUnits = new ArrayList<>();
-	List<XOUnit> readXOUnits = XOUnitFactory.getInstance().getXOUnits(
-		AbstractXOTitanTest.class
-			.getResource(XO_CONFIGURATION_RESOURCE));
-	for (XOUnit xoUnit : readXOUnits) {
-	    xoUnits.add(new XOUnit[] { xoUnit });
+	public static Collection<XOUnit[]> configuredXOUnits() throws IOException {
+		List<XOUnit[]> xoUnits = new ArrayList<>();
+		List<XOUnit> readXOUnits = XOUnitFactory.getInstance().getXOUnits(
+				AbstractXOTitanTest.class
+						.getResource(XO_CONFIGURATION_RESOURCE));
+		for (XOUnit xoUnit : readXOUnits) {
+			xoUnits.add(new XOUnit[] { xoUnit });
+		}
+		return xoUnits;
 	}
-	return xoUnits;
-    }
 
-    public static Collection<XOUnit[]> xoUnits() {
-	return xoUnits(Arrays.asList(DEFAULT_LOCAL_URI),
-		Collections.<Class<?>> emptyList(),
-		Collections.<Class<?>> emptyList(), ValidationMode.AUTO,
-		ConcurrencyMode.SINGLETHREADED,
-		Transaction.TransactionAttribute.MANDATORY);
-    }
-
-    public static Collection<XOUnit[]> xoUnits(Class<?>... types) {
-	return xoUnits(Arrays.asList(DEFAULT_LOCAL_URI), Arrays.asList(types),
-		Collections.<Class<?>> emptyList(), ValidationMode.AUTO,
-		ConcurrencyMode.SINGLETHREADED,
-		Transaction.TransactionAttribute.MANDATORY);
-    }
-
-    public static Collection<XOUnit[]> xoUnits(List<URI> uris,
-	    List<? extends Class<?>> types) {
-	return xoUnits(uris, types, Collections.<Class<?>> emptyList(),
-		ValidationMode.AUTO, ConcurrencyMode.SINGLETHREADED,
-		Transaction.TransactionAttribute.MANDATORY);
-    }
-
-    public static Collection<XOUnit[]> xoUnits(List<? extends Class<?>> types,
-	    List<? extends Class<?>> instanceListeners,
-	    ValidationMode validationMode, ConcurrencyMode concurrencyMode,
-	    Transaction.TransactionAttribute transactionAttribute) {
-	return xoUnits(Arrays.asList(DEFAULT_LOCAL_URI), types,
-		instanceListeners, validationMode, concurrencyMode,
-		transactionAttribute);
-    }
-
-    public static Collection<XOUnit[]> xoUnits(List<URI> uris,
-	    List<? extends Class<?>> types,
-	    List<? extends Class<?>> instanceListenerTypes,
-	    ValidationMode valiationMode, ConcurrencyMode concurrencyMode,
-	    Transaction.TransactionAttribute transactionAttribute) {
-	List<XOUnit[]> xoUnits = new ArrayList<>(uris.size());
-	for (URI uri : uris) {
-	    XOUnit xoUnit = new XOUnit("default", "Default XO unit", uri,
-		    TitanXOProvider.class, new HashSet<>(types),
-		    instanceListenerTypes, valiationMode, concurrencyMode,
-		    transactionAttribute, new Properties());
-	    xoUnits.add(new XOUnit[] { xoUnit });
+	public static Collection<XOUnit[]> xoUnits() {
+		return xoUnits(Arrays.asList(DEFAULT_LOCAL_URI),
+				Collections.<Class<?>> emptyList(),
+				Collections.<Class<?>> emptyList(), ValidationMode.AUTO,
+				ConcurrencyMode.SINGLETHREADED,
+				Transaction.TransactionAttribute.MANDATORY);
 	}
-	return xoUnits;
-    }
 
-    /**
-     * This method is called if a keyspace for a given {@link XOUnit} is to be
-     * cleared.
-     * 
-     * @param xoUnit
-     *            is the {@link XOUnit} which points to the to be cleared
-     *            keyspace.
-     */
-    public static void clearTitanKeyspace(XOUnit xoUnit) {
-	Class<?> provider = xoUnit.getProvider();
-	if (TitanXOProvider.class.equals(provider)) {
-	    clearTitanKeyspace(xoUnit.getUri());
+	public static Collection<XOUnit[]> xoUnits(Class<?>... types) {
+		return xoUnits(Arrays.asList(DEFAULT_LOCAL_URI), Arrays.asList(types),
+				Collections.<Class<?>> emptyList(), ValidationMode.AUTO,
+				ConcurrencyMode.SINGLETHREADED,
+				Transaction.TransactionAttribute.MANDATORY);
 	}
-    }
 
-    /**
-     * Clears the keyspaces assigned to the specified URI.
-     * 
-     * @param uri
-     *            is an {@link URI} pointing to the keyspace to be cleaned.
-     */
-    private static void clearTitanKeyspace(URI uri) {
-	String host = uri.getHost();
-	int port = Integer.valueOf(uri.getPort());
-	String keyspace = TitanCassandraStore.retrieveKeyspaceFromURI(uri);
-	TitanCassandraStore titanCassandraStore = new TitanCassandraStore(host,
-		port, keyspace);
-	try {
-	    titanCassandraStore.init(new HashSet<TypeMetadata>());
-	    TitanGraph titanGraph = titanCassandraStore.getTitanGraph();
-	    Iterable<Vertex> vertices = titanGraph.query().vertices();
-	    for (Vertex vertex : vertices) {
-		vertex.remove();
-	    }
-	    titanGraph.commit();
-	} finally {
-	    titanCassandraStore.close();
+	public static Collection<XOUnit[]> xoUnits(List<URI> uris,
+			List<? extends Class<?>> types) {
+		return xoUnits(uris, types, Collections.<Class<?>> emptyList(),
+				ValidationMode.AUTO, ConcurrencyMode.SINGLETHREADED,
+				Transaction.TransactionAttribute.MANDATORY);
 	}
-    }
 
-    /**
-     * Drops the whole keyspace for XO-Titan for a completely clean startup.
-     * 
-     * @param xoUnit
-     *            is the {@link XOUnit} which points to the to be dropped
-     *            keyspace.
-     */
-    public static void dropTitanKeyspace(XOUnit xoUnit) {
-	Class<?> provider = xoUnit.getProvider();
-	if (TitanXOProvider.class.equals(provider)) {
-	    dropTitanKeyspace(xoUnit.getUri());
+	public static Collection<XOUnit[]> xoUnits(List<? extends Class<?>> types,
+			List<? extends Class<?>> instanceListeners,
+			ValidationMode validationMode, ConcurrencyMode concurrencyMode,
+			Transaction.TransactionAttribute transactionAttribute) {
+		return xoUnits(Arrays.asList(DEFAULT_LOCAL_URI), types,
+				instanceListeners, validationMode, concurrencyMode,
+				transactionAttribute);
 	}
-    }
 
-    /**
-     * Drops the whole keyspace for XO-Titan for a completely clean startup.
-     * 
-     * @param uri
-     *            is an {@link URI} pointing to the keyspace to be dropped.
-     */
-    private static void dropTitanKeyspace(URI uri) {
-	String host = uri.getHost();
-	int port = Integer.valueOf(9042);
-	String keyspace = TitanCassandraStore.retrieveKeyspaceFromURI(uri);
-
-	try (Cluster cluster = Cluster.builder().addContactPoint(host)
-		.withPort(port).build()) {
-	    try (Session session = cluster.connect()) {
-		session.execute("DROP KEYSPACE " + keyspace);
-	    }
+	public static Collection<XOUnit[]> xoUnits(List<URI> uris,
+			List<? extends Class<?>> types,
+			List<? extends Class<?>> instanceListenerTypes,
+			ValidationMode valiationMode, ConcurrencyMode concurrencyMode,
+			Transaction.TransactionAttribute transactionAttribute) {
+		List<XOUnit[]> xoUnits = new ArrayList<>(uris.size());
+		for (URI uri : uris) {
+			XOUnit xoUnit = new XOUnit("default", "Default XO unit", uri,
+					TitanXOProvider.class, new HashSet<>(types),
+					instanceListenerTypes, valiationMode, concurrencyMode,
+					transactionAttribute, new Properties());
+			xoUnits.add(new XOUnit[] { xoUnit });
+		}
+		return xoUnits;
 	}
-    }
 
-    /**
-     * This method adds the Starwars characters data into the Titan database for
-     * testing purposes.
-     * 
-     * @param xoManager
-     * 
-     * @param xoManagerFactory
-     */
-    public static void addStarwarsData(XOManager xoManager) {
-	TestData.addStarwars(xoManager);
-    }
+	/**
+	 * This method is called if a keyspace for a given {@link XOUnit} is to be
+	 * cleared.
+	 * 
+	 * @param xoUnit
+	 *            is the {@link XOUnit} which points to the to be cleared
+	 *            keyspace.
+	 */
+	public static void clearTitanKeyspace(XOUnit xoUnit) {
+		Class<?> provider = xoUnit.getProvider();
+		if (TitanXOProvider.class.equals(provider)) {
+			clearTitanKeyspace(xoUnit.getUri());
+		}
+	}
+
+	/**
+	 * Clears the keyspaces assigned to the specified URI.
+	 * 
+	 * @param uri
+	 *            is an {@link URI} pointing to the keyspace to be cleaned.
+	 */
+	private static void clearTitanKeyspace(URI uri) {
+		String host = uri.getHost();
+		int port = Integer.valueOf(uri.getPort());
+		String keyspace = TitanCassandraStore.retrieveKeyspaceFromURI(uri);
+		TitanCassandraStore titanCassandraStore = new TitanCassandraStore(host,
+				port, keyspace);
+		try {
+			titanCassandraStore.init(new HashSet<TypeMetadata>());
+			TitanGraph titanGraph = titanCassandraStore.getTitanGraph();
+			Iterable<Vertex> vertices = titanGraph.query().vertices();
+			for (Vertex vertex : vertices) {
+				vertex.remove();
+			}
+			titanGraph.commit();
+		} finally {
+			titanCassandraStore.close();
+		}
+	}
+
+	/**
+	 * Drops the whole keyspace for XO-Titan for a completely clean startup.
+	 * 
+	 * @param xoUnit
+	 *            is the {@link XOUnit} which points to the to be dropped
+	 *            keyspace.
+	 */
+	public static void dropTitanKeyspace(XOUnit xoUnit) {
+		Class<?> provider = xoUnit.getProvider();
+		if (TitanXOProvider.class.equals(provider)) {
+			dropTitanKeyspace(xoUnit.getUri());
+		}
+	}
+
+	/**
+	 * Drops the whole keyspace for XO-Titan for a completely clean startup.
+	 * 
+	 * @param uri
+	 *            is an {@link URI} pointing to the keyspace to be dropped.
+	 */
+	private static void dropTitanKeyspace(URI uri) {
+		String host = uri.getHost();
+		int port = Integer.valueOf(9042);
+		String keyspace = TitanCassandraStore.retrieveKeyspaceFromURI(uri);
+
+		try (Cluster cluster = Cluster.builder().addContactPoint(host)
+				.withPort(port).build()) {
+			try (Session session = cluster.connect()) {
+				session.execute("DROP KEYSPACE " + keyspace);
+			}
+		}
+	}
+
+	/**
+	 * This method adds the Starwars characters data into the Titan database for
+	 * testing purposes.
+	 * 
+	 * @param xoManager
+	 * 
+	 * @param xoManagerFactory
+	 */
+	public static void addStarwarsData(XOManager xoManager) {
+		TestData.addStarwars(xoManager);
+	}
 }

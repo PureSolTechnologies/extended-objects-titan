@@ -15,46 +15,46 @@ import com.buschmais.xo.api.bootstrap.XOUnit;
  */
 public abstract class AbstractXOTitanTest {
 
-    private XOManagerFactory xoManagerFactory;
-    private XOManager xoManager;
+	private XOManagerFactory xoManagerFactory;
+	private XOManager xoManager;
 
-    private final XOUnit xoUnit;
+	private final XOUnit xoUnit;
 
-    public AbstractXOTitanTest(XOUnit xoUnit) {
-	super();
-	this.xoUnit = xoUnit;
-    }
-
-    @Before
-    public final void setup() {
-	xoManagerFactory = XO.createXOManagerFactory(xoUnit);
-	xoManager = xoManagerFactory.createXOManager();
-	XOTitanTestUtils.clearTitanKeyspace(xoUnit);
-    }
-
-    @After
-    public final void destroy() {
-	if (xoManager != null) {
-	    xoManager.close();
+	public AbstractXOTitanTest(XOUnit xoUnit) {
+		super();
+		this.xoUnit = xoUnit;
 	}
-	if (xoManagerFactory != null) {
-	    xoManagerFactory.close();
+
+	@Before
+	public final void setup() {
+		xoManagerFactory = XO.createXOManagerFactory(xoUnit);
+		xoManager = xoManagerFactory.createXOManager();
+		XOTitanTestUtils.clearTitanKeyspace(xoUnit);
 	}
-    }
 
-    public XOManagerFactory getXOManagerFactory() {
-	return xoManagerFactory;
-    }
-
-    public XOManager getXOManager() {
-	if (xoManager == null) {
-	    xoManager = xoManagerFactory.createXOManager();
+	@After
+	public final void destroy() {
+		if (xoManager != null) {
+			xoManager.close();
+		}
+		if (xoManagerFactory != null) {
+			xoManagerFactory.close();
+		}
 	}
-	return xoManager;
-    }
 
-    public void closeXOManager() {
-	xoManager.close();
-	xoManager = null;
-    }
+	public XOManagerFactory getXOManagerFactory() {
+		return xoManagerFactory;
+	}
+
+	public XOManager getXOManager() {
+		if (xoManager == null) {
+			xoManager = xoManagerFactory.createXOManager();
+		}
+		return xoManager;
+	}
+
+	public void closeXOManager() {
+		xoManager.close();
+		xoManager = null;
+	}
 }
