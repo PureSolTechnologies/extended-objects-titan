@@ -2,6 +2,7 @@ package com.puresoltechnologies.xo.titan;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.XOManagerFactory;
@@ -23,6 +24,11 @@ public abstract class AbstractXOTitanTest {
 	public AbstractXOTitanTest(XOUnit xoUnit) {
 		super();
 		this.xoUnit = xoUnit;
+	}
+
+	@BeforeClass
+	public static void dropTitanKeyspace() {
+		XOTitanTestUtils.dropTitanKeyspace("localhost", "titantest");
 	}
 
 	@Before

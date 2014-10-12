@@ -147,6 +147,23 @@ public class XOTitanTestUtils {
 		}
 	}
 
+	public static void dropTitanKeyspace(String host, String keyspace) {
+		Cluster cluster = Cluster.builder().addContactPoint(host)
+				.withPort(9042).build();
+		try {
+			if (cluster.getMetadata().getKeyspace(keyspace) != null) {
+				Session session = cluster.connect();
+				try {
+					session.execute("DROP KEYSPACE " + keyspace + ";");
+				} finally {
+					session.close();
+				}
+			}
+		} finally {
+			cluster.close();
+		}
+	}
+
 	/**
 	 * Drops the whole keyspace for XO-Titan for a completely clean startup.
 	 * 
