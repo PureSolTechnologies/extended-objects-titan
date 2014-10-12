@@ -27,6 +27,7 @@ import com.thinkaurelius.titan.core.PropertyKey;
 import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.core.schema.PropertyKeyMaker;
+import com.thinkaurelius.titan.core.schema.TitanGraphIndex;
 import com.thinkaurelius.titan.core.schema.TitanManagement;
 import com.thinkaurelius.titan.core.schema.TitanManagement.IndexBuilder;
 import com.tinkerpop.blueprints.Edge;
@@ -185,11 +186,6 @@ public class TitanCassandraStore
 		return new TitanMetadataFactory();
 	}
 
-	/**
-	 * Init connects to Cassandra and uses a mixture of provided and default
-	 * settings. How the connection can be configured can be found here:
-	 * http://s3.thinkaurelius.com/docs/titan/0.5.0/cassandra.html
-	 */
 	@Override
 	public void init(Collection<TypeMetadata> registeredMetadata) {
 		logger.info("Initializing eXtended Objects for Titan on Cassandra...");
@@ -202,10 +198,7 @@ public class TitanCassandraStore
 		if (keyspace != null) {
 			configuration.setProperty("storage.cassandra.keyspace", keyspace);
 		}
-		configuration.setProperty("storage.cassandra.thrift.frame_size_mb", 64);
 		titanGraph = TitanFactory.open(configuration);
-		titanGraph.addVertexWithLabel("test");
-		titanGraph.commit();
 		try {
 			checkAndInitializeDiscriminatorProperties(registeredMetadata);
 			checkAndInitializePropertyIndizes(registeredMetadata);
@@ -243,7 +236,7 @@ public class TitanCassandraStore
 					+ discriminatorName
 					+ "' is used in vertizes or edges. Check for presence of index...");
 			checkAndCreatePropertyIndex(discriminatorName, String.class, type,
-					false, Cardinality.SINGLE);
+					false);
 		}
 	}
 
@@ -261,35 +254,53 @@ public class TitanCassandraStore
 				boolean unique = datastoreMetadata.isUnique();
 				logger.info("Indexed property '" + name
 						+ "' was found. Check for presence of index...");
-				checkAndCreatePropertyIndex(name, dataType, type, unique,
-						unique ? Cardinality.SET : Cardinality.LIST);
+				checkAndCreatePropertyIndex(name, dataType, type, unique);
 			}
 		}
 	}
 
 	private void checkAndCreatePropertyIndex(String name, Class<?> dataType,
-			Class<? extends Element> type, boolean unique,
-			Cardinality cardinality) {
+			Class<? extends Element> type, boolean unique) {
 		TitanManagement managementSystem = titanGraph.getManagementSystem();
 		try {
 			PropertyKey propertyKey = managementSystem.getPropertyKey(name);
+			String indexName = name + "_index";
+
 			if (propertyKey == null) {
-				PropertyKeyMaker propertyKeyMaker = managementSystem
+				logger.info("Create index for property (or discriminator) '"
+						+ name + "'.");
+				PropertyKeyMaker propertyKeyMake = managementSystem
 						.makePropertyKey(name);
-				propertyKeyMaker.cardinality(cardinality);
-				propertyKeyMaker.dataType(dataType);
-				propertyKey = propertyKeyMaker.make();
-				IndexBuilder indexBuilder = managementSystem.buildIndex(name
-						+ "_index", type);
+				propertyKeyMake.cardinality(Cardinality.SINGLE);
+				propertyKeyMake.dataType(dataType);
+				propertyKey = propertyKeyMake.make();
+				IndexBuilder indexBuilder = managementSystem.buildIndex(
+						indexName, type);
 				indexBuilder.addKey(propertyKey);
 				if (unique) {
 					indexBuilder.unique();
 				}
 				indexBuilder.buildCompositeIndex();
 				managementSystem.commit();
+			} else {
+				TitanGraphIndex graphIndex = managementSystem
+						.getGraphIndex(name + "_index");
+				if (graphIndex == null) {
+					IndexBuilder indexBuilder = managementSystem.buildIndex(
+							indexName, type);
+					indexBuilder.addKey(propertyKey);
+					if (unique) {
+						indexBuilder.unique();
+					}
+					indexBuilder.buildCompositeIndex();
+					managementSystem.commit();
+				} else {
+					managementSystem.rollback();
+				}
 			}
 		} catch (XOException e) {
 			managementSystem.rollback();
+			throw e;
 		}
 	}
 

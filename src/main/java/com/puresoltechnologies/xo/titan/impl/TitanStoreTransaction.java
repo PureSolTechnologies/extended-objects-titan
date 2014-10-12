@@ -3,7 +3,6 @@ package com.puresoltechnologies.xo.titan.impl;
 import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.spi.datastore.DatastoreTransaction;
 import com.thinkaurelius.titan.core.TitanGraph;
-import com.thinkaurelius.titan.core.TitanTransaction;
 
 /**
  * This class implements an XO {@link DatastoreTransaction} for Titan databases.
@@ -13,15 +12,15 @@ import com.thinkaurelius.titan.core.TitanTransaction;
 public class TitanStoreTransaction implements DatastoreTransaction {
 
 	/**
+	 * This field stores whether the transaction is currently active or not.
+	 */
+	private boolean active = false;
+
+	/**
 	 * This method contains the Titan graph as {@link TitanGraph} to handle on
 	 * it its transactions.
 	 */
 	private final TitanGraph titanGraph;
-
-	/**
-	 * This field contains a reference to a lock.
-	 */
-	private TitanTransaction transaction = null;
 
 	/**
 	 * This is the initial value constructor.
@@ -38,33 +37,33 @@ public class TitanStoreTransaction implements DatastoreTransaction {
 	}
 
 	@Override
-	public synchronized void begin() {
-		if (transaction != null) {
+	public void begin() {
+		if (active) {
 			throw new XOException("There is already an active transaction.");
 		}
-		transaction = titanGraph.newTransaction();
+		active = true;
 	}
 
 	@Override
-	public synchronized void commit() {
-		if (transaction == null) {
+	public void commit() {
+		if (!active) {
 			throw new XOException("There is no active transaction.");
 		}
-		transaction.commit();
-		transaction = null;
+		active = false;
+		titanGraph.commit();
 	}
 
 	@Override
-	public synchronized void rollback() {
-		if (transaction == null) {
+	public void rollback() {
+		if (!active) {
 			throw new XOException("There is no active transaction.");
 		}
-		transaction.rollback();
-		transaction = null;
+		active = false;
+		titanGraph.rollback();
 	}
 
 	@Override
-	public synchronized boolean isActive() {
-		return transaction != null && transaction.isOpen();
+	public boolean isActive() {
+		return active;
 	}
 }
