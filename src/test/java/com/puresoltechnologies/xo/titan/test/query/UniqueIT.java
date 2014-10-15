@@ -16,6 +16,7 @@ import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
 import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
 import com.puresoltechnologies.xo.titan.XOTitanTestUtils;
+import com.thinkaurelius.titan.core.SchemaViolationException;
 
 @RunWith(Parameterized.class)
 public class UniqueIT extends AbstractXOTitanTest {
@@ -30,11 +31,11 @@ public class UniqueIT extends AbstractXOTitanTest {
 	}
 
 	/**
-	 * This test checks for the presence of a unique constraint. Titan does not
-	 * provide a dedicated unique constraint violation exception, but returns an
-	 * {@link IllegalArgumentException}. For this exception it is checked here.
+	 * This test checks for the presence of a unique constraint. Titan provides
+	 * now a dedicated unique constraint violation exception:
+	 * {@link SchemaViolationException}. For this exception it is checked here.
 	 */
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = SchemaViolationException.class)
 	public void denyDuplicates() {
 		XOManager xoManager = getXOManager();
 		xoManager.currentTransaction().begin();

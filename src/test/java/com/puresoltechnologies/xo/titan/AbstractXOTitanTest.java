@@ -28,11 +28,11 @@ public abstract class AbstractXOTitanTest {
 
 	@BeforeClass
 	public static void dropTitanKeyspace() {
-		XOTitanTestUtils.dropTitanKeyspace("localhost", "titantest");
 	}
 
 	@Before
 	public final void setup() {
+		XOTitanTestUtils.dropTitanKeyspace("localhost", "titantest");
 		xoManagerFactory = XO.createXOManagerFactory(xoUnit);
 		xoManager = xoManagerFactory.createXOManager();
 		XOTitanTestUtils.clearTitanKeyspace(xoUnit);

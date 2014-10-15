@@ -80,7 +80,8 @@ public class QueryIT extends AbstractXOTitanTest {
 		Result<CompositeRowObject> result = xoManager.createQuery(
 				"_().has('_xo_discriminator_A').value").execute();
 		for (CompositeRowObject row : result) {
-			assertThat(row.as(String.class), isOneOf("A1", "A2"));
+			assertThat(row.get("unknown_type", String.class),
+					isOneOf("A1", "A2"));
 		}
 
 		xoManager.currentTransaction().commit();
