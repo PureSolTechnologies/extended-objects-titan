@@ -5,8 +5,8 @@ import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
 @VertexDefinition("B")
 public interface B {
 
-	int getValue();
+    int getIntValue();
 
-	void setValue(int value);
+    void setIntValue(int intValue);
 
 }
