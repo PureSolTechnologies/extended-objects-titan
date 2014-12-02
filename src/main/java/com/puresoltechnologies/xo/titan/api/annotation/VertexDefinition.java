@@ -8,28 +8,28 @@ import java.lang.annotation.Target;
 import com.buschmais.xo.spi.annotation.EntityDefinition;
 
 /**
- * This annotation marks enties as Titan vertex.
+ * This annotation marks entities as Titan vertex.
  */
 @EntityDefinition
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface VertexDefinition {
 
-	String DEFAULT_VALUE = "";
+    String DEFAULT_VALUE = "";
 
-	/**
-	 * @return Returns the name of the type as {@link String}.
-	 */
-	String value() default "";
+    /**
+     * @return Returns the name of the type as {@link String}.
+     */
+    String value() default "";
 
-	/**
-	 * @return The (super) type containing an indexed property ({@link Indexed}
-	 *         ).
-	 *         <p>
-	 *         An index will be created for this label and the indexed property
-	 *         and used by {@link CdoManager#find(Class, Object)}.
-	 *         </p>
-	 */
-	Class<?> usingIndexedPropertyOf() default Object.class;
+    /**
+     * @return The (super) type containing an indexed property ({@link Indexed}
+     *         ).
+     *         <p>
+     *         An index will be created for this label and the indexed property,
+     *         too.
+     *         </p>
+     */
+    Class<?> usingIndexedPropertyOf() default Object.class;
 
 }

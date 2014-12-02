@@ -36,7 +36,7 @@ import com.tinkerpop.blueprints.Vertex;
 
 /**
  * <p>
- * This class implements an XO {@link Datastore} for Titan on Cassandra.
+ * This class implements an XO Datastore for Titan on Cassandra.
  * </p>
  * <p>
  * For details have a look to <a
@@ -172,10 +172,9 @@ public class TitanCassandraStore
     }
 
     /**
-     * This method returns the {@link TitanGraph} object when database is
-     * connected.
+     * This method returns the TitanGraph object when database is connected.
      * 
-     * @return A {@link TitanGraph} is returned.
+     * @return A TitanGraph is returned.
      */
     public final TitanGraph getTitanGraph() {
 	return titanGraph;

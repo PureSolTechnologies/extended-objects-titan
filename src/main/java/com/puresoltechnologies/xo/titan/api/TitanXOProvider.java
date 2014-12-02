@@ -8,11 +8,11 @@ import com.buschmais.xo.spi.bootstrap.XODatastoreProvider;
 import com.buschmais.xo.spi.datastore.Datastore;
 import com.puresoltechnologies.xo.titan.impl.TitanCassandraStore;
 import com.puresoltechnologies.xo.titan.impl.TitanStoreSession;
-import com.puresoltechnologies.xo.titan.impl.metadata.TitanVertexMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanEdgeMetadata;
+import com.puresoltechnologies.xo.titan.impl.metadata.TitanVertexMetadata;
 
 /**
- * This class implements the XO {@link CdoDatastoreProvider} for Titan database.
+ * This class implements the XO XODatastoreProvider for Titan database.
  * 
  * @author Rick-Rainer Ludwig
  */

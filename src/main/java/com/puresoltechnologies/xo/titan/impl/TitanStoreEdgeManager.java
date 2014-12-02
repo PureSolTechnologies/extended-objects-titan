@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.buschmais.xo.api.XOException;
-import com.buschmais.xo.spi.datastore.DatastorePropertyManager;
 import com.buschmais.xo.spi.datastore.DatastoreRelationManager;
 import com.buschmais.xo.spi.metadata.method.PrimitivePropertyMethodMetadata;
 import com.buschmais.xo.spi.metadata.type.RelationTypeMetadata;
@@ -17,8 +16,7 @@ import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.VertexQuery;
 
 /**
- * This class implements the XO {@link DatastorePropertyManager} for Titan
- * database.
+ * This class implements the XO DatastorePropertyManager for Titan database.
  * 
  * @author Rick-Rainer Ludwig
  */
@@ -61,7 +59,8 @@ public class TitanStoreEdgeManager
     public Edge getSingleRelation(Vertex source,
 	    RelationTypeMetadata<TitanEdgeMetadata> metadata,
 	    RelationTypeMetadata.Direction direction) {
-	String descriminator = metadata.getDatastoreMetadata().getDiscriminator();
+	String descriminator = metadata.getDatastoreMetadata()
+		.getDiscriminator();
 	Iterable<Edge> edges;
 	switch (direction) {
 	case FROM:

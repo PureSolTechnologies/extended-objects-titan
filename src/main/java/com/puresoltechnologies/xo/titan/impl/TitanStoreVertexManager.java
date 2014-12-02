@@ -8,7 +8,6 @@ import java.util.Set;
 import com.buschmais.xo.api.ResultIterator;
 import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.spi.datastore.DatastoreEntityManager;
-import com.buschmais.xo.spi.datastore.DatastorePropertyManager;
 import com.buschmais.xo.spi.datastore.TypeMetadataSet;
 import com.buschmais.xo.spi.metadata.method.IndexedPropertyMethodMetadata;
 import com.buschmais.xo.spi.metadata.method.PrimitivePropertyMethodMetadata;
@@ -20,8 +19,7 @@ import com.thinkaurelius.titan.core.TitanGraphQuery;
 import com.tinkerpop.blueprints.Vertex;
 
 /**
- * This class implements the XO {@link DatastorePropertyManager} for Titan
- * database.
+ * This class implements the XO DatastorePropertyManager for Titan database.
  * 
  * @author Rick-Rainer Ludwig
  */

@@ -19,19 +19,18 @@ import com.puresoltechnologies.xo.titan.api.annotation.Indexed;
 import com.puresoltechnologies.xo.titan.api.annotation.Property;
 import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanCollectionPropertyMetadata;
+import com.puresoltechnologies.xo.titan.impl.metadata.TitanEdgeMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanIndexedPropertyMetadata;
-import com.puresoltechnologies.xo.titan.impl.metadata.TitanVertexMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanPropertyMetadata;
 import com.puresoltechnologies.xo.titan.impl.metadata.TitanReferencePropertyMetadata;
-import com.puresoltechnologies.xo.titan.impl.metadata.TitanEdgeMetadata;
+import com.puresoltechnologies.xo.titan.impl.metadata.TitanVertexMetadata;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.Vertex;
 
 /**
- * This class implements the XO {@link DatastoreMetadataFactory} for Titan
- * database.
+ * This class implements the XO DatastoreMetadataFactory for Titan database.
  * 
  * @author Rick-Rainer Ludwig
  */
@@ -40,7 +39,8 @@ public class TitanMetadataFactory
 	DatastoreMetadataFactory<TitanVertexMetadata, String, TitanEdgeMetadata, String> {
 
     @Override
-    public TitanVertexMetadata createEntityMetadata(AnnotatedType annotatedType,
+    public TitanVertexMetadata createEntityMetadata(
+	    AnnotatedType annotatedType,
 	    Map<Class<?>, TypeMetadata> metadataByType) {
 	VertexDefinition annotation = annotatedType
 		.getAnnotation(VertexDefinition.class);

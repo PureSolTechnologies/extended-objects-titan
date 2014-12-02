@@ -8,11 +8,11 @@ import java.lang.annotation.Target;
 import com.buschmais.xo.spi.annotation.IndexDefinition;
 
 /**
+ * <p>
  * Marks a property as indexed.
  * <p/>
  * <p>
- * An indexed property is used to find instances using
- * {@link com.buschmais.cdo.api.CdoManager#find(Class, Object)}.
+ * An indexed property is used to find instances using XOManager.
  * </p>
  */
 @IndexDefinition
@@ -20,6 +20,6 @@ import com.buschmais.xo.spi.annotation.IndexDefinition;
 @Target(ElementType.METHOD)
 public @interface Indexed {
 
-	boolean unique() default false;
+    boolean unique() default false;
 
 }
