@@ -20,11 +20,11 @@
 	</parent>
 
 	<groupId>com.puresoltechnologies.xo</groupId>
-	<artifactId>xo-titan</artifactId>
+	<artifactId>titan.parent</artifactId>
 	<version>0.2.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 
-	<name>${project.groupId}.${project.artifactId}</name>
+	<name>eXtended Objects for Titan: ${project.artifactId}</name>
 	<description>PureSol Technologies' XO Implementation for Titan Graph Database</description>
 	<inceptionYear>2014</inceptionYear>
 	<url>http://opensource.puresol-technologies.com/xo-titan</url>
@@ -69,7 +69,6 @@
 		<url>https://travis-ci.org/RickRainerLudwig/xo-titan</url>
 	</ciManagement>
 
-
 	<distributionManagement>
 		<site>
 			<id>FTPPureSolTechnologiesCom</id>
@@ -81,125 +80,145 @@
 	<repositories />
 	<pluginRepositories />
 
-	<dependencies>
-		<dependency>
-			<groupId>com.buschmais.xo</groupId>
-			<artifactId>xo.api</artifactId>
-			<version>${xo.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.buschmais.xo</groupId>
-			<artifactId>xo.spi</artifactId>
-			<version>${xo.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.buschmais.xo</groupId>
-			<artifactId>xo.impl</artifactId>
-			<version>${xo.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.guava</groupId>
-					<artifactId>guava</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.thinkaurelius.titan</groupId>
-			<artifactId>titan-core</artifactId>
-			<version>${titan.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.thinkaurelius.titan</groupId>
-			<artifactId>titan-cassandra</artifactId>
-			<version>${titan.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-library</artifactId>
-			<version>1.3</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.datastax.cassandra</groupId>
-			<artifactId>cassandra-driver-core</artifactId>
-			<version>${cassandra.driver.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>5.0.1.Final</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>1.10.8</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.puresoltechnologies.commons</groupId>
+				<artifactId>osgi</artifactId>
+				<version>0.3.0</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.xo</groupId>
+				<artifactId>titan</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.buschmais.xo</groupId>
+				<artifactId>xo.api</artifactId>
+				<version>${xo.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.buschmais.xo</groupId>
+				<artifactId>xo.spi</artifactId>
+				<version>${xo.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.buschmais.xo</groupId>
+				<artifactId>xo.impl</artifactId>
+				<version>${xo.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>com.google.guava</groupId>
+						<artifactId>guava</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>com.thinkaurelius.titan</groupId>
+				<artifactId>titan-core</artifactId>
+				<version>${titan.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.thinkaurelius.titan</groupId>
+				<artifactId>titan-cassandra</artifactId>
+				<version>${titan.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.core</artifactId>
+				<version>5.0.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.11</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>hamcrest-library</artifactId>
+				<version>1.3</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.datastax.cassandra</groupId>
+				<artifactId>cassandra-driver-core</artifactId>
+				<version>${cassandra.driver.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-validator</artifactId>
+				<version>5.0.1.Final</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-all</artifactId>
+				<version>1.10.8</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<profiles>
 		<profile>
 			<id>it</id>
 			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-failsafe-plugin</artifactId>
-						<version>2.18</version>
-						<executions>
-							<execution>
-								<id>integration-test</id>
-								<phase>integration-test</phase>
-								<goals>
-									<goal>integration-test</goal>
-								</goals>
-							</execution>
-							<execution>
-								<id>verification</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>verify</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<includes>
-								<include>**/*IT.java</include>
-							</includes>
-						</configuration>
-					</plugin>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>cassandra-maven-plugin</artifactId>
-						<version>2.0.0-1</version>
-						<executions>
-							<execution>
-								<id>cassandra-start</id>
-								<phase>pre-integration-test</phase>
-								<goals>
-									<goal>start</goal>
-								</goals>
-							</execution>
-							<execution>
-								<id>cassandra-stop</id>
-								<phase>post-integration-test</phase>
-								<goals>
-									<goal>stop</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-failsafe-plugin</artifactId>
+							<version>2.18</version>
+							<executions>
+								<execution>
+									<id>integration-test</id>
+									<phase>integration-test</phase>
+									<goals>
+										<goal>integration-test</goal>
+									</goals>
+								</execution>
+								<execution>
+									<id>verification</id>
+									<phase>verify</phase>
+									<goals>
+										<goal>verify</goal>
+									</goals>
+								</execution>
+							</executions>
+							<configuration>
+								<includes>
+									<include>**/*IT.java</include>
+								</includes>
+							</configuration>
+						</plugin>
+						<plugin>
+							<groupId>org.codehaus.mojo</groupId>
+							<artifactId>cassandra-maven-plugin</artifactId>
+							<version>2.0.0-1</version>
+							<executions>
+								<execution>
+									<id>cassandra-start</id>
+									<phase>pre-integration-test</phase>
+									<goals>
+										<goal>start</goal>
+									</goals>
+								</execution>
+								<execution>
+									<id>cassandra-stop</id>
+									<phase>post-integration-test</phase>
+									<goals>
+										<goal>stop</goal>
+									</goals>
+								</execution>
+							</executions>
+						</plugin>
+					</plugins>
+				</pluginManagement>
 			</build>
 		</profile>
 	</profiles>
@@ -292,43 +311,27 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.5</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>test-jar</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<archive>
-						<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
-					</archive>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
 				<version>2.5.3</version>
-				<executions>
-					<execution>
-						<id>bundle-manifest</id>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>manifest</goal>
-						</goals>
-						<configuration>
-							<instructions>
-								<Bundle-Name>${project.name}</Bundle-Name>
-							</instructions>
-						</configuration>
-					</execution>
-				</executions>
+				<extensions>true</extensions>
 				<configuration>
+					<manifestLocation>META-INF</manifestLocation>
 					<instructions>
-						<DynamicImport-Package>*</DynamicImport-Package>
+						<!-- The Bundle-SymbolicName is fixed in this way. Otherwise Tycho 
+							will not find the bundle. -->
+						<Bundle-SymbolicName>${bundle.namespace}.bundle</Bundle-SymbolicName>
+						<Bundle-Name>${bundle.namespace}.bundle</Bundle-Name>
+						<Bundle-Version>${project.version}</Bundle-Version>
+						<Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
+						<Export-Package>${bundle.namespace}.*;version="${project.version}"</Export-Package>
+						<Bundle-Activator>${bundle.namespace}.Activator</Bundle-Activator>
+						<Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
+						<!-- embed compile/runtime dependencies using path that matches the 
+							copied dependency folder -->
+						<Embed-Dependency>*;scope=compile|runtime;inline=false</Embed-Dependency>
+						<Embed-Directory>dependencies</Embed-Directory>
+						<Embed-StripGroup>true</Embed-StripGroup>
 					</instructions>
 				</configuration>
 			</plugin>
@@ -336,6 +339,13 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
 				<version>3.4</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.puresoltechnologies.xo</groupId>
+						<artifactId>xo-titan</artifactId>
+						<version>${project.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -412,4 +422,10 @@
 			</plugin>
 		</plugins>
 	</reporting>
+
+	<modules>
+		<module>titan</module>
+		<module>titan.bundle</module>
+		<module>titan.test</module>
+	</modules>
 </project>

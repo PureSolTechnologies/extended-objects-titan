@@ -24,7 +24,11 @@ public class GremlinManager {
      * @param expression
      *            is the object which comes in from
      *            DatastoreSession#executeQuery(Object, java.util.Map).
+     * @param parameters
+     *            is a Map of parameters.
      * @return A {@link String} containing a Gremlin expression is returned.
+     * @param <QL>
+     *            is the query language.
      */
     public static <QL> GremlinExpression getGremlinExpression(QL expression,
 	    Map<String, Object> parameters) {
