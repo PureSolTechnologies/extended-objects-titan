@@ -20,6 +20,7 @@
       			<item name="Introduction" href="introduction.html" /> 		
       			<item name="Usage" href="usage.html" /> 		
  		</menu>
+ 		<menu ref="modules" />
  		<menu name="Project Documentation">
 	 		<item name="Project Information" href="project-info.html">
       			<item name="About" href="index.html" />

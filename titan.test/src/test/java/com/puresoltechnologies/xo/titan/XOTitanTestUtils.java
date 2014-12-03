@@ -203,8 +203,7 @@ public class XOTitanTestUtils {
      * testing purposes.
      * 
      * @param xoManager
-     * 
-     * @param xoManagerFactory
+     *            is the {@link XOManager} to be used.
      */
     public static void addStarwarsData(XOManager xoManager) {
 	TestData.addStarwars(xoManager);
