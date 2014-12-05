@@ -339,13 +339,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
 				<version>3.4</version>
-				<dependencies>
-					<dependency>
-						<groupId>com.puresoltechnologies.xo</groupId>
-						<artifactId>xo-titan</artifactId>
-						<version>${project.version}</version>
-					</dependency>
-				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
