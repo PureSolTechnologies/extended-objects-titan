@@ -20,7 +20,7 @@
 
 	<groupId>com.puresoltechnologies.xo</groupId>
 	<artifactId>titan.parent</artifactId>
-	<version>0.2.0-SNAPSHOT</version>
+	<version>0.2.0-beta1</version>
 	<packaging>pom</packaging>
 
 	<name>eXtended Objects for Titan: ${project.artifactId}</name>
@@ -260,6 +260,14 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<tagNameFormat>v@{project.version}</tagNameFormat>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
 				<version>3.0.0</version>
@@ -346,13 +354,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
 				<version>3.4</version>
-				<dependencies>
-					<dependency>
-						<groupId>com.puresoltechnologies.xo</groupId>
-						<artifactId>xo-titan</artifactId>
-						<version>${project.version}</version>
-					</dependency>
-				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
