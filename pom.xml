@@ -72,7 +72,7 @@
 		<site>
 			<id>FTPPureSolTechnologiesCom</id>
 			<name>FTPPureSolTechnologiesCom</name>
-			<url>ftp://puresol-technologies.com/opensource/xo-titan</url>
+			<url>ftp://puresol-technologies.com/opensource.puresol-technologies.com/projects/xo-titan</url>
 		</site>
 	</distributionManagement>
 
