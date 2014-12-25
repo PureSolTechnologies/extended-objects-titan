@@ -15,7 +15,7 @@
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
-		<version>7</version>
+		<version>9</version>
 	</parent>
 
 	<groupId>com.puresoltechnologies.extended-objects</groupId>
@@ -24,7 +24,7 @@
 	<packaging>pom</packaging>
 
 	<name>eXtended Objects for Titan: ${project.artifactId}</name>
-	<description>PureSol Technologies' XO Implementation for Titan Graph Database</description>
+	<description>PureSol Technologies' eXtended Objects Implementation for Titan Graph Database</description>
 	<inceptionYear>2014</inceptionYear>
 	<url>http://opensource.puresol-technologies.com/xo-titan</url>
 
@@ -287,14 +287,6 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<configuration>
-					<tagNameFormat>v@{project.version}</tagNameFormat>
-					<autoVersionSubmodules>true</autoVersionSubmodules>
 				</configuration>
 			</plugin>
 			<plugin>
