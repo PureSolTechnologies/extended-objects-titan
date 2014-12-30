@@ -42,9 +42,9 @@
 	</licenses>
 
 	<scm>
-		<developerConnection>scm:git:https://github.com/PureSolTechnologies/xo-titan</developerConnection>
-		<connection>scm:git:https://github.com/PureSolTechnologies/xo-titan</connection>
-		<url>https://github.com/PureSolTechnologies/xo-titan.git</url>
+		<developerConnection>scm:git:https://github.com/PureSolTechnologies/extended-objects-titan</developerConnection>
+		<connection>scm:git:https://github.com/PureSolTechnologies/extended-objects-titan</connection>
+		<url>https://github.com/PureSolTechnologies/extended-objects-titan.git/tree/HEAD</url>
 		<tag>HEAD</tag>
 	</scm>
 
@@ -152,7 +152,6 @@
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-validator</artifactId>
 				<version>5.0.1.Final</version>
-				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.mockito</groupId>

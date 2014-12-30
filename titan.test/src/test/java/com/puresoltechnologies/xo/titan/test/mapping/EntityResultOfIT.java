@@ -15,8 +15,8 @@ import org.junit.runners.Parameterized;
 import com.buschmais.xo.api.Query.Result;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
-import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
-import com.puresoltechnologies.xo.titan.XOTitanTestUtils;
+import com.puresoltechnologies.xo.titan.test.AbstractXOTitanTest;
+import com.puresoltechnologies.xo.titan.test.XOTitanTestUtils;
 
 @RunWith(Parameterized.class)
 public class EntityResultOfIT extends AbstractXOTitanTest {

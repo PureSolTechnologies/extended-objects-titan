@@ -1,4 +1,4 @@
-package com.puresoltechnologies.xo.titan;
+package com.puresoltechnologies.xo.titan.test;
 
 import java.io.IOException;
 import java.net.URI;
