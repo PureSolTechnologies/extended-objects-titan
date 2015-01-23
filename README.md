@@ -11,3 +11,5 @@ http://opensource.puresol-technologies.com/xo-titan
 __Please, use the issue tracker at:__
 
 https://bugs.puresol-technologies.net/projects/xo-titan
+
+[![Build Status](http://ci.puresol-technologies.net/job/xo-titan/badge/icon)](http://ci.puresol-technologies.net/job/xo-titan/)
