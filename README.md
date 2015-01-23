@@ -1,5 +1,5 @@
-extended-objects-titan
-======================
+eXtended Objects for Titan
+==========================
 
 
 XO-Titan is an XO provider for a Titan graph database (http://thinkaurelius.github.io/titan).
