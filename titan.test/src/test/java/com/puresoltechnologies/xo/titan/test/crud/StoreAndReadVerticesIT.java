@@ -15,40 +15,40 @@ import com.buschmais.xo.api.ResultIterable;
 import com.buschmais.xo.api.ResultIterator;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
-import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
-import com.puresoltechnologies.xo.titan.XOTitanTestUtils;
+import com.puresoltechnologies.xo.titan.test.AbstractXOTitanTest;
+import com.puresoltechnologies.xo.titan.test.XOTitanTestUtils;
 import com.puresoltechnologies.xo.titan.test.bootstrap.TestEntity;
 
 @RunWith(Parameterized.class)
 public class StoreAndReadVerticesIT extends AbstractXOTitanTest {
 
-	public StoreAndReadVerticesIT(XOUnit xoUnit) {
-		super(xoUnit);
-	}
+    public StoreAndReadVerticesIT(XOUnit xoUnit) {
+	super(xoUnit);
+    }
 
-	@Parameterized.Parameters
-	public static Collection<XOUnit[]> getCdoUnits() throws IOException {
-		return XOTitanTestUtils.configuredXOUnits();
-	}
+    @Parameterized.Parameters
+    public static Collection<XOUnit[]> getCdoUnits() throws IOException {
+	return XOTitanTestUtils.configuredXOUnits();
+    }
 
-	@Test
-	public void test() {
-		XOManager xoManager = getXOManager();
-		xoManager.currentTransaction().begin();
-		TestEntity createdA = xoManager.create(TestEntity.class);
-		createdA.setName("Test");
-		xoManager.currentTransaction().commit();
+    @Test
+    public void test() {
+	XOManager xoManager = getXOManager();
+	xoManager.currentTransaction().begin();
+	TestEntity createdA = xoManager.create(TestEntity.class);
+	createdA.setName("Test");
+	xoManager.currentTransaction().commit();
 
-		xoManager.currentTransaction().begin();
-		ResultIterable<TestEntity> aa = xoManager
-				.find(TestEntity.class, "Test");
-		assertNotNull(aa);
-		ResultIterator<TestEntity> iterator = aa.iterator();
-		assertTrue(iterator.hasNext());
-		TestEntity readA = iterator.next();
-		assertNotNull(readA);
-		assertEquals("Test", readA.getName());
-		xoManager.currentTransaction().rollback();
-	}
+	xoManager.currentTransaction().begin();
+	ResultIterable<TestEntity> aa = xoManager
+		.find(TestEntity.class, "Test");
+	assertNotNull(aa);
+	ResultIterator<TestEntity> iterator = aa.iterator();
+	assertTrue(iterator.hasNext());
+	TestEntity readA = iterator.next();
+	assertNotNull(readA);
+	assertEquals("Test", readA.getName());
+	xoManager.currentTransaction().rollback();
+    }
 
 }

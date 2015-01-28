@@ -1,4 +1,4 @@
-package com.puresoltechnologies.xo.titan;
+package com.puresoltechnologies.xo.titan.test;
 
 import org.junit.After;
 import org.junit.Before;

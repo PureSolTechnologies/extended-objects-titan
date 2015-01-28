@@ -15,16 +15,16 @@
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
-		<version>7</version>
+		<version>9</version>
 	</parent>
 
-	<groupId>com.puresoltechnologies.xo</groupId>
+	<groupId>com.puresoltechnologies.extended-objects</groupId>
 	<artifactId>titan.parent</artifactId>
 	<version>0.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>eXtended Objects for Titan: ${project.artifactId}</name>
-	<description>PureSol Technologies' XO Implementation for Titan Graph Database</description>
+	<description>PureSol Technologies' eXtended Objects Implementation for Titan Graph Database</description>
 	<inceptionYear>2014</inceptionYear>
 	<url>http://opensource.puresol-technologies.com/xo-titan</url>
 
@@ -42,9 +42,9 @@
 	</licenses>
 
 	<scm>
-		<developerConnection>scm:git:https://github.com/PureSolTechnologies/xo-titan</developerConnection>
-		<connection>scm:git:https://github.com/PureSolTechnologies/xo-titan</connection>
-		<url>https://github.com/PureSolTechnologies/xo-titan.git</url>
+		<developerConnection>scm:git:https://github.com/PureSolTechnologies/extended-objects-titan</developerConnection>
+		<connection>scm:git:https://github.com/PureSolTechnologies/extended-objects-titan</connection>
+		<url>https://github.com/PureSolTechnologies/extended-objects-titan.git/tree/HEAD</url>
 		<tag>HEAD</tag>
 	</scm>
 
@@ -64,8 +64,8 @@
 	</issueManagement>
 
 	<ciManagement>
-		<system>Jenkins</system>
-		<url>https://travis-ci.org/RickRainerLudwig/xo-titan</url>
+		<system>PureSol Technologies Jenkins</system>
+		<url>http://ci.puresol-technologies.net/job/xo-titan</url>
 	</ciManagement>
 
 	<distributionManagement>
@@ -87,7 +87,7 @@
 				<version>0.3.0</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresoltechnologies.xo</groupId>
+				<groupId>com.puresoltechnologies.extended-objects</groupId>
 				<artifactId>titan</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -152,7 +152,6 @@
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-validator</artifactId>
 				<version>5.0.1.Final</version>
-				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.mockito</groupId>
@@ -270,16 +269,26 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
+				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
-					<tagNameFormat>v@{project.version}</tagNameFormat>
-					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<archive>
+						<index>true</index>
+						<manifestEntries>
+							<Specification-Title>${project.name}</Specification-Title>
+							<Specification-Version>${project.version}</Specification-Version>
+							<Specification-Vendor>${project.organization.name}</Specification-Vendor>
+							<Implementation-Title>${project.groupId}:${project.artifactId}</Implementation-Title>
+							<Implementation-Version>${project.version}</Implementation-Version>
+							<Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+							<Vendor-URL>${project.organization.url}</Vendor-URL>
+							<Project-URL>${project.url}</Project-URL>
+						</manifestEntries>
+					</archive>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.4</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -289,15 +298,16 @@
 						</goals>
 						<configuration>
 							<archive>
+								<index>true</index>
 								<manifestEntries>
-									<Bundle-ManifestVersion>2</Bundle-ManifestVersion>
-									<Bundle-Name>${project.name} (Source)</Bundle-Name>
-									<Bundle-SymbolicName>${bundle.name}.source</Bundle-SymbolicName>
-									<Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
-									<Bundle-Version>${parsedVersion.osgiVersion}</Bundle-Version>
-									<Eclipse-SourceBundle>
-										${bundle.name};version="${parsedVersion.osgiVersion}";roots:="."
-									</Eclipse-SourceBundle>
+									<Specification-Title>${project.name}</Specification-Title>
+									<Specification-Version>${project.version}</Specification-Version>
+									<Specification-Vendor>${project.organization.name}</Specification-Vendor>
+									<Implementation-Title>${project.groupId}:${project.artifactId}</Implementation-Title>
+									<Implementation-Version>${project.version}</Implementation-Version>
+									<Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+									<Vendor-URL>${project.organization.url}</Vendor-URL>
+									<Project-URL>${project.url}</Project-URL>
 								</manifestEntries>
 							</archive>
 						</configuration>
@@ -312,6 +322,14 @@
 				<configuration>
 					<manifestLocation>META-INF</manifestLocation>
 					<instructions>
+						<Specification-Title>${project.name}</Specification-Title>
+						<Specification-Version>${project.version}</Specification-Version>
+						<Specification-Vendor>${project.organization.name}</Specification-Vendor>
+						<Implementation-Title>${project.groupId}:${project.artifactId}</Implementation-Title>
+						<Implementation-Version>${project.version}</Implementation-Version>
+						<Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+						<Vendor-URL>${project.organization.url}</Vendor-URL>
+						<Project-URL>${project.url}</Project-URL>
 						<!-- The Bundle-SymbolicName is fixed in this way. Otherwise Tycho 
 							will not find the bundle. -->
 						<Bundle-SymbolicName>${bundle.namespace}.bundle</Bundle-SymbolicName>

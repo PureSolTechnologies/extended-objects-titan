@@ -20,8 +20,8 @@ import com.buschmais.xo.api.Transaction;
 import com.buschmais.xo.api.ValidationMode;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.bootstrap.XOUnit;
-import com.puresoltechnologies.xo.titan.AbstractXOTitanTest;
-import com.puresoltechnologies.xo.titan.XOTitanTestUtils;
+import com.puresoltechnologies.xo.titan.test.AbstractXOTitanTest;
+import com.puresoltechnologies.xo.titan.test.XOTitanTestUtils;
 import com.puresoltechnologies.xo.titan.test.transaction.A.ByValue;
 
 @RunWith(Parameterized.class)
