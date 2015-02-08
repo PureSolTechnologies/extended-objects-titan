@@ -136,7 +136,10 @@ public class TitanMetadataFactory
     @Override
     public TitanIndexedPropertyMetadata createIndexedPropertyMetadata(
 	    PropertyMethod propertyMethod) {
-	String name = propertyMethod.getName();
+	Property property = propertyMethod
+		.getAnnotationOfProperty(Property.class);
+	String name = property != null ? property.value() : propertyMethod
+		.getName();
 	Class<?> declaringClass = propertyMethod.getAnnotatedElement()
 		.getDeclaringClass();
 	Class<? extends Element> type = null;
