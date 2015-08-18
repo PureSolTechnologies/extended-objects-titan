@@ -8,7 +8,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<xo.version>0.4.5</xo.version>
-		<cassandra.driver.version>2.1.4</cassandra.driver.version>
+		<cassandra.driver.version>2.2.0-rc2</cassandra.driver.version>
 		<titan.version>0.5.4</titan.version>
 	</properties>
 
